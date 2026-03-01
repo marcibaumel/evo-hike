@@ -42,7 +42,7 @@ export default defineConfig([
             'no-empty-function': 'warn',
 
             // React Specific
-            'react/react-in-jsx-scope': 'off' 
+            'react/react-in-jsx-scope': 'off'
         }
     }
 ]);
