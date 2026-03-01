@@ -1,0 +1,58 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Backend",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/evoHike.Backend/bin/Debug/net8.0/evoHike.Backend.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/evoHike.Backend",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger/index.html",
+                "action": "openExternally",
+                "killOnDispose": true
+            },
+            "preLaunchTask": "build"
+        },
+        {
+            "name": "Debug Backend",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/evoHike.Backend/bin/Debug/net8.0/evoHike.Backend.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/evoHike.Backend",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger/index.html",
+                "action": "openExternally",
+                "killOnDispose": true
+            },
+            "preLaunchTask": "build"
+        },
+        {
+            "name": "Run Tests",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/evoHike.UnitTests/bin/Debug/net8.0/evoHike.UnitTests.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/evoHike.UnitTests",
+            "stopAtEntry": false,
+            "preLaunchTask": "test"
+        },
+        {
+            "name": "Debug Tests",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/evoHike.UnitTests/bin/Debug/net8.0/evoHike.UnitTests.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/evoHike.UnitTests",
+            "stopAtEntry": false,
+            "preLaunchTask": "test",
+            "stopOnEntry": false
+        }
+    ]
+}

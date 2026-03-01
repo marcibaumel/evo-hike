@@ -1,0 +1,255 @@
+{
+  "social": "Social",
+  "weather": "Weather",
+  "clickHere": "Click here",
+  "mainMenuH1": "Weather Forecast from C# Backend",
+  "routePageH1": "Routing planning",
+  "navbarLink1": "Planner",
+  "navbarLink2": "Weather",
+  "navbarLink3": "Journal",
+  "navbarLink4": "Social",
+  "navbarLink5": "Contacts",
+  "navbarLink6": "Login",
+  "weatherForecast": "Weather Forecast",
+  "refresh": "Refresh",
+  "weatherTime": "Time",
+  "weatherTemperature": "Temperature",
+  "weatherFeelsLike": "Feels Like",
+  "weatherWind": "Wind",
+  "weatherVapor": "Vapor",
+  "weatherPrecipitation": "Precipitation",
+  "weatherDescription": "Description",
+  "weatherCodes": {
+    "0": "Clear sky",
+    "1": "Mainly clear",
+    "2": "Partly cloudy",
+    "3": "Overcast",
+    "45": "Fog",
+    "48": "Depositing rime fog",
+    "51": "Drizzle: Light",
+    "53": "Drizzle: Moderate",
+    "55": "Drizzle: Dense intensity",
+    "56": "Freezing Drizzle: Light",
+    "57": "Freezing Drizzle: Dense intensity",
+    "61": "Rain: Slight",
+    "63": "Rain: Moderate",
+    "65": "Rain: Heavy intensity",
+    "66": "Freezing Rain: Light",
+    "67": "Freezing Rain: Heavy intensity",
+    "71": "Snow fall: Slight",
+    "73": "Snow fall: Moderate",
+    "75": "Snow fall: Heavy intensity",
+    "77": "Snow grains",
+    "80": "Rain showers: Slight",
+    "81": "Rain showers: Moderate",
+    "82": "Rain showers: Violent",
+    "85": "Snow showers: Slight",
+    "86": "Snow showers: Heavy",
+    "95": "Thunderstorm",
+    "96": "Thunderstorm with slight hail",
+    "99": "Thunderstorm with heavy hail"
+  },
+  "trail": {
+    "difficulty_label": "Difficulty",
+    "distance": "Distance",
+    "elevation": "Elevation",
+    "rating": "Rating",
+    "button_text": "To Planner",
+    "difficulties": {
+      "0": "Easy",
+      "1": "Medium",
+      "2": "Hard",
+      "3": "Extreme"
+    }
+  },
+  "landing": {
+    "hero": {
+      "badge": "Explore the Unseen",
+      "title_prefix": "Wilderness",
+      "title_suffix": "Awaits.",
+      "description": "Discover hidden trails, track your journey, and connect with a community of explorers. Your next great adventure starts here.",
+      "cta_primary": "Start Planning",
+      "cta_secondary": "View Community",
+      "stat_distance": "Total Distance",
+      "stat_elevation": "Elevation Gain"
+    },
+    "features": {
+      "title": "Everything you need",
+      "subtitle": "Advanced tools designed for the modern hiker. From planning to tracking, we've got you covered.",
+      "maps_title": "Interactive Routes",
+      "maps_desc": "Plan detailed routes with elevation profiles, waypoints, and offline capabilities. Never lose your way again.",
+      "weather_title": "Live Weather",
+      "weather_desc": "Real-time updates and forecasts for your specific trail location.",
+      "community_title": "Community",
+      "community_desc": "Share your journals, photos, and tips with fellow hikers.",
+      "stat_mapped": "National Parks Mapped"
+    }
+  },
+  "route": {
+    "search_placeholder": "Find a trail...",
+    "showing_count": "Showing {{count}} trails",
+    "active_trails": "Active Trails",
+    "view_details": "View Details",
+    "stats": {
+      "dist": "Dist",
+      "elev": "Elev",
+      "time": "Time"
+    }
+  },
+  "social_page": {
+    "page_title": "Community Feed",
+    "page_subtitle": "Share your adventures and discover new paths from the community.",
+    "create_post_placeholder": "Start a new post..."
+  },
+  "dashboard": {
+    "stats": {
+      "hikes": "Hikes",
+      "distance": "Distance",
+      "elevation": "Elevation"
+    },
+    "upcoming": {
+      "title": "Upcoming Adventures",
+      "days_left": "{{count}} Days to go"
+    },
+    "memories": {
+      "title": "Recent Memories",
+      "view_all": "View All"
+    },
+    "checklist": {
+      "title": "Expedition Prep",
+      "edit_button": "Edit Checklist",
+      "items": {
+        "offline_maps": "Download offline maps",
+        "weather_check": "Check weather forecast",
+        "first_aid": "Pack first aid kit",
+        "power_bank": "Charge power bank",
+        "boots": "Clean hiking boots"
+      }
+    },
+    "badges": {
+      "title": "Recent Badges"
+    }
+  },
+  "weather_page": {
+    "current_weather": "Current Weather",
+    "unknown_conditions": "Unknown Conditions",
+    "next_48h": "Next 48 Hours",
+    "units": {
+      "meters_per_sec": "meters / sec",
+      "percent": "%"
+    },
+    "labels": {
+      "humidity": "Humidity",
+      "precip_chance": "Precipitation Chance",
+      "probability": "probability"
+    },
+    "status": {
+      "expect_rain": "Expect Rain",
+      "likely_dry": "Likely Dry"
+    },
+    "error": {
+      "failed": "Failed to load forecast",
+      "retry": "Retry"
+    }
+  },
+  "routeForm": {
+    "route_name": "Trail name",
+    "add_photo": "Add photo",
+    "upload_file": "File Upload (.gpx)",
+    "trail_description": "Short description...",
+    "poi": {
+      "poi": "Point of Interests",
+      "name": "Name",
+      "description": "Description",
+      "new": "+ Add new"
+    },
+    "save": "Save",
+    "cancel": "Cancel",
+    "title": "Route Planner",
+    "close_menu": "Close menu",
+    "name_placeholder": "E.g. Hike to the treasure",
+    "description_label": "Description",
+    "description_placeholder": "E.g. EXTREME AND VERY dangerous because there are many pirates here !!4",
+    "distance": "Distance",
+    "time": "Time",
+    "image_alt": "trail image",
+    "add_route": "Add Route",
+    "or": "OR",
+    "manual_nav_active": "Manual navigation active. Clear navigation first!",
+    "image_too_big": "Image too large! Max 5MB allowed.",
+    "hours": "h",
+    "minutes": "m"
+  },
+  "routePage": {
+    "gpxLoadedError": "GPX file loaded. Clear navigation for manual planning!",
+    "routeSaved": "Route saved",
+    "intermediatePoint": "Intermediate point",
+    "startPoint": "Start point",
+    "endPoint": "End point",
+    "delete": "Delete",
+    "navFrom": "Navigate from here",
+    "navTo": "Navigate to here",
+    "addWaypoint": "Add waypoint",
+    "clearNav": "Clear navigation"
+  },
+  "mapLegend": {
+    "title": "Legend",
+    "natural": "Natural",
+    "peak": "Peak",
+    "spring": "Spring",
+    "cave": "Cave",
+    "waterfall": "Waterfall",
+    "tourism": "Tourism",
+    "viewpoint": "Viewpoint",
+    "attraction": "Attraction",
+    "museum": "Museum",
+    "historic": "Historic",
+    "castle": "Castle",
+    "ruins": "Ruins",
+    "monument": "Monument",
+    "service": "Service",
+    "drinking_water": "Drinking water",
+    "church": "Church",
+    "restaurant": "Restaurant"
+  },
+  "selectedTrail": {
+    "selected": "Selected",
+    "location": "Location",
+    "distance": "Dist",
+    "elevation": "Elev",
+    "time": "Time",
+    "hour": "h",
+    "minute": "min",
+    "user_photos": "User photos",
+    "photo_alt": "Trail photo",
+    "nearby_pois": "Nearby POIs along the route",
+    "jump_to_map": "Jump to map",
+    "items": "items"
+  },
+  "trailList": {
+    "search_title": "Route Search",
+    "filter": "Filter",
+    "difficulty_level": "Difficulty level"
+  },
+  "plan": {
+    "title": "Plan Hike",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "checklist_title": "Checklist",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "success": "Saved successfully!",
+    "error_save": "Error while saving.",
+    "error_date": "Invalid date range.",
+    "error_past_date": "Start date cannot be in the past."
+  },
+  "checklist": {
+    "water": "Sufficient water (1.5L+)",
+    "raincoat": "Raincoat / Spare clothes",
+    "phone": "Charged phone + Powerbank",
+    "map": "Map (Offline) / GPS",
+    "first_aid": "First Aid Kit",
+    "food": "Food / Energy bar"
+  }
+}
