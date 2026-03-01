@@ -76,7 +76,7 @@ export const getNearbyPOIs = async (
 
     try {
         const response = await axios.post<OverpassResponse>(
-          'https://overpass-api.de/api/interpreter',
+            'https://overpass-api.de/api/interpreter',
             `data=${encodeURIComponent(query)}`,
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         );
