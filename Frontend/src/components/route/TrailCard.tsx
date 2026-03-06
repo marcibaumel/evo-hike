@@ -114,7 +114,7 @@ export const TrailCard = ({ trail, onViewDetails, onDelete }: TrailCardProps) =>
                             {t('route.view_details')}
                         </Button>
                     ) : (
-                        <Link to={`/routeplan/${trail.id}`} className="block">
+                        <Link to={`/routes/${trail.id}`} className="block">
                             <Button variant="outline" className="w-full" size="sm">
                                 {t('route.view_details')}
                             </Button>

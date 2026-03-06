@@ -14,6 +14,7 @@ interface UpcomingHikeCardProps {
     hike: UpcomingHike;
 }
 
+//TODO: SEPARATE COMPONENTS FOR IMAGE, OVERLAY, AND INFO FOR BETTER MAINTAINABILITY
 export const UpcomingHikeCard = ({ hike }: UpcomingHikeCardProps) => {
     const { t } = useTranslation();
 

@@ -2,14 +2,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { FeatureCollection } from 'geojson';
 import { useTranslation } from 'react-i18next';
-import { TrailCard } from '../components/route/TrailCard';
-import { RouteMap } from '../components/route/RouteMap';
-import { Trail } from '../models/Trail';
-import backendTrails from '../data/backendTrails.json';
-import type { DifficultyLevel } from '../types/difficulty';
-import { MagnifyingGlassIcon, FadersIcon, PlusIcon } from '@phosphor-icons/react';
-import { Button } from '../components/ui/Button';
-import RouteEditorPanel from '../components/RouteEditorPanel';
+import { TrailCard } from '../../components/route/TrailCard';
+import { RouteMap } from '../../components/route/RouteMap';
+import { Trail } from '../../models/Trail';
+import backendTrails from '../../data/backendTrails.json';
+import type { DifficultyLevel } from '../../types/difficulty';
+import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react';
+import { Button } from '../../components/ui/Button';
+import RouteEditorPanel from '../../components/RouteEditorPanel';
 
 const emptyGeoJson: FeatureCollection = {
     type: 'FeatureCollection',
@@ -19,6 +19,7 @@ const emptyGeoJson: FeatureCollection = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TrailData = any;
 
+//TODO: SEPARATE COMPONENTS FOR TRAIL LIST, TRAIL CARD, AND MAP FOR BETTER MAINTAINABILITY
 function RoutePage() {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
@@ -168,7 +169,6 @@ function RoutePage() {
                     <>
                         {/* Header & Filter */}
                         <div className="p-6 border-b border-white/5 bg-brand-dark/95 backdrop-blur-md sticky top-0 z-20">
-                            <h1 className="text-3xl font-display font-bold mb-4">{t('routePageH1')}</h1>
                             <div className="flex gap-3">
                                 <div className="relative flex-1">
                                     <MagnifyingGlassIcon
@@ -183,9 +183,6 @@ function RoutePage() {
                                         className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-accent/50 transition-colors"
                                     />
                                 </div>
-                                <Button variant="secondary" className="p-2.5 rounded-xl h-auto" size="sm">
-                                    <FadersIcon size={20} />
-                                </Button>
                                 <Button
                                     variant="primary"
                                     className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
@@ -208,9 +205,6 @@ function RoutePage() {
                                     />
                                 </div>
                             ))}
-                            <div className="text-center py-8 text-brand-muted text-sm">
-                                {t('route.showing_count', { count: filteredTrails.length })}
-                            </div>
                         </div>
                     </>
                 )}

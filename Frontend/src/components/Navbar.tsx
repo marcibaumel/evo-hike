@@ -62,11 +62,10 @@ function Navbar() {
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center space-x-10">
-                    <NavbarLink to="/routeplan">{t('navbarLink1')}</NavbarLink>
+                    <NavbarLink to="/routes">{t('navbarLink1')}</NavbarLink>
                     <NavbarLink to="/weather">{t('navbarLink2')}</NavbarLink>
                     <NavbarLink to="/journal">{t('navbarLink3')}</NavbarLink>
                     <NavbarLink to="/social">{t('navbarLink4')}</NavbarLink>
-                    <NavbarLink to="/contact">{t('navbarLink5')}</NavbarLink>
                 </div>
 
                 {/* Action Buttons */}
@@ -95,7 +94,7 @@ function Navbar() {
                     }`}>
                     <ul className="flex flex-col p-6 space-y-4">
                         <li>
-                            <NavbarLink to="/routeplan">{t('navbarLink1')}</NavbarLink>
+                            <NavbarLink to="/routes">{t('navbarLink1')}</NavbarLink>
                         </li>
                         <li>
                             <NavbarLink to="/weather">{t('navbarLink2')}</NavbarLink>
@@ -105,9 +104,6 @@ function Navbar() {
                         </li>
                         <li>
                             <NavbarLink to="/social">{t('navbarLink4')}</NavbarLink>
-                        </li>
-                        <li>
-                            <NavbarLink to="/contact">{t('navbarLink5')}</NavbarLink>
                         </li>
                         <li className="pt-6 border-t border-white/10 flex flex-col gap-6">
                             <NavLink

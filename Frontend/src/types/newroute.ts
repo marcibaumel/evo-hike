@@ -3,10 +3,3 @@ export interface Stop {
     name: string;
     note: string;
 }
-
-export interface TourData {
-    name: string;
-    description: string;
-    stops: Stop[];
-    photo?: File | string;
-}

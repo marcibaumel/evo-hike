@@ -1,4 +1,4 @@
-import { useOpenWeather } from '../hooks/useOpenWeather';
+import { useOpenWeather } from '../../hooks/useOpenWeather';
 import { useTranslation } from 'react-i18next';
 import {
     CloudLightningIcon,
@@ -8,12 +8,12 @@ import {
     MapPinIcon,
     CloudRainIcon
 } from '@phosphor-icons/react';
-import { CurrentWeatherCard } from '../components/weather/CurrentWeatherCard';
-import { WeatherStatCard } from '../components/weather/WeatherStatCard';
-import { ForecastGrid } from '../components/weather/ForecastGrid';
-import { Skeleton } from '../components/ui/Skeleton';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
+import { CurrentWeatherCard } from '../../components/weather/CurrentWeatherCard';
+import { WeatherStatCard } from '../../components/weather/WeatherStatCard';
+import { ForecastGrid } from '../../components/weather/ForecastGrid';
+import { Skeleton } from '../../components/ui/Skeleton';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
 
 const WeatherSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
@@ -24,6 +24,7 @@ const WeatherSkeleton = () => (
     </div>
 );
 
+//TODO: SePARATE COMPONENTS FOR CURRENT WEATHER, WEATHER STATS, AND FORECAST GRID FOR BETTER MAINTAINABILITY
 function Weather() {
     const { data: forecasts, loading, error, refetch } = useOpenWeather();
     const { t } = useTranslation();
@@ -100,7 +101,7 @@ function Weather() {
                         <WeatherStatCard
                             icon={<WindIcon size={24} weight="duotone" />}
                             label={t('weatherWind')}
-                            value={current.windSpeed_ms}
+                            value={current.windSpeed_ms.toPrecision(3)}
                             subtext={t('weather_page.units.meters_per_sec')}
                         />
                     )}

@@ -1,8 +1,8 @@
 ﻿import { CheckSquareIcon, TrashIcon, PlusIcon, PencilSimpleIcon } from '@phosphor-icons/react';
-import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { Button } from '../../../components/ui/Button';
+import { Card } from '../../../components/ui/Card';
 
 export interface ChecklistItem {
     id: string;
@@ -17,6 +17,7 @@ interface ExpeditionChecklistProps {
     onUpdate: (items: ChecklistItem[]) => void;
 }
 
+//TODO: SEPARATE CHECKLIST ITEM INTO ITS OWN COMPONENT FOR BETTER MAINTAINABILITY
 export const ExpeditionChecklist = ({ items, title, subtitle, onUpdate }: ExpeditionChecklistProps) => {
     const { t } = useTranslation();
     const [isEditing, setIsEditing] = useState(false);

@@ -1,9 +1,9 @@
 ﻿import { ArrowRightIcon, CompassIcon, FootprintsIcon, TrendUpIcon } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
+import { Card } from '../../../components/ui/Card';
+import { Badge } from '../../../components/ui/Badge';
+import { Button } from '../../../components/ui/Button';
 
 export const HeroSection = () => {
     const { t } = useTranslation();
@@ -43,7 +43,7 @@ export const HeroSection = () => {
                     </p>
 
                     <div className="flex flex-wrap items-center gap-4 pt-4">
-                        <Link to="/routeplan">
+                        <Link to="/routes">
                             <Button size="lg" className="rounded-full group relative overflow-hidden">
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                 <span className="relative flex items-center gap-2">

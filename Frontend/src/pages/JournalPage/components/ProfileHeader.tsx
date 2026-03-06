@@ -1,6 +1,6 @@
 ﻿import { TrophyIcon, MountainsIcon } from '@phosphor-icons/react';
-import { Card } from '../ui/Card';
 import { useTranslation } from 'react-i18next';
+import { Card } from '../../../components/ui/Card';
 
 interface UserStats {
     totalDistance: string;
@@ -19,6 +19,7 @@ interface ProfileHeaderProps {
     user: UserProfile;
 }
 
+//TODO: SEPARATE COMPONENTS FOR AVATAR, USER INFO, AND STATS FOR BETTER MAINTAINABILITY
 export const ProfileHeader = ({ user }: ProfileHeaderProps) => {
     const { t } = useTranslation();
 

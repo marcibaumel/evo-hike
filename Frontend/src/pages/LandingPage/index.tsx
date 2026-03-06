@@ -1,6 +1,6 @@
-﻿import { Footer } from '../components/layout/Footer';
-import { HeroSection } from '../components/landing/HeroSection';
-import { FeaturesSection } from '../components/landing/FeaturesSection';
+﻿import { Footer } from './components/Footer';
+import { HeroSection } from './components/HeroSection';
+import { FeaturesSection } from './components/FeaturesSection';
 
 function LandingPage() {
     return (

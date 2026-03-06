@@ -1,7 +1,8 @@
-﻿import { CloudSunIcon, MapTrifoldIcon, MountainsIcon, UsersIcon } from '@phosphor-icons/react';
+﻿import { CloudSunIcon, MapTrifoldIcon, UsersIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../ui/Card';
+import { Card } from '../../../components/ui/Card';
 
+//TODO: SEPARATE FEATURE CARDS INTO THEIR OWN COMPONENTS FOR BETTER MAINTAINABILITY
 export const FeaturesSection = () => {
     const { t } = useTranslation();
 
@@ -68,15 +69,6 @@ export const FeaturesSection = () => {
                             </div>
                         </div>
                     </Card>
-
-                    {/* Stat Card */}
-                    <div className="md:col-span-1 bg-brand-accent text-brand-dark rounded-3xl p-8 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-500">
-                        <div className="relative z-10 h-full flex flex-col justify-center text-center items-center">
-                            <MountainsIcon size={48} weight="fill" className="mb-4 text-brand-dark/80" />
-                            <div className="text-5xl font-display font-bold mb-1">50+</div>
-                            <div className="font-semibold opacity-80">{t('landing.features.stat_mapped')}</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>

@@ -1,11 +1,11 @@
 ﻿import { MapTrifoldIcon, PlusIcon } from '@phosphor-icons/react';
-import { ProfileHeader } from '../components/dashboard/ProfileHeader';
-import { UpcomingHikeCard, type UpcomingHike } from '../components/dashboard/UpcomingHikeCard';
-import { PhotoGrid } from '../components/dashboard/PhotoGrid';
-import { ExpeditionChecklist, type ChecklistItem } from '../components/dashboard/ExpeditionChecklist';
-import { AchievementsWidget } from '../components/dashboard/AchievementsWidget';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { AchievementsWidget } from './components/AchievementsWidget';
+import { type ChecklistItem, ExpeditionChecklist } from './components/ExpeditionChecklist';
+import { PhotoGrid } from './components/PhotoGrid';
+import { ProfileHeader } from './components/ProfileHeader';
+import { type UpcomingHike, UpcomingHikeCard } from './components/UpcomingHikeCard';
 
 function JournalPage() {
     const { t } = useTranslation();

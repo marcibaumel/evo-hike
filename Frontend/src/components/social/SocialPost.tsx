@@ -39,6 +39,7 @@ interface SocialPostProps {
     onToggleLike: (id: number) => void;
 }
 
+//TODO: SEPARATE COMPONENTS FOR HEADER, CONTENT, IMAGES, STATS, AND ACTIONS FOR BETTER MAINTAINABILITY
 export const SocialPost = ({ entry, onToggleLike }: SocialPostProps) => {
     return (
         <Card variant="glass" className="p-0 overflow-hidden hover:border-white/10 transition-colors duration-300">

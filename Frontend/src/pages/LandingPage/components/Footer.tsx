@@ -11,18 +11,7 @@ export const Footer = () => {
                     </span>
                 </div>
                 <div className="text-brand-muted text-sm">
-                    © {new Date().getFullYear()} evoHike. All rights reserved.
-                </div>
-                <div className="flex gap-6">
-                    <a href="/" className="text-brand-muted hover:text-white transition-colors">
-                        Privacy
-                    </a>
-                    <a href="/" className="text-brand-muted hover:text-white transition-colors">
-                        Terms
-                    </a>
-                    <a href="/" className="text-brand-muted hover:text-white transition-colors">
-                        Contact
-                    </a>
+                    © {new Date().getFullYear()} evoHike
                 </div>
             </div>
         </footer>
