@@ -2,14 +2,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { FeatureCollection } from 'geojson';
 import { useTranslation } from 'react-i18next';
-import { TrailCard } from '../../components/route/TrailCard';
-import { RouteMap } from '../../components/route/RouteMap';
-import { Trail } from '../../models/Trail';
-import backendTrails from '../../data/backendTrails.json';
-import type { DifficultyLevel } from '../../types/difficulty';
+import { TrailCard } from './components/TrailCard';
+import { RouteMap } from './components/RouteMap';
+import backendTrails from '../../assets/mockData/backendTrails.json';
+import type { DifficultyLevel } from '../../utils/difficulty';
 import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react';
-import { Button } from '../../components/ui/Button';
-import RouteEditorPanel from '../../components/RouteEditorPanel';
+import { Button } from '../../components/Button';
+import RouteEditorPanel from './components/RouteEditorPanel';
+import { Trail } from '../../utils/Trail';
 
 const emptyGeoJson: FeatureCollection = {
     type: 'FeatureCollection',

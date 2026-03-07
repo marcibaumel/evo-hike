@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useState, useEffect, useCallback } from 'react';
-import type { OpenWeatherForecast } from '../types/openweather';
-import apiClient from '../api/axios';
+import type { OpenWeatherForecast } from '../utils/openweather';
+import apiClient from '../api/Client';
 
 export function useOpenWeather(city: string = 'Miskolc') {
     const [data, setData] = useState<OpenWeatherForecast[]>([]);

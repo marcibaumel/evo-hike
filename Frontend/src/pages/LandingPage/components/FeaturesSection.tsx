@@ -1,6 +1,6 @@
 ﻿import { CloudSunIcon, MapTrifoldIcon, UsersIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../../../components/ui/Card';
+import { Card } from '../../../components/Card';
 
 //TODO: SEPARATE FEATURE CARDS INTO THEIR OWN COMPONENTS FOR BETTER MAINTAINABILITY
 export const FeaturesSection = () => {

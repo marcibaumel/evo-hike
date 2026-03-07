@@ -1,9 +1,9 @@
 ﻿import { ArrowRightIcon, CompassIcon, FootprintsIcon, TrendUpIcon } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../../../components/ui/Card';
-import { Badge } from '../../../components/ui/Badge';
-import { Button } from '../../../components/ui/Button';
+import { Card } from '../../../components/Card';
+import { Badge } from '../../../components/Badge';
+import { Button } from '../../../components/Button';
 
 export const HeroSection = () => {
     const { t } = useTranslation();

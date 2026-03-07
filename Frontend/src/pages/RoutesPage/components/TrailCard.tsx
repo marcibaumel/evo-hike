@@ -1,11 +1,12 @@
 ﻿import { ClockIcon, MapPinIcon, PersonSimpleRunIcon, TrendUpIcon, TrashIcon } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
-import type { Trail } from '../../models/Trail';
-import { Card } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
+import { Card } from '../../../components/Card';
+import { Badge } from '../../../components/Badge';
+import { Button } from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
+import type { Trail } from '../../../utils/Trail';
 
+//TODO: Refactor this components
 interface TrailCardProps {
     trail: Trail;
     onViewDetails?: (trail: Trail) => void;

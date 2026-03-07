@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from './LanguageSwitcher';
+import LanguageSwitcher from './components/LanguageSwitcher';
 import { MountainsIcon, ListIcon, XIcon } from '@phosphor-icons/react';
 
 const NavbarLink = ({ to, children }: { to: string; children: ReactNode }) => (

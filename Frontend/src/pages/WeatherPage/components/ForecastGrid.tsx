@@ -1,7 +1,7 @@
 ﻿import { CalendarBlankIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { WeatherIcon } from './WeatherIcon';
-import type { OpenWeatherForecast } from '../../types/openweather';
-import { Card } from '../ui/Card';
+import type { OpenWeatherForecast } from '../../../utils/openweather';
+import { Card } from '../../../components/Card';
 import { useTranslation } from 'react-i18next';
 
 interface ForecastGridProps {

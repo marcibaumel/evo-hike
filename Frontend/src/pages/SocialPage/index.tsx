@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react';
-import { SocialPost, type SocialEntry } from '../../components/social/SocialPost';
-import { CreatePostWidget } from '../../components/social/CreatePostWidget';
+import { SocialPost, type SocialEntry } from './components/SocialPost';
+import { CreatePostWidget } from './components/CreatePostWidget';
 
 const MOCK_ENTRIES: SocialEntry[] = [
     {

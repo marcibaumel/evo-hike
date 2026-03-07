@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage } from '../../../hooks/useLanguage';
 import { CaretDownIcon } from '@phosphor-icons/react';
 
+//TODO: SEPARATE COMPONENT INTO LANGUAGE SELECTOR AND DROPDOWN FOR BETTER MAINTAINABILITY
 function LanguageSwitcher() {
     const { options, currentOption, changeLanguage } = useLanguage();
     const [open, setOpen] = useState<boolean>(false);
@@ -40,9 +41,6 @@ function LanguageSwitcher() {
 
             {open && (
                 <div className="absolute right-0 mt-2 w-48 py-2 bg-brand-card/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl origin-top-right animate-in fade-in zoom-in-95 duration-200">
-                    <div className="px-3 py-2 text-xs font-semibold text-brand-muted uppercase tracking-wider border-b border-white/5 mb-1">
-                        Select Language
-                    </div>
                     {options.map((option) => {
                         const isActive = option.code === currentOption.code;
                         return (

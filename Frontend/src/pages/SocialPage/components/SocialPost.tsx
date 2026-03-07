@@ -6,8 +6,8 @@
     CalendarBlankIcon,
     MountainsIcon
 } from '@phosphor-icons/react';
-import { Card } from '../ui/Card';
-import { Badge } from '../ui/Badge';
+import { Card } from '../../../components/Card';
+import { Badge } from '../../../components/Badge';
 
 export interface SocialUser {
     name: string;

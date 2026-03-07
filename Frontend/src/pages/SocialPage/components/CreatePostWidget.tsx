@@ -1,5 +1,5 @@
 ﻿import { ImageIcon, MapPinIcon, PlusIcon } from '@phosphor-icons/react';
-import { Card } from '../ui/Card';
+import { Card } from '../../../components/Card';
 import { useTranslation } from 'react-i18next';
 
 export const CreatePostWidget = () => {

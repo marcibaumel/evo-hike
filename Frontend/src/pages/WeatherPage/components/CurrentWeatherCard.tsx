@@ -1,8 +1,9 @@
 ﻿import { CalendarBlankIcon } from '@phosphor-icons/react';
-import { WeatherIcon } from './WeatherIcon';
+
 import { useTranslation } from 'react-i18next';
-import type { OpenWeatherForecast } from '../../types/openweather';
-import { Badge } from '../ui/Badge';
+import type { OpenWeatherForecast } from '../../../utils/openweather';
+import { Badge } from '../../../components/Badge';
+import { WeatherIcon } from './WeatherIcon';
 
 interface CurrentWeatherCardProps {
     current: OpenWeatherForecast;

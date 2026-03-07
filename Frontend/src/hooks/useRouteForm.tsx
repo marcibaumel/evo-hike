@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useState, type ChangeEvent } from 'react';
 import { useRef } from 'react';
-import type { Stop } from '../types/newroute';
+import type { Stop } from '../utils/newroute';
 
 export const useRouteForm = () => {
     const [tourName, setTourName] = useState('');

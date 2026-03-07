@@ -1,6 +1,6 @@
 ﻿import { TrophyIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../../../components/ui/Card';
+import { Card } from '../../../components/Card';
 
 export const AchievementsWidget = () => {
     const { t } = useTranslation();

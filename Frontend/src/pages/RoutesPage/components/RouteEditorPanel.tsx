@@ -13,13 +13,14 @@ import {
     CaretRightIcon,
     UploadSimpleIcon
 } from '@phosphor-icons/react';
-import { useRouteForm } from '../hooks/useRouteForm';
+import { useRouteForm } from '../../../hooks/useRouteForm';
 import { useTranslation } from 'react-i18next';
-import { parseGpxToGeoJSON } from '../utils/gpxParser';
+import { parseGpxToGeoJSON } from '../../../utils/gpxParser';
 import type { FeatureCollection } from 'geojson';
-import { Button } from './ui/Button';
+import { Button } from '../../../components/Button';
 
 // itt vannak a propsok amiket kapunk
+//TODO: Refactor this components
 interface RouteEditorPanelProps {
     name: string;
     description: string;

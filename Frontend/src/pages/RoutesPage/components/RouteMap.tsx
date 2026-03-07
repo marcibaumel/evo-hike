@@ -5,12 +5,13 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import L, { divIcon, point } from 'leaflet';
 import type { FeatureCollection } from 'geojson';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../ui/Card';
+import { Card } from '../../../components/Card';
 import { useState, useMemo, useEffect, useRef } from 'react';
-import RoutingMachine from '../RoutingMachine';
-import { Button } from '../ui/Button';
+import RoutingMachine from './RoutingMachine';
+import { Button } from '../../../components/Button';
 import { FlagIcon, MapPinIcon, XIcon, PlusIcon } from '@phosphor-icons/react';
 
+//TODO: Refactor this components
 interface RouteMapProps {
     geojson: FeatureCollection;
     onRouteCalculated?: (distance: number, time: number, coordinates: [number, number][]) => void;

@@ -1,5 +1,5 @@
 ﻿import type { ReactNode } from 'react';
-import { Card } from '../ui/Card';
+import { Card } from '../../../components/Card';
 
 interface WeatherStatCardProps {
     icon: ReactNode;

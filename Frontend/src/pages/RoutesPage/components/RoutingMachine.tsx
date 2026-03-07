@@ -9,6 +9,7 @@ interface RoutingMachineProps {
     onRouteFound?: (summary: { totalDistance: number; totalTime: number; coordinates: [number, number][] }) => void;
 }
 
+//TODO: Refactor this components
 export default function RoutingMachine({ waypoints, onRouteFound }: RoutingMachineProps) {
     const map = useMap();
     const onRouteFoundRef = useRef(onRouteFound);

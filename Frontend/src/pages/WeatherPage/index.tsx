@@ -8,12 +8,12 @@ import {
     MapPinIcon,
     CloudRainIcon
 } from '@phosphor-icons/react';
-import { CurrentWeatherCard } from '../../components/weather/CurrentWeatherCard';
-import { WeatherStatCard } from '../../components/weather/WeatherStatCard';
-import { ForecastGrid } from '../../components/weather/ForecastGrid';
-import { Skeleton } from '../../components/ui/Skeleton';
-import { Card } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
+import { CurrentWeatherCard } from './components/CurrentWeatherCard';
+import { WeatherStatCard } from './components/WeatherStatCard';
+import { ForecastGrid } from './components/ForecastGrid';
+import { Skeleton } from '../../components/Skeleton';
+import { Card } from '../../components/Card';
+import { Button } from '../../components/Button';
 
 const WeatherSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
@@ -24,7 +24,7 @@ const WeatherSkeleton = () => (
     </div>
 );
 
-//TODO: SePARATE COMPONENTS FOR CURRENT WEATHER, WEATHER STATS, AND FORECAST GRID FOR BETTER MAINTAINABILITY
+//TODO: SEPARATE COMPONENTS FOR CURRENT WEATHER, WEATHER STATS, AND FORECAST GRID FOR BETTER MAINTAINABILITY
 function Weather() {
     const { data: forecasts, loading, error, refetch } = useOpenWeather();
     const { t } = useTranslation();

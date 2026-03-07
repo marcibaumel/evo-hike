@@ -1,8 +1,8 @@
 ﻿import { CheckSquareIcon, TrashIcon, PlusIcon, PencilSimpleIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { Button } from '../../../components/ui/Button';
-import { Card } from '../../../components/ui/Card';
+import { Button } from '../../../components/Button';
+import { Card } from '../../../components/Card';
 
 export interface ChecklistItem {
     id: string;

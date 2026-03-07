@@ -1,4 +1,4 @@
-import type { DifficultyLevel } from '../types/difficulty';
+import type { DifficultyLevel } from './difficulty';
 
 export class Trail {
     id: string;
