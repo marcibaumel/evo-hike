@@ -13,7 +13,8 @@
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
-    "test:ui": "npx playwright test --ui"
+    "test:ui": "npx playwright test --ui",
+    "test:headless": "npx playwright test"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

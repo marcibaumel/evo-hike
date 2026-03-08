@@ -81,7 +81,7 @@ jobs:
       
       - name: Run Playwright tests
         working-directory: Frontend
-        run: npm run test:ui
+        run: npm run test:headless
       
       - name: Upload Playwright report
         if: always()
