@@ -4,12 +4,12 @@ using OpenMeteoSDKHourly = OpenMeteo.Weather.Forecast.ResponseModel.Hourly;
 
 public class OpenWeatherForecastResponse
 {
-    private readonly OpenMeteoSDKHourly _hourly;
+    private readonly OpenMeteoSDKHourly? _hourly;
     private readonly int _count; 
 
     public OpenWeatherForecastResponse(OpenMeteoSDK? forecast)
     {
-        _hourly = forecast?.Hourly!;
+        _hourly = forecast?.Hourly;
         _count = _hourly?.Time?.Length ?? 0;
     }
     public bool IsValidForecast()
@@ -42,12 +42,12 @@ public class OpenWeatherForecastResponse
         return new OpenWeatherForecast
         {
             ForecastDatetime = apiTime,
-            TemperatureC = h.Temperature_2m![index],
-            FeelsLikeC = h.Apparent_temperature![index],
-            WindSpeed_ms = (int)h.Windspeed_10m![index],
-            HumidityPercent = h.Relativehumidity_2m![index],
-            Pop = h.Precipitation_probability![index],
-            WeatherCode = h.Weathercode![index]
+            TemperatureC = h.Temperature_2m?[index] ?? 0,
+            FeelsLikeC = h.Apparent_temperature?[index] ?? 0,
+            WindSpeed_ms = (int)(h.Windspeed_10m?[index] ?? 0),
+            HumidityPercent = h.Relativehumidity_2m?[index] ?? 0,
+            Pop = h.Precipitation_probability?[index] ?? 0,
+            WeatherCode = h.Weathercode?[index] ?? 0
         };
     }
     
