@@ -7,10 +7,10 @@ public class OpenWeatherForecastResponse
     private readonly OpenMeteoSDKHourly _hourly;
     private readonly int _count; 
 
-    public OpenWeatherForecastResponse(OpenMeteoSDK forecast)
+    public OpenWeatherForecastResponse(OpenMeteoSDK? forecast)
     {
-        _hourly = forecast.Hourly;
-        _count = _hourly.Time?.Length ?? 0;
+        _hourly = forecast?.Hourly!;
+        _count = _hourly?.Time?.Length ?? 0;
     }
     public bool IsValidForecast()
     {

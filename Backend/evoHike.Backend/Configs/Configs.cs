@@ -23,9 +23,9 @@ public static class Configs
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                     }
-                    else
+                    else if (!string.IsNullOrWhiteSpace(allowedOrigins))
                     {
-                        policy.WithOrigins(allowedOrigins)
+                        policy.WithOrigins(allowedOrigins.Split(";", StringSplitOptions.RemoveEmptyEntries))
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                     }

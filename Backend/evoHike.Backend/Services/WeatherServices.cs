@@ -15,17 +15,19 @@ public class WeatherService
         _client = client;
     }
 
-    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(string cityName, int forecastDays , int startHour , int endHour ) //város alapján 
+    public async Task<List<OpenWeatherForecast>?> GetWeatherForecastAsync(string cityName, int forecastDays , int startHour , int endHour ) //város alapján 
     {
         var geoOption = new GeocodingOptions(cityName) ; // 
         var geoResult = await _client.GetLocationDataAsync(geoOption);
 
+        if (geoResult?.Locations == null || geoResult.Locations.Length == 0)
+            return null;
         var location = geoResult.Locations[0]; // azért nulla mert a legpontosabb egyezés kell
 
         return await GetWeatherForecastAsync(location.Latitude, location.Longitude, forecastDays, startHour, endHour);
     }
 
-    public async Task<List<OpenWeatherForecast>> GetWeatherForecastAsync(float lat, float longl, int forecastDays, // szél és hossz alapján
+    public async Task<List<OpenWeatherForecast>?> GetWeatherForecastAsync(float lat, float longl, int forecastDays, // szél és hossz alapján
         int startHour, int endHour)
     {
         var weatherOption = new WeatherForecastOptions
@@ -50,12 +52,16 @@ public class WeatherService
 
         var response = await _client.QueryWeatherApiAsync(weatherOption);
         
+        if (response?.Hourly?.Time == null)
+            return null;
+            
         var validator = new OpenWeatherForecastResponse(response);
 
         if (!validator.IsValidForecast())
         {
             return null;
         }
+        
         var forecast = new List<OpenWeatherForecast>();
 
         for (int i = 0; i < response.Hourly.Time.Length; i++)
