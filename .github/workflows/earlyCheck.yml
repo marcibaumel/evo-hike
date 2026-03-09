@@ -8,7 +8,7 @@ on:
 
 jobs:
   frontend-lint:
-    name: Frontend Lint
+    name: Frontend lint
     runs-on: ubuntu-latest
     
     steps:
@@ -30,7 +30,7 @@ jobs:
         run: npm run lint
 
   backend-tests:
-    name: Backend Tests
+    name: Backend tests
     runs-on: ubuntu-latest
     
     steps:
@@ -47,14 +47,14 @@ jobs:
       
       - name: Build
         working-directory: Backend
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --no-restore /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=true
       
       - name: Run unit tests
         working-directory: Backend
         run: dotnet test evoHike.UnitTests/evoHike.UnitTests.csproj --configuration Release --no-build --verbosity normal
 
-  frontend-playwright:
-    name: Frontend Playwright Tests
+  frontend-test:
+    name: Frontend tests
     runs-on: ubuntu-latest
     
     steps:
@@ -83,10 +83,9 @@ jobs:
         working-directory: Frontend
         run: npm run test:headless
       
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: Frontend/playwright-report/
-          retention-days: 30
+      # - name: Upload Playwright report
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: playwright-report
+      #     path: Frontend/playwright-report/
+      #     retention-days: 1
