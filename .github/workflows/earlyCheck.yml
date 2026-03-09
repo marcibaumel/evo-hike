@@ -47,7 +47,7 @@ jobs:
       
       - name: Build
         working-directory: Backend
-        run: dotnet build --no-restore /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=true
+        run: dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=true
       
       - name: Run unit tests
         working-directory: Backend
