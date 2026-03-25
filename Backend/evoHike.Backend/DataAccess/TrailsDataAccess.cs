@@ -1,6 +1,7 @@
 ﻿using evoHike.Backend.Data;
 using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Models;
+using evoHike.Backend.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace evoHike.Backend.DataAccess
@@ -20,14 +21,14 @@ namespace evoHike.Backend.DataAccess
                 .FirstOrDefaultAsync(t => t.TrailID == id);
         }
 
-        public async Task<IEnumerable<PoiDto>> GetNearbyPoisAsync(int trailId, double distanceMeters)
+        public async Task<IEnumerable<PoiDTO>> GetNearbyPoisAsync(int trailId, double distanceMeters)
         {
             var trail = await _context.HikingTrails.FindAsync(trailId);
-            if (trail == null || trail.RouteLine == null) return Enumerable.Empty<PoiDto>();
+            if (trail == null || trail.RouteLine == null) return Enumerable.Empty<PoiDTO>();
 
             return await _context.PointsOfInterest
                 .Where(poi => poi.Location.IsWithinDistance(trail.RouteLine, distanceMeters))
-                .Select(p => new PoiDto
+                .Select(p => new PoiDTO
                 {
                     Id = p.PointOfInterestId,
                     Name = p.PointOfInterestName
@@ -35,11 +36,11 @@ namespace evoHike.Backend.DataAccess
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<TrailDto>> GetTrailsAsync()
+        public async Task<IEnumerable<TrailDTO>> GetTrailsAsync()
         {
             return await _context.HikingTrails
                 .AsNoTracking() 
-                .Select(t => new TrailDto
+                .Select(t => new TrailDTO
                 {
                     Name = t.TrailName,
                     Difficulty = t.Difficulty

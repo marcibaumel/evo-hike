@@ -1,8 +1,8 @@
 using NetTopologySuite.Geometries;
 
-namespace evoHike.Backend.Models
+namespace evoHike.Backend.Models.DTO
 {
-    public class TrailDto
+    public class TrailDTO
     {
         public string Id { get; set; } = string.Empty; 
         public string Name { get; set; } = string.Empty;
@@ -16,9 +16,9 @@ namespace evoHike.Backend.Models
         public string CoverPhotoPath { get; set; } = string.Empty;
         public Geometry? RouteLine { get; set; }
 
-        public TrailDto() { }
+        public TrailDTO() { }
 
-        public TrailDto(HikingTrail trail)
+        public TrailDTO(HikingTrail trail)
         {
             Id = trail.TrailID.ToString();
             Name = trail.TrailName;

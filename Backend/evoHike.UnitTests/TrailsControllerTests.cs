@@ -1,6 +1,7 @@
 ﻿using evoHike.Backend.Controllers;
 using evoHike.Backend.Models;
-using evoHike.Backend.Services;
+using evoHike.Backend.Models.DTO;
+using evoHike.Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 

@@ -1,6 +1,6 @@
 ﻿using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
-using evoHike.Backend.Services;
+using evoHike.Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace evoHike.Backend.Controllers
@@ -30,7 +30,7 @@ namespace evoHike.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PlannedHikeEntity>> PlanHike([FromBody] PlanHikeRequest request)
+        public async Task<ActionResult<PlannedHikeEntity>> PlanHike([FromBody] PlannedHikeDTO request)
         {
             try
             {
