@@ -22,10 +22,10 @@ public static class DbInitializer
 
         var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
 
-        var trails = new HikingTrail[]
+        var trails = new HikingTrailEntity[]
         {
 
-            new HikingTrail
+            new HikingTrailEntity
             {
                 TrailName = "Bükkinyúlsz",
                 Description = "Kellemes séta a Bükkben.",
@@ -47,7 +47,7 @@ public static class DbInitializer
             },
             
 
-            new HikingTrail
+            new HikingTrailEntity
             {
                 TrailName = "Nehéz terep (Bükkihűlsz)",
                 Description = "Nehéz terep, csak profiknak.",
@@ -70,7 +70,7 @@ public static class DbInitializer
 
  
 
-            new HikingTrail
+            new HikingTrailEntity
             {
                 TrailName = "Nagymaros - Prédikálószék",
                 Description = "A Dunakanyar legszebb panorámája.",
@@ -91,7 +91,7 @@ public static class DbInitializer
                 ])
             },
 
-            new HikingTrail
+            new HikingTrailEntity
             {
                 TrailName = "Rám-szakadék kaland",
                 Description = "Izgalmas szurdoktúra létrákkal és vízesésekkel.",
@@ -112,7 +112,7 @@ public static class DbInitializer
                 ])
             },
 
-            new HikingTrail
+            new HikingTrailEntity
             {
                 TrailName = "Spartacus-ösvény",
                 Description = "Kanyargós vadászösvény pazar kilátással.",
@@ -133,7 +133,7 @@ public static class DbInitializer
                 ])
             },
 
-            new HikingTrail
+            new HikingTrailEntity
             {
                 TrailName = "Vörös-kő extrém kör",
                 Description = "Extrém nehézségű, meredek emelkedőkkel tarkított körtúra.",

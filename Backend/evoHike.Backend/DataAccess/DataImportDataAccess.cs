@@ -54,7 +54,7 @@ namespace evoHike.Backend.DataAccess
 
                         var elevation = ImportHelper.ParseDouble(ImportHelper.GetAttributeValue(attr, "ascent", "ele"));
 
-                        var trail = new HikingTrail
+                        var trail = new HikingTrailEntity
                         {
                             TrailName = nameInfo.Name,
                             StartLocation = ImportHelper.GetAttributeValue(attr, "from")
@@ -101,7 +101,7 @@ namespace evoHike.Backend.DataAccess
                     if (feature.Geometry is not Point point)
                         continue;
 
-                    var poi = new PointOfInterest
+                    var poi = new PointOfInterestEntity
                     {
                         PointOfInterestName = ImportHelper.GetAttributeValue(feature.Attributes, "name")
                                   ?? "Unnamed POI",

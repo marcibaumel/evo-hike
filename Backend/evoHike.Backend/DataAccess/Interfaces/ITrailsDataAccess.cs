@@ -8,7 +8,7 @@ namespace evoHike.Backend.DataAccess.Interfaces
     {
 
         Task<IEnumerable<TrailDTO>> GetTrailsAsync();
-        Task<HikingTrail?> GetByIdAsync(int id);
+        Task<HikingTrailEntity?> GetByIdAsync(int id);
         Task<IEnumerable<PoiDTO>> GetNearbyPoisAsync(int trailId, double distance); 
 
 

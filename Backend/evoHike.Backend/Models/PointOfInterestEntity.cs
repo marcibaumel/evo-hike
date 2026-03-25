@@ -3,10 +3,10 @@ using NetTopologySuite.Geometries;
 
 namespace evoHike.Backend.Models;
 
-public class PointOfInterest
+public class PointOfInterestEntity
 {
     [Key]
-    public int PointOfInterestId { get; set; }
+    public int Id { get; set; }
     public required string PointOfInterestName { get; set; }
     public required string PointOfInterestType { get; set; }
     public required Point Location { get; set; }

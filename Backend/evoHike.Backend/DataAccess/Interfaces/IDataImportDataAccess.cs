@@ -1,9 +1,4 @@
-﻿using evoHike.Backend.Models;
-using evoHike.Backend.Utils;
-using NetTopologySuite.IO;
-using System.Text;
-
-namespace evoHike.Backend.DataAccess.Interfaces
+﻿namespace evoHike.Backend.DataAccess.Interfaces
 {
     public interface IDataImportDataAccess
     {

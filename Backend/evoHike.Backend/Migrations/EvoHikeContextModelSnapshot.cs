@@ -23,13 +23,13 @@ namespace evoHike.Backend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("evoHike.Backend.Models.HikingTrail", b =>
+            modelBuilder.Entity("evoHike.Backend.Models.HikingTrailEntity", b =>
                 {
-                    b.Property<int>("TrailID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrailID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CoverPhotoPath")
                         .HasColumnType("nvarchar(max)");
@@ -86,7 +86,7 @@ namespace evoHike.Backend.Migrations
                     b.Property<string>("Wikipedia")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TrailID");
+                    b.HasKey("Id");
 
                     b.ToTable("HikingTrails");
                 });
@@ -127,13 +127,13 @@ namespace evoHike.Backend.Migrations
                     b.ToTable("PlannedHikes");
                 });
 
-            modelBuilder.Entity("evoHike.Backend.Models.PointOfInterest", b =>
+            modelBuilder.Entity("evoHike.Backend.Models.PointOfInterestEntity", b =>
                 {
-                    b.Property<int>("PointOfInterestId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PointOfInterestId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Point>("Location")
                         .IsRequired()
@@ -147,14 +147,14 @@ namespace evoHike.Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PointOfInterestId");
+                    b.HasKey("Id");
 
                     b.ToTable("PointsOfInterest");
                 });
 
             modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
                 {
-                    b.HasOne("evoHike.Backend.Models.HikingTrail", "HikingTrail")
+                    b.HasOne("evoHike.Backend.Models.HikingTrailEntity", "HikingTrail")
                         .WithMany()
                         .HasForeignKey("HikingTrailId")
                         .OnDelete(DeleteBehavior.Cascade)
