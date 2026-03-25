@@ -1,6 +1,8 @@
 using evoHike.Backend;
 using evoHike.Backend.Middleware;
 using evoHike.Backend.Repositories;
+using evoHike.Backend.DataAccess;
+using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Services;
 using OpenMeteo;
 
@@ -23,6 +25,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddApplicationAuthentication(builder.Configuration); 
 
 builder.Services.AddScoped<ITrailService, TrailService>();
+builder.Services.AddScoped<ITrailsDataAccess, TrailsDataAccess>();
 builder.Services.AddScoped<IPlannedHikeService, PlannedHikeService>();
 
 builder.Services.AddScoped<DataImportService>();

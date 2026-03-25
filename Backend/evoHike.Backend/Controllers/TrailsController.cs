@@ -1,4 +1,5 @@
-﻿using evoHike.Backend.Models;
+﻿using evoHike.Backend.DataAccess.Interfaces;
+using evoHike.Backend.Models;
 using evoHike.Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,38 +7,41 @@ namespace evoHike.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TrailsController(ITrailService _trailService) : ControllerBase
+    public class TrailsController : ControllerBase
     {
+
+        private readonly ITrailService _trailService;
+
+        public TrailsController(ITrailService trailService)
+        {
+            _trailService = trailService;
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TrailDto>>> GetTrails()
         {
             try
             {
                 var trails = await _trailService.GetAllTrailsAsync();
-                var trailDtos = trails.Select(t => new TrailDto(t));
-
-                return Ok(trailDtos);
+                return Ok(trails);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, "Hiba történt az adatok lekérésekor. " + ex.Message);
             }
         }
 
         [HttpGet("{id}/pois")]
-        public async Task<ActionResult<IEnumerable<PoiDto>>> GetNearbyPois(
-            int id,
-            [FromQuery] double distance = 1000)
+        public async Task<ActionResult<IEnumerable<PoiDto>>> GetPois(int id, [FromQuery] double distance = 1000)
         {
             try
             {
-                var nearbyPois = await _trailService.GetPoisNearTrailAsync(id, distance);
-                var poiDtos = nearbyPois.Select(p => new PoiDto(p));
-                return Ok(poiDtos);
+                var pois = await _trailService.GetPoisNearTrailAsync(id, distance);
+                return Ok(pois);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, "Hiba történt az adatok lekérésekor. " + ex.Message);
             }
         }
     }
