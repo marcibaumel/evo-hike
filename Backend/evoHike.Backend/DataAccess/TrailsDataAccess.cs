@@ -8,12 +8,21 @@ namespace evoHike.Backend.DataAccess
 {
     public class TrailsDataAccess : ITrailsDataAccess
     {
-
         private readonly EvoHikeContext _context;
         public TrailsDataAccess(EvoHikeContext context) {
             _context = context;
         }
-
+        public async Task<IEnumerable<TrailDTO>> GetTrailsAsync()
+        {
+            return await _context.HikingTrails
+                .AsNoTracking()
+                .Select(t => new TrailDTO
+                {
+                    Name = t.TrailName,
+                    Difficulty = t.Difficulty
+                })
+                .ToListAsync();
+        }
         public async Task<HikingTrail?> GetByIdAsync(int id)
         {
             return await _context.HikingTrails
@@ -32,18 +41,6 @@ namespace evoHike.Backend.DataAccess
                 {
                     Id = p.PointOfInterestId,
                     Name = p.PointOfInterestName
-                })
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<TrailDTO>> GetTrailsAsync()
-        {
-            return await _context.HikingTrails
-                .AsNoTracking() 
-                .Select(t => new TrailDTO
-                {
-                    Name = t.TrailName,
-                    Difficulty = t.Difficulty
                 })
                 .ToListAsync();
         }

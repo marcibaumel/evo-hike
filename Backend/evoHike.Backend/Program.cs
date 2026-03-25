@@ -21,6 +21,8 @@ builder.Services.AddApplicationDatabase(builder.Configuration);
 
 builder.Services.AddScoped<ITrailService, TrailService>();
 builder.Services.AddScoped<ITrailsDataAccess, TrailsDataAccess>();
+builder.Services.AddScoped<IPlannedHikeDataAccess, PlannedHikeDataAccess>();
+builder.Services.AddScoped<IDataImportDataAccess, DataImportDataAccess>();
 builder.Services.AddScoped<IPlannedHikeService, PlannedHikeService>();
 
 builder.Services.AddScoped<DataImportService>();
