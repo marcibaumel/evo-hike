@@ -10,8 +10,16 @@ namespace evoHike.Backend.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class PlannedHikesController(IPlannedHikeService _plannedHikeService) : ControllerBase
+    public class PlannedHikesController: ControllerBase
     {
+
+        private readonly IPlannedHikeService _plannedHikeService;
+
+        public PlannedHikesController(IPlannedHikeService plannedHikeService)
+        {
+            _plannedHikeService = plannedHikeService;
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlannedHikeEntity>>> GetPlannedHikes([FromQuery] HikeStatus? status)
         {

@@ -1,85 +1,36 @@
-﻿using evoHike.Backend.Data;
+﻿using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
 using evoHike.Backend.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 namespace evoHike.Backend.Services
 {
     public class PlannedHikeService : IPlannedHikeService
     {
-        private readonly EvoHikeContext _context;
-        public PlannedHikeService(EvoHikeContext context)
+        private readonly IPlannedHikeDataAccess _plannedHike;
+        public PlannedHikeService(IPlannedHikeDataAccess plannedHike)
         {
-            _context = context;
+            _plannedHike = plannedHike;
         }
 
         public async Task<IEnumerable<PlannedHikeEntity>> GetAllPlannedHikesAsync(HikeStatus? filterStatus = null)
         {
-            var query = _context.PlannedHikes
-                .Include(ph => ph.HikingTrail)
-                .AsQueryable();
+            var plannedHikeEntities = await _plannedHike.GetAllPlannedHikesAsync();
 
-            if (filterStatus.HasValue)
-            {
-                query = query.Where(ph => ph.Status == filterStatus.Value);
-            }
-
-            return await query
-                .OrderBy(ph => ph.PlannedStartDateTime)
-                .ToListAsync();
+            return plannedHikeEntities ?? Enumerable.Empty<PlannedHikeEntity>();
         }
 
         public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlannedHikeDTO request)
         {
-            var routeExists = await _context.HikingTrails.AnyAsync(r => r.TrailID == request.RouteId);
-            if (!routeExists)
-            {
-                throw new ArgumentException("A megadott RouteId nem létezik.");
-            }
-            if (request.Start < DateTime.UtcNow.AddMinutes(-5))
-                throw new ArgumentException("A túra kezdete nem lehet a múltban.");
-
-            if (request.End <= request.Start)
-                throw new ArgumentException("A túra vége később kell legyen, mint a kezdete.");
-
-            string? checklistJson = null;
-            if (request.ChecklistItems != null && request.ChecklistItems.Any())
-            {
-                checklistJson = JsonSerializer.Serialize(request.ChecklistItems);
-            }
-
-            var newPlan = new PlannedHikeEntity
-            {
-                HikingTrailId = request.RouteId,
-                PlannedStartDateTime = request.Start,
-                PlannedEndDateTime = request.End,
-                Status = HikeStatus.Planned,
-                ChecklistJson = checklistJson,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.PlannedHikes.Add(newPlan);
-            await _context.SaveChangesAsync();
+            var newPlan= await _plannedHike.CreatePlannedHikeAsync(request);
 
             return newPlan;
         }
 
         public async Task<bool> MarkHikeAsCompletedAsync(int id)
         {
-            var hike = await _context.PlannedHikes.FindAsync(id);
-
-            if (hike == null)
-            {
-                return false;
-            }
-
-            hike.Status = HikeStatus.Completed;
-            hike.CompletedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-            return true;
+            var hike = await _plannedHike.MarkHikeAsCompletedAsync(id);
+            return hike;
         }
     }
 }
