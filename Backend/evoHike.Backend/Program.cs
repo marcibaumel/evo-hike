@@ -4,6 +4,7 @@ using evoHike.Backend.Repositories;
 using evoHike.Backend.DataAccess;
 using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Services;
+using evoHike.Backend.Services.Interfaces;
 using OpenMeteo;
 
 var builder = WebApplication.CreateBuilder(args);

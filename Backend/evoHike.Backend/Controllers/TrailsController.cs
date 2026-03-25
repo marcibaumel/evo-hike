@@ -1,6 +1,6 @@
 ﻿using evoHike.Backend.DataAccess.Interfaces;
-using evoHike.Backend.Models;
-using evoHike.Backend.Services;
+using evoHike.Backend.Models.DTO;
+using evoHike.Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace evoHike.Backend.Controllers
@@ -18,7 +18,7 @@ namespace evoHike.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TrailDto>>> GetTrails()
+        public async Task<ActionResult<IEnumerable<TrailDTO>>> GetTrails()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace evoHike.Backend.Controllers
         }
 
         [HttpGet("{id}/pois")]
-        public async Task<ActionResult<IEnumerable<PoiDto>>> GetPois(int id, [FromQuery] double distance = 1000)
+        public async Task<ActionResult<IEnumerable<PoiDTO>>> GetPois(int id, [FromQuery] double distance = 1000)
         {
             try
             {

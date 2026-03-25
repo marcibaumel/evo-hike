@@ -1,6 +1,6 @@
 ﻿using evoHike.Backend.Models;
 
-namespace evoHike.Backend.Services
+namespace evoHike.Backend.Services.Interfaces
 {
     public interface IWeatherService
     {

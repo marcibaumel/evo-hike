@@ -1,6 +1,7 @@
 ﻿using evoHike.Backend.Data;
 using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
+using evoHike.Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -30,7 +31,7 @@ namespace evoHike.Backend.Services
                 .ToListAsync();
         }
 
-        public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlanHikeRequest request)
+        public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlannedHikeDTO request)
         {
             var routeExists = await _context.HikingTrails.AnyAsync(r => r.TrailID == request.RouteId);
             if (!routeExists)
