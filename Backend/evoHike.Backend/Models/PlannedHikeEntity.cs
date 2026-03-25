@@ -9,10 +9,9 @@ namespace evoHike.Backend.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey(nameof(HikingTrail))]
         public int HikingTrailId { get; set; }
 
-        public HikingTrail? HikingTrail { get; set; }
+        public HikingTrailEntity? HikingTrail { get; set; }
 
         public DateTime PlannedStartDateTime { get; set; }
 

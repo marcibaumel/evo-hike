@@ -11,9 +11,9 @@ namespace evoHike.Backend.Models.DTO
 
         public PoiDTO() { }
 
-        public PoiDTO(PointOfInterest poi)
+        public PoiDTO(PointOfInterestEntity poi)
         {
-            Id = poi.PointOfInterestId;
+            Id = poi.Id;
             Name = poi.PointOfInterestName;
             Type = poi.PointOfInterestType;
             Location = poi.Location;

@@ -23,11 +23,11 @@ namespace evoHike.Backend.DataAccess
                 })
                 .ToListAsync();
         }
-        public async Task<HikingTrail?> GetByIdAsync(int id)
+        public async Task<HikingTrailEntity?> GetByIdAsync(int id)
         {
             return await _context.HikingTrails
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.TrailID == id);
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<IEnumerable<PoiDTO>> GetNearbyPoisAsync(int trailId, double distanceMeters)
@@ -39,7 +39,7 @@ namespace evoHike.Backend.DataAccess
                 .Where(poi => poi.Location.IsWithinDistance(trail.RouteLine, distanceMeters))
                 .Select(p => new PoiDTO
                 {
-                    Id = p.PointOfInterestId,
+                    Id = p.Id,
                     Name = p.PointOfInterestName
                 })
                 .ToListAsync();

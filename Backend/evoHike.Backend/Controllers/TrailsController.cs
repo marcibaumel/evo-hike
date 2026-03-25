@@ -27,7 +27,7 @@ namespace evoHike.Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Hiba történt az adatok lekérésekor. " + ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 

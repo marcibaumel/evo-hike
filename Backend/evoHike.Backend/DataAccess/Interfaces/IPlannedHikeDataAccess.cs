@@ -1,5 +1,4 @@
-﻿using evoHike.Backend.Data;
-using evoHike.Backend.Models;
+﻿using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
 
 namespace evoHike.Backend.DataAccess.Interfaces

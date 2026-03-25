@@ -2,7 +2,6 @@ using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTO;
 using evoHike.Backend.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace evoHike.Backend.Services
 {
@@ -22,7 +21,7 @@ namespace evoHike.Backend.Services
             return trails ?? Enumerable.Empty<TrailDTO>();
         }
 
-        public async Task<HikingTrail?> GetTrailByIdAsync(int id)
+        public async Task<HikingTrailEntity?> GetTrailByIdAsync(int id)
         { 
            var trailById = await _dataAccess.GetByIdAsync(id);
            return trailById ?? throw new Exception("Something went wrong :/");
