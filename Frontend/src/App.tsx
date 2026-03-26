@@ -4,7 +4,7 @@ import LandingPage from './pages/LandingPage';
 import RoutePage from './pages/RoutesPage';
 import SocialPage from './pages/SocialPage';
 import Weather from './pages/WeatherPage';
-import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage.tsx';
 
 function App() {
     return (
