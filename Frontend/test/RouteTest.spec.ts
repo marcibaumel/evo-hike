@@ -1,8 +1,12 @@
 import {expect, test} from '@playwright/test'
 
 test.describe('RouteTest', () =>{
+    
+    test.beforeEach(async({page})=> {
+    await page.goto("http://localhost:5173");
+    });
+    
     test('check the journal route exists', async({page}) =>{
-        await page.goto("http://localhost:5173");
         await page.getByRole("link" ,{name : "Journal"}).click();
         await expect(page).toHaveURL(/\/journal$/);
 
@@ -17,7 +21,6 @@ test.describe('RouteTest', () =>{
 
     });
     test('check the social route exists', async({page}) =>{
-        await page.goto("http://localhost:5173");
         await page.getByRole("link", {name: "Social"}).click();
         await expect(page).toHaveURL(/\/social$/);
 
@@ -32,7 +35,6 @@ test.describe('RouteTest', () =>{
         
     });
     test('check the planner routes exists', async({page}) =>{
-        await page.goto("http://localhost:5173");
         await page.getByRole("link", {name: "Planner"}).click();
         await expect(page).toHaveURL(/\/routes$/);
         
