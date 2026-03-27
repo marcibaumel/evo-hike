@@ -1,8 +1,11 @@
-﻿namespace evoHike.Backend.DataAccess.Interfaces
+﻿using evoHike.Backend.Models;
+
+namespace evoHike.Backend.DataAccess.Interfaces
 {
     public interface IDataImportDataAccess
     {
-        Task<string> ImportTrailsAsync(string folderPath);
-        Task<string> ImportPoisAsync(string filePath);
+        Task ImportTrailsAsync(IEnumerable<HikingTrailEntity> trails);
+        Task AddPoisAsync(IEnumerable<PointOfInterestEntity> pois);
+        Task SaveChangesAsync();
     }
 }

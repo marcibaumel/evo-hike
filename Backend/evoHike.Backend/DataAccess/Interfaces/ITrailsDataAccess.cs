@@ -1,6 +1,7 @@
 ﻿using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 
 namespace evoHike.Backend.DataAccess.Interfaces
 {
@@ -9,8 +10,8 @@ namespace evoHike.Backend.DataAccess.Interfaces
 
         Task<IEnumerable<TrailDTO>> GetTrailsAsync();
         Task<HikingTrailEntity?> GetByIdAsync(int id);
-        Task<IEnumerable<PoiDTO>> GetNearbyPoisAsync(int trailId, double distance); 
-
+        Task<HikingTrailEntity?> GetTrailByIdAsync(int trailId);
+        Task<List<PointOfInterestEntity>> GetPoisWithinDistanceAsync(Geometry region, double distanceMeters);
 
     }
 }
