@@ -14,7 +14,8 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "test:ui": "npx playwright test --ui",
-    "test:headless": "npx playwright test"
+    "test:headless": "npx playwright test",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
