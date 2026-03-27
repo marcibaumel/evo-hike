@@ -1,5 +1,4 @@
 import {test,expect} from '@playwright/test';
-import { error } from 'console';
 
 test.describe('Leaflet and buttons test', () =>{
 
