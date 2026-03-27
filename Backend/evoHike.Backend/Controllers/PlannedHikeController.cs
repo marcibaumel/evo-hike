@@ -22,7 +22,7 @@ namespace evoHike.Backend.Controllers
         {
             try
             {
-                var hikes = await _plannedHikeService.GetAllPlannedHikesAsync(status);
+                var hikes = await _plannedHikeService.GetHikesAsync(status);
                 return Ok(hikes);
             }
             catch (Exception ex)
@@ -42,22 +42,12 @@ namespace evoHike.Backend.Controllers
         {
             try
             {
-                if (request.RouteId == 0)
-                {
-                    return BadRequest("HikingTrailId is required.");
-                }
-
-                var createdHike = await _plannedHikeService.CreatePlannedHikeAsync(request);
-
-                return CreatedAtAction(nameof(GetPlannedHikes), new { id = createdHike.Id }, createdHike);
+                var result = await _plannedHikeService.CreatePlannedHikeAsync(request);
+                return CreatedAtAction(nameof(GetPlannedHikes), new { id = result.Id }, result);
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message); 
             }
         }
 

@@ -1,5 +1,6 @@
 using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTO;
+using NetTopologySuite.Geometries;
 
 namespace evoHike.Backend.Services.Interfaces
 {
