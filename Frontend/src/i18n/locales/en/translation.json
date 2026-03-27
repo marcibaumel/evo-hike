@@ -251,5 +251,11 @@
     "map": "Map (Offline) / GPS",
     "first_aid": "First Aid Kit",
     "food": "Food / Energy bar"
+  },
+  "notFound": {
+    "title": "Oops! Page not found.",
+    "description": "Congratulations, you've successfully gone off the map! Only the wilderness (and this 404 error) awaits you here. Let's find a safer, well-marked trail instead.",
+    "backToHome": "Back to home",
+    "contact": "Contact us"
   }
 }
