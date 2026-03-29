@@ -28,8 +28,10 @@ storybook-static
 /stories/assets/accessibility/
 
 # Playwright
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+*/test-results/
+*/playwright-report/
+*/blob-report/
+*/playwright/.cache/
+*/playwright/.auth/
+
+.vs
