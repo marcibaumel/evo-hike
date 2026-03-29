@@ -1,6 +1,6 @@
 ﻿namespace evoHike.Backend.Models.DTOs
 {
-    public class PlanHikeRequest
+    public class PlannedHikeDTO
     {
         public int RouteId { get; set; }
         public DateTime Start { get; set; }

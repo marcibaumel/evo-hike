@@ -1,41 +1,37 @@
-using evoHike.Backend.Data;
+using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Models;
-using Microsoft.EntityFrameworkCore;
+using evoHike.Backend.Models.DTO;
+using evoHike.Backend.Services.Interfaces;
 
 namespace evoHike.Backend.Services
 {
-    public class TrailService(EvoHikeContext _context) : ITrailService
+    public class TrailService : ITrailService
     {
-        public async Task<IReadOnlyList<HikingTrail>> GetAllTrailsAsync()
-        {
-            var trails = await _context.HikingTrails
-                .AsNoTracking()
-                .ToListAsync();
 
-            return trails.Count == 0
-                ? []
-                : trails;
+        private readonly ITrailsDataAccess _dataAccess;
+
+        public TrailService(ITrailsDataAccess dataAccess)
+        {
+           _dataAccess = dataAccess;
         }
 
-        public async Task<HikingTrail?> GetTrailByIdAsync(int id)
+        public async Task<IEnumerable<TrailDTO>> GetAllTrailsAsync()
         {
-            return await _context.HikingTrails
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.TrailID == id);
+            var trails = await _dataAccess.GetTrailsAsync();
+            return trails ?? Enumerable.Empty<TrailDTO>();
         }
 
-        public async Task<IEnumerable<PointOfInterest>> GetPoisNearTrailAsync(int trailId, double distanceMeters)
-        {
-            var trail = await _context.HikingTrails.FindAsync(trailId);
-            if (trail == null || trail.RouteLine == null)
-            {
-                return [];
-            }
-
-            return await _context.PointsOfInterest
-                .Where(poi => poi.Location.IsWithinDistance(trail.RouteLine, distanceMeters))
-                .AsNoTracking()
-                .ToListAsync();
+        public async Task<HikingTrailEntity?> GetTrailByIdAsync(int id)
+        { 
+           var trailById = await _dataAccess.GetByIdAsync(id);
+           return trailById ?? throw new Exception("Something went wrong :/");
         }
+
+        public async Task<IEnumerable<PoiDTO>> GetPoisNearTrailAsync(int trailId, double distanceMeters)
+        {
+           var getPoi = await _dataAccess.GetNearbyPoisAsync(trailId, distanceMeters);
+            return getPoi ?? Enumerable.Empty<PoiDTO>();
+        }
+
     }
 }
