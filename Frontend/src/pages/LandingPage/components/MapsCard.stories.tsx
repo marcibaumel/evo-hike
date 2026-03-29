@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MapsCard } from './MapsCard';
 import '../../../i18n';
 
 const meta: Meta<typeof MapsCard> = {
     title: 'Components/LandingPage/MapsCard',
-    component: MapsCard,
+    component: MapsCard
 };
 export default meta;
 

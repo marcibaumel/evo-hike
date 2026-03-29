@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProfileHeader } from './ProfileHeader';
 import '../../../i18n';
 
 const meta: Meta<typeof ProfileHeader> = {
     title: 'Components/JournalPage/ProfileHeader',
-    component: ProfileHeader,
+    component: ProfileHeader
 };
 export default meta;
 
@@ -19,8 +19,8 @@ export const Default: Story = {
             stats: {
                 hikesCompleted: 42,
                 totalDistance: '1248km',
-                elevationGain: '8848m',
-            },
-        },
-    },
+                elevationGain: '8848m'
+            }
+        }
+    }
 };

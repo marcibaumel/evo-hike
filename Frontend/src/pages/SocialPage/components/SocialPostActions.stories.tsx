@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SocialPostActions } from './SocialPostActions';
 
 const meta: Meta<typeof SocialPostActions> = {
     title: 'Components/SocialPage/SocialPostActions',
-    component: SocialPostActions,
+    component: SocialPostActions
 };
 export default meta;
 
@@ -15,8 +15,8 @@ export const NotLiked: Story = {
         likes: 124,
         comments: 18,
         isLiked: false,
-        onToggleLike: (id) => console.log('Toggled:', id),
-    },
+        onToggleLike: (id) => console.log('Toggled:', id)
+    }
 };
 
 export const Liked: Story = {
@@ -25,6 +25,6 @@ export const Liked: Story = {
         likes: 125,
         comments: 18,
         isLiked: true,
-        onToggleLike: (id) => console.log('Toggled:', id),
-    },
+        onToggleLike: (id) => console.log('Toggled:', id)
+    }
 };

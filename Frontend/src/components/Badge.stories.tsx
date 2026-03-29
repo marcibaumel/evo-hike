@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Badge } from './Badge';
 
 const meta: Meta<typeof Badge> = {
     title: 'Components/Common/Badge',
-  component: Badge,
-  args: {
-    children: 'Badge',
-  },
+    component: Badge,
+    args: {
+        children: 'Badge'
+    }
 };
 export default meta;
 

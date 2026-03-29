@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ChecklistItemComponent } from './ChecklistItem';
 import '../../../i18n';
 
 const meta: Meta<typeof ChecklistItemComponent> = {
     title: 'Components/JournalPage/ChecklistItem',
-    component: ChecklistItemComponent,
+    component: ChecklistItemComponent
 };
 export default meta;
 
@@ -16,8 +16,8 @@ export const Unchecked: Story = {
         isEditing: false,
         onToggle: (id) => console.log('Toggled:', id),
         onUpdateText: (id, text) => console.log('Updated:', id, text),
-        onDelete: (id) => console.log('Deleted:', id),
-    },
+        onDelete: (id) => console.log('Deleted:', id)
+    }
 };
 
 export const Checked: Story = {
@@ -26,8 +26,8 @@ export const Checked: Story = {
         isEditing: false,
         onToggle: (id) => console.log('Toggled:', id),
         onUpdateText: (id, text) => console.log('Updated:', id, text),
-        onDelete: (id) => console.log('Deleted:', id),
-    },
+        onDelete: (id) => console.log('Deleted:', id)
+    }
 };
 
 export const Editing: Story = {
@@ -36,6 +36,6 @@ export const Editing: Story = {
         isEditing: true,
         onToggle: (id) => console.log('Toggled:', id),
         onUpdateText: (id, text) => console.log('Updated:', id, text),
-        onDelete: (id) => console.log('Deleted:', id),
-    },
+        onDelete: (id) => console.log('Deleted:', id)
+    }
 };

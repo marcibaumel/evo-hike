@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Skeleton } from './Skeleton';
 
 const meta: Meta<typeof Skeleton> = {
     title: 'Components/Common/Skeleton',
-    component: Skeleton,
+    component: Skeleton
 };
 export default meta;
 
@@ -19,5 +19,5 @@ export const Text: Story = {
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-4 w-1/2" />
         </div>
-    ),
+    )
 };

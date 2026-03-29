@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ExpeditionChecklist } from './ExpeditionChecklist';
 import '../../../i18n';
 
 const meta: Meta<typeof ExpeditionChecklist> = {
     title: 'Components/JournalPage/ExpeditionChecklist',
-    component: ExpeditionChecklist,
+    component: ExpeditionChecklist
 };
 export default meta;
 
@@ -18,16 +18,16 @@ export const Default: Story = {
             { id: '1', text: 'Hiking boots', isCompleted: true },
             { id: '2', text: 'Water bottle', isCompleted: true },
             { id: '3', text: 'Trail map', isCompleted: false },
-            { id: '4', text: 'First aid kit', isCompleted: false },
+            { id: '4', text: 'First aid kit', isCompleted: false }
         ],
-        onUpdate: (items) => console.log('Updated:', items),
-    },
+        onUpdate: (items) => console.log('Updated:', items)
+    }
 };
 
 export const Empty: Story = {
     args: {
         title: 'New Checklist',
         items: [],
-        onUpdate: (items) => console.log('Updated:', items),
-    },
+        onUpdate: (items) => console.log('Updated:', items)
+    }
 };

@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card } from './Card';
 
 const meta: Meta<typeof Card> = {
     title: 'Components/Common/Card',
     component: Card,
     args: {
-        children: 'Card content goes here',
-    },
+        children: 'Card content goes here'
+    }
 };
 export default meta;
 

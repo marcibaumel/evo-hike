@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UpcomingHikeCard } from './UpcomingHikeCard';
 import '../../../i18n';
 
 const meta: Meta<typeof UpcomingHikeCard> = {
     title: 'Components/JournalPage/UpcomingHikeCard',
-    component: UpcomingHikeCard,
+    component: UpcomingHikeCard
 };
 export default meta;
 
@@ -19,8 +19,8 @@ export const Hard: Story = {
             daysLeft: 3,
             difficulty: 'Hard',
             image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop'
-        },
-    },
+        }
+    }
 };
 
 export const Moderate: Story = {
@@ -32,6 +32,6 @@ export const Moderate: Story = {
             daysLeft: 11,
             difficulty: 'Moderate',
             image: 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=2070&auto=format&fit=crop'
-        },
-    },
+        }
+    }
 };

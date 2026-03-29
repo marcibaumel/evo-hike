@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CommunityCard } from './CommunityCard';
 import '../../../i18n';
 
 const meta: Meta<typeof CommunityCard> = {
     title: 'Components/LandingPage/CommunityCard',
-    component: CommunityCard,
+    component: CommunityCard
 };
 export default meta;
 

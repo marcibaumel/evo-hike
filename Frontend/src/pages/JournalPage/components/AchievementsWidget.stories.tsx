@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AchievementsWidget } from './AchievementsWidget';
 import '../../../i18n';
 
 const meta: Meta<typeof AchievementsWidget> = {
     title: 'Components/JournalPage/AchievementsWidget',
-    component: AchievementsWidget,
+    component: AchievementsWidget
 };
 export default meta;
 

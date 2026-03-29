@@ -34,7 +34,7 @@ export const ExpeditionChecklist = ({ items, title, subtitle, onUpdate }: Expedi
         const newItem: ChecklistItem = {
             id: crypto.randomUUID(),
             text: '',
-            isCompleted: false,
+            isCompleted: false
         };
         onUpdate([...items, newItem]);
     };

@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FeaturesSection } from './FeaturesSection';
 import '../../../i18n';
 
 const meta: Meta<typeof FeaturesSection> = {
     title: 'Components/LandingPage/FeaturesSection',
-    component: FeaturesSection,
+    component: FeaturesSection
 };
 export default meta;
 

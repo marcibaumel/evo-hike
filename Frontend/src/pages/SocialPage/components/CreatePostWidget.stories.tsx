@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CreatePostWidget } from './CreatePostWidget';
 import '../../../i18n';
 
 const meta: Meta<typeof CreatePostWidget> = {
     title: 'Components/SocialPage/CreatePostWidget',
-    component: CreatePostWidget,
+    component: CreatePostWidget
 };
 export default meta;
 

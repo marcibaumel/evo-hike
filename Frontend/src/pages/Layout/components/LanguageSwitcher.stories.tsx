@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import LanguageSwitcher from './LanguageSwitcher';
 import '../../../i18n';
 
 const meta: Meta<typeof LanguageSwitcher> = {
     title: 'Components/Layout/LanguageSwitcher',
-    component: LanguageSwitcher,
+    component: LanguageSwitcher
 };
 export default meta;
 

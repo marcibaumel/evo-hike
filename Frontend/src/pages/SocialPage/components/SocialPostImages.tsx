@@ -8,12 +8,12 @@ export const SocialPostImages = ({ images }: SocialPostImagesProps) => {
     return (
         <div
             className={`grid gap-1 ${images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
-                }`}>
+            }`}>
             {images.map((img, idx) => (
                 <div
                     key={idx}
                     className={`relative overflow-hidden ${images.length === 3 && idx === 0 ? 'col-span-2 aspect-2/1' : 'aspect-square'
-                        }`}>
+                    }`}>
                     <img
                         src={img}
                         alt="Hike moment"

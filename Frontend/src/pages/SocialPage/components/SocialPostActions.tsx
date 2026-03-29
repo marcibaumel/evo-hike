@@ -15,7 +15,7 @@ export const SocialPostActions = ({ id, likes, comments, isLiked, onToggleLike }
                 <button
                     onClick={() => onToggleLike(id)}
                     className={`flex items-center gap-2 text-sm font-bold transition-colors ${isLiked ? 'text-red-500' : 'text-brand-muted hover:text-white'
-                        }`}>
+                    }`}>
                     <HeartIcon
                         size={20}
                         weight={isLiked ? 'fill' : 'regular'}

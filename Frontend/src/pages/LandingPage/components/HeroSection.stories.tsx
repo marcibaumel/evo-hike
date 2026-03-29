@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { HeroSection } from './HeroSection';
 import { MemoryRouter } from 'react-router-dom';
 import '../../../i18n';
@@ -11,8 +11,8 @@ const meta: Meta<typeof HeroSection> = {
             <MemoryRouter>
                 <Story />
             </MemoryRouter>
-        ),
-    ],
+        )
+    ]
 };
 export default meta;
 
