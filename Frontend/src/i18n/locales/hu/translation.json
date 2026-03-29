@@ -161,5 +161,11 @@
     "map": "Térkép (Offline is) / GPS",
     "first_aid": "Elsősegély csomag",
     "food": "Élelem / Energiaszelet"
+  },
+  "notFound": {
+    "title": "Hoppá! Az oldal nem található.",
+    "description": "Gratulálunk, sikeresen letértél a térképről! Itt már csak a vadon (és ez a 404-es hiba) vár. Inkább keressünk egy biztonságosabb, jól jelzett útvonalat.",
+    "backToHome": "Vissza a főoldalra",
+    "contact": "Kapcsolatfelvétel"
   }
 }
