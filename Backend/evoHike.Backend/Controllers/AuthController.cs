@@ -40,5 +40,18 @@ namespace evoHike.Backend.Controllers
 
             return Ok("User registered successfully.");
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginDTO request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+            if (user == null) {
+                return Unauthorized("Invalid email.");
+            }
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            {
+                return Unauthorized("Invalid password.");
+            }
+            return Ok("Login successful.");
+        }
     }
 }
