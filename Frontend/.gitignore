@@ -25,6 +25,7 @@ dist-ssr
 *.env
 *storybook.log
 storybook-static
+/stories/assets/accessibility/
 
 # Playwright
 /test-results/
