@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Skeleton } from './Skeleton';
+import { Skeleton } from '../../components/Skeleton';
 
+//TODO: Format story as the Button story
 const meta: Meta<typeof Skeleton> = {
     title: 'Components/Common/Skeleton',
     component: Skeleton
 };
+
 export default meta;
 
 type Story = StoryObj<typeof Skeleton>;

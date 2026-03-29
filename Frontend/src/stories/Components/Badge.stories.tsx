@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Badge } from './Badge';
+import { Badge } from '../../components/Badge';
 
+//TODO: Format story as the Button story
 const meta: Meta<typeof Badge> = {
     title: 'Components/Common/Badge',
     component: Badge,

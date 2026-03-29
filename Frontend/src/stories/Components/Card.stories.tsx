@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Card } from './Card';
+import { Card } from '../../components/Card';
 
+//TODO: Format story as the Button story
 const meta: Meta<typeof Card> = {
     title: 'Components/Common/Card',
     component: Card,
