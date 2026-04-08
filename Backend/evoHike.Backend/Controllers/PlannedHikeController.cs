@@ -1,10 +1,12 @@
 ﻿using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
 using evoHike.Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace evoHike.Backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PlannedHikesController(IPlannedHikeService _plannedHikeService) : ControllerBase
