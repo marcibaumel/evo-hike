@@ -1,6 +1,10 @@
 ﻿using evoHike.Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using evoHike.Backend.Models;
 
 namespace evoHike.Backend;
 
@@ -68,8 +72,10 @@ public static class Configs
         }
 
         app.UseHttpsRedirection();
-
         app.UseCors(CorsPolicyName);
+
+        app.UseAuthentication(); 
+        app.UseAuthorization();
 
         app.MapControllers();
     }
@@ -82,5 +88,40 @@ public static class Configs
 
             DbInitializer.Initialize(context);
         }
+    }
+    
+    public static void AddApplicationAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtSettings = new JwtSettings();
+        configuration.GetSection(JwtSettings.SectionName).Bind(jwtSettings);
+
+        if (string.IsNullOrEmpty(jwtSettings.Key))
+        {
+            throw new InvalidOperationException("JWT Key is missing! Add it to appsettings.Development.json");
+        }
+
+        var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
+
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+            
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+            
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+        services.AddAuthorization();
     }
 }
