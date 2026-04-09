@@ -15,6 +15,7 @@ builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddApplicationCors(builder.Configuration);
 builder.Services.AddApplicationSwagger();
 builder.Services.AddApplicationDatabase(builder.Configuration);
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<ITrailService, TrailService>();
 builder.Services.AddScoped<IPlannedHikeService, PlannedHikeService>();
