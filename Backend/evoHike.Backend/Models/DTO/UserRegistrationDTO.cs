@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using evoHike.Backend.Attributes;
 
 namespace evoHike.Backend.Models.DTO
 {
@@ -13,7 +14,8 @@ namespace evoHike.Backend.Models.DTO
         public string Email { get; set; } = null!;
 
         [Required (ErrorMessage = "Password is required!")]
-        [Length(6,100, ErrorMessage = "The password must be at least 6 character long.")]
+        [Length(8,100, ErrorMessage = "The password must be at least 8 character long.")]
+        [StrongPassword(ErrorMessage = "The password must contain at least one uppercase letter, one lowercase letter, one number and one special character.")]
         public string Password { get; set; } = null!;
     }
 }
