@@ -11,7 +11,7 @@ namespace evoHike.Backend.Models
 
         public int HikingTrailId { get; set; }
 
-        public HikingTrailEntity? HikingTrail { get; set; }
+        public HikingTrailEntity HikingTrail { get; set; } = null!;
 
         public DateTime PlannedStartDateTime { get; set; }
 
