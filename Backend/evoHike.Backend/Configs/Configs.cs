@@ -120,9 +120,9 @@ public static class Configs
         var jwtSettings = new JwtSettings();
         configuration.GetSection(JwtSettings.SectionName).Bind(jwtSettings);
 
-        if (string.IsNullOrEmpty(jwtSettings.Key))
+        if (string.IsNullOrEmpty(jwtSettings.Key) || jwtSettings.Key == "REPLACE_WITH_SECURE_SECRET_KEY")
         {
-            throw new InvalidOperationException("JWT Key is missing! Add it to appsettings.Development.json");
+            throw new InvalidOperationException("JWT Key is missing or using placeholder! Update your appsettings.Development.json.");
         }
 
         var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
