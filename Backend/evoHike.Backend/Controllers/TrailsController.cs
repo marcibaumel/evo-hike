@@ -9,7 +9,6 @@ namespace evoHike.Backend.Controllers
     [Route("api/[controller]")]
     public class TrailsController : ControllerBase
     {
-
         private readonly ITrailService _trailService;
 
         public TrailsController(ITrailService trailService)
@@ -41,7 +40,7 @@ namespace evoHike.Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Hiba történt az adatok lekérésekor. " + ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }
