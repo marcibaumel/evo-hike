@@ -7,28 +7,20 @@ namespace evoHike.Backend.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class DataController(
-        DataImportService _importService,
-        IWebHostEnvironment _env
+        DataImportService _importService
     ) : ControllerBase
     {
         [HttpPost("import")]
-        public async Task<IActionResult> ImportData()
+        public async Task<IActionResult> ImportPois([FromQuery] string filePath)
         {
-            var trailsPath = Path.Combine(_env.ContentRootPath,
-                "Data",
-                "split_trails");
-            var poisPath = Path.Combine(_env.ContentRootPath,
-                "Data",
-                "bukk_pois.geojson");
+            var (count, error) = await _importService.ImportPoisFromFileAsync(filePath);
 
-            var trailReport = await _importService.ImportTrailsAsync(trailsPath);
-            var poiReport = await _importService.ImportPoisAsync(poisPath);
-
-            return Ok(new
+            if (error != null)
             {
-                TrailImport = trailReport,
-                PoiImport = poiReport
-            });
+                return BadRequest(new { Message = "Error importing POIs", Details = error });
+            }
+
+            return Ok(new { Message = $"Successfully imported {count} POIs" });
         }
 
         [HttpDelete("clear")]

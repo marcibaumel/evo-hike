@@ -1,26 +1,31 @@
-using System.Text;
-using evoHike.Backend.Data;
+using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Models;
 using evoHike.Backend.Utils;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
-
+using System.Text;
 namespace evoHike.Backend.Services;
 
-public class DataImportService(EvoHikeContext context)
+public class DataImportService
 {
+    private readonly IDataImportDataAccess _dataImport;
+    public DataImportService(IDataImportDataAccess dataImport)
+    {
+        _dataImport = dataImport; 
+    }
     public async Task<string> ImportTrailsAsync(string folderPath)
     {
         var report = new StringBuilder();
-        int importedCount = 0, skippedCount = 0;
+        var trailsToSave = new List<HikingTrailEntity>();
+        int skippedCount = 0;
 
-        if (!Directory.Exists(folderPath)) 
-            return $"Directory not found: {folderPath}";
+        if (!Directory.Exists(folderPath)) return $"Directory not found: {folderPath}";
 
         var reader = new GeoJsonReader();
+        var files = Directory.GetFiles(folderPath, "*.geojson");
 
-        foreach (var file in Directory.GetFiles(folderPath, "*.geojson"))
+        foreach (var file in files)
         {
             try
             {
@@ -30,44 +35,13 @@ public class DataImportService(EvoHikeContext context)
 
                 foreach (var feature in featureCollection)
                 {
-                    var validGeometry = ImportHelper.ExtractValidLineGeometry(feature.Geometry);
-
-                    if (validGeometry == null)
+                    var trail = MapFeatureToEntity(feature, file);
+                    if (trail == null)
                     {
                         skippedCount++;
                         continue;
                     }
-
-                    var attr = feature.Attributes;
-                    var rawName = ImportHelper.GetAttributeValue(attr, "name")
-                                  ?? Path.GetFileNameWithoutExtension(file);
-                    var nameInfo = ImportHelper.ParseTrailDetails(rawName, Path.GetFileNameWithoutExtension(file));
-
-                    var lengthKm = ImportHelper.ParseDouble(ImportHelper.GetAttributeValue(attr, "distance", "length"));
-                    if (lengthKm <= 0)
-                        lengthKm = GeoUtils.CalculateLengthKm(validGeometry);
-
-                    var elevation = ImportHelper.ParseDouble(ImportHelper.GetAttributeValue(attr, "ascent", "ele"));
-
-                    var trail = new HikingTrail
-                    {
-                        TrailName = nameInfo.Name,
-                        StartLocation = ImportHelper.GetAttributeValue(attr, "from") 
-                                        ?? nameInfo.Start,
-                        EndLocation = ImportHelper.GetAttributeValue(attr, "to") 
-                                      ?? nameInfo.End,
-                        TrailSymbol = ImportHelper.GetAttributeValue(attr, "osmc:symbol", "jel", "symbol"),
-                        Description = ImportHelper.GetAttributeValue(attr, "description"),
-                        Length = lengthKm,
-                        Elevation = elevation,
-                        EstimatedDuration = ImportHelper.CalculateDurationMinutes(lengthKm, elevation),
-                        CoverPhotoPath = "",
-                        RouteLine = validGeometry
-                    };
-
-                    trail.RouteLine.SRID = 4326;
-                    context.HikingTrails.Add(trail);
-                    importedCount++;
+                    trailsToSave.Add(trail);
                 }
             }
             catch (Exception ex)
@@ -76,45 +50,83 @@ public class DataImportService(EvoHikeContext context)
             }
         }
 
-        await context.SaveChangesAsync();
-        report.AppendLine($"Import Complete. Imported: {importedCount}, Skipped: {skippedCount}");
+        await _dataImport.ImportTrailsAsync(trailsToSave);
+
+        report.AppendLine($"Import Complete. Imported: {trailsToSave.Count}, Skipped: {skippedCount}");
         return report.ToString();
     }
 
-    public async Task<string> ImportPoisAsync(string filePath)
+    private HikingTrailEntity? MapFeatureToEntity(IFeature feature, string file)
     {
-        if (!File.Exists(filePath)) return $"POI file not found: {filePath}";
+        var validGeometry = ImportHelper.ExtractValidLineGeometry(feature.Geometry);
+        if (validGeometry == null) return null;
+
+        var attr = feature.Attributes;
+        var fileName = Path.GetFileNameWithoutExtension(file);
+        var rawName = ImportHelper.GetAttributeValue(attr, "name") ?? fileName;
+        var nameInfo = ImportHelper.ParseTrailDetails(rawName, fileName);
+
+        var lengthKm = ImportHelper.ParseDouble(ImportHelper.GetAttributeValue(attr, "distance", "length"));
+        if (lengthKm <= 0) lengthKm = GeoUtils.CalculateLengthKm(validGeometry);
+
+        var elevation = ImportHelper.ParseDouble(ImportHelper.GetAttributeValue(attr, "ascent", "ele"));
+
+        return new HikingTrailEntity
+        {
+            TrailName = nameInfo.Name,
+            StartLocation = ImportHelper.GetAttributeValue(attr, "from") ?? nameInfo.Start,
+            EndLocation = ImportHelper.GetAttributeValue(attr, "to") ?? nameInfo.End,
+            TrailSymbol = ImportHelper.GetAttributeValue(attr, "osmc:symbol", "jel", "symbol"),
+            Description = ImportHelper.GetAttributeValue(attr, "description"),
+            Length = lengthKm,
+            Elevation = elevation,
+            EstimatedDuration = ImportHelper.CalculateDurationMinutes(lengthKm, elevation),
+            RouteLine = validGeometry,
+            CreatedAt = DateTime.UtcNow
+        };
+    }
+
+    public async Task<(int ImportedCount, string? ErrorMessage)> ImportPoisFromFileAsync(string filePath)
+    {
+        if (!File.Exists(filePath))
+            return (0, $"POI file not found: {filePath}");
 
         try
         {
             var json = await File.ReadAllTextAsync(filePath);
             var collection = new GeoJsonReader().Read<FeatureCollection>(json);
-            int imported = 0;
 
-            foreach (var feature in collection ?? [])
+            if (collection == null)
+                return (0, "Invalid or empty GeoJSON file.");
+
+            var poisToImport = new List<PointOfInterestEntity>();
+
+            foreach (var feature in collection)
             {
-                if (feature.Geometry is not Point point)
-                    continue;
+                if (feature.Geometry is not Point point) continue;
+                if (feature.Attributes == null) continue;
 
-                var poi = new PointOfInterest
+                var poi = new PointOfInterestEntity
                 {
-                    PointOfInterestName = ImportHelper.GetAttributeValue(feature.Attributes, "name") 
-                              ?? "Unnamed POI",
-                    PointOfInterestType = ImportHelper.GetAttributeValue(feature.Attributes, "tourism", "amenity", "natural")
-                              ?? "General",
+                    PointOfInterestName = ImportHelper.GetAttributeValue(feature.Attributes, "name") ?? "Unnamed POI",
+                    PointOfInterestType = ImportHelper.GetAttributeValue(feature.Attributes, "tourism", "amenity", "natural") ?? "General",
                     Location = point
                 };
+
                 poi.Location.SRID = 4326;
-                context.PointsOfInterest.Add(poi);
-                imported++;
+                poisToImport.Add(poi);
+            }
+            if (poisToImport.Any())
+            {
+                await _dataImport.AddPoisAsync(poisToImport);
+                await _dataImport.SaveChangesAsync();
             }
 
-            await context.SaveChangesAsync();
-            return $"POIs: Imported {imported}";
+            return (poisToImport.Count, null);
         }
         catch (Exception ex)
         {
-            return $"Error importing POIs: {ex.Message}";
+            return (0, ex.Message);
         }
     }
 }

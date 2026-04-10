@@ -1,6 +1,7 @@
-﻿using evoHike.Backend.Data;
+﻿using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
+using evoHike.Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -8,17 +9,20 @@ namespace evoHike.Backend.Services
 {
     public class PlannedHikeService : IPlannedHikeService
     {
-        private readonly EvoHikeContext _context;
-        public PlannedHikeService(EvoHikeContext context)
+        private readonly IPlannedHikeDataAccess _plannedHike;
+        public PlannedHikeService(IPlannedHikeDataAccess plannedHike)
         {
-            _context = context;
+            _plannedHike = plannedHike;
         }
 
-        public async Task<IEnumerable<PlannedHikeEntity>> GetAllPlannedHikesAsync(HikeStatus? filterStatus = null)
+        public async Task<IEnumerable<PlannedHikeEntity>> GetHikesAsync(HikeStatus? filterStatus = null,bool includeTrail = false) 
         {
-            var query = _context.PlannedHikes
-                .Include(ph => ph.HikingTrail)
-                .AsQueryable();
+            var query = _plannedHike.GetBaseQuery();
+
+            if (includeTrail)
+            {
+                query = _plannedHike.GetBaseQuery(ph => ph.HikingTrail);
+            }
 
             if (filterStatus.HasValue)
             {
@@ -29,25 +33,20 @@ namespace evoHike.Backend.Services
                 .OrderBy(ph => ph.PlannedStartDateTime)
                 .ToListAsync();
         }
-
-        public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlanHikeRequest request)
+        public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlannedHikeDTO request)
         {
-            var routeExists = await _context.HikingTrails.AnyAsync(r => r.TrailID == request.RouteId);
-            if (!routeExists)
+            if (request.RouteId == 0)
             {
-                throw new ArgumentException("A megadott RouteId nem létezik.");
+                throw new ArgumentException("Route Id cannot be 0!");
             }
+            if (!await _plannedHike.TrailExistsAsync(request.RouteId))
+                throw new ArgumentException("No existing route with the given ID!");
+
             if (request.Start < DateTime.UtcNow.AddMinutes(-5))
-                throw new ArgumentException("A túra kezdete nem lehet a múltban.");
+                throw new ArgumentException("The start date of the route cannot be in the past!");
 
             if (request.End <= request.Start)
-                throw new ArgumentException("A túra vége később kell legyen, mint a kezdete.");
-
-            string? checklistJson = null;
-            if (request.ChecklistItems != null && request.ChecklistItems.Any())
-            {
-                checklistJson = JsonSerializer.Serialize(request.ChecklistItems);
-            }
+                throw new ArgumentException("The end date of the route must be later than the start date!");
 
             var newPlan = new PlannedHikeEntity
             {
@@ -55,29 +54,25 @@ namespace evoHike.Backend.Services
                 PlannedStartDateTime = request.Start,
                 PlannedEndDateTime = request.End,
                 Status = HikeStatus.Planned,
-                ChecklistJson = checklistJson,
+                ChecklistJson = request.ChecklistItems?.Any() == true
+                                ? JsonSerializer.Serialize(request.ChecklistItems)
+                                : null,
                 CreatedAt = DateTime.UtcNow
             };
-
-            _context.PlannedHikes.Add(newPlan);
-            await _context.SaveChangesAsync();
-
-            return newPlan;
+            return await _plannedHike.AddHikeAsync(newPlan);
         }
 
         public async Task<bool> MarkHikeAsCompletedAsync(int id)
         {
-            var hike = await _context.PlannedHikes.FindAsync(id);
+            var hike = await _plannedHike.FindHikeAsync(id);
 
-            if (hike == null)
-            {
-                return false;
-            }
+            if (hike == null) return false;
 
             hike.Status = HikeStatus.Completed;
             hike.CompletedAt = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
+            await _plannedHike.SaveChangesAsync();
+
             return true;
         }
     }

@@ -1,41 +1,41 @@
-using evoHike.Backend.Data;
+using evoHike.Backend.DataAccess.Interfaces;
 using evoHike.Backend.Models;
-using Microsoft.EntityFrameworkCore;
+using evoHike.Backend.Models.DTO;
+using evoHike.Backend.Services.Interfaces;
 
 namespace evoHike.Backend.Services
 {
-    public class TrailService(EvoHikeContext _context) : ITrailService
+    public class TrailService : ITrailService
     {
-        public async Task<IReadOnlyList<HikingTrail>> GetAllTrailsAsync()
+        private readonly ITrailsDataAccess _dataAccess;
+        public TrailService(ITrailsDataAccess dataAccess)
         {
-            var trails = await _context.HikingTrails
-                .AsNoTracking()
-                .ToListAsync();
-
-            return trails.Count == 0
-                ? []
-                : trails;
+           _dataAccess = dataAccess;
         }
-
-        public async Task<HikingTrail?> GetTrailByIdAsync(int id)
+        public async Task<IEnumerable<TrailDTO>> GetAllTrailsAsync()
         {
-            return await _context.HikingTrails
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.TrailID == id);
+            var trails = await _dataAccess.GetTrailsAsync();
+            return trails ?? Enumerable.Empty<TrailDTO>();
         }
-
-        public async Task<IEnumerable<PointOfInterest>> GetPoisNearTrailAsync(int trailId, double distanceMeters)
+        public async Task<HikingTrailEntity?> GetTrailByIdAsync(int id)
+        { 
+           var trailById = await _dataAccess.GetByIdAsync(id);
+           return trailById ?? throw new Exception("Something went wrong :/");
+        }
+        public async Task<IEnumerable<PoiDTO>> GetPoisNearTrailAsync(int trailId, double distanceMeters)
         {
-            var trail = await _context.HikingTrails.FindAsync(trailId);
-            if (trail == null || trail.RouteLine == null)
+            var trail = await _dataAccess.GetByIdAsync(trailId);
+            if (trail == null) return Enumerable.Empty<PoiDTO>();
+            if (trail.RouteLine == null) return Enumerable.Empty<PoiDTO>();
+            var poiEntities = await _dataAccess.GetPoisWithinDistanceAsync(trail.RouteLine, distanceMeters);
+
+            var poiDtos = poiEntities.Select(p => new PoiDTO
             {
-                return [];
-            }
+                Id = p.Id,
+                Name = p.PointOfInterestName
+            });
 
-            return await _context.PointsOfInterest
-                .Where(poi => poi.Location.IsWithinDistance(trail.RouteLine, distanceMeters))
-                .AsNoTracking()
-                .ToListAsync();
+            return poiDtos;
         }
     }
 }
