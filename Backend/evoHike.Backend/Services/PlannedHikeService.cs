@@ -3,7 +3,6 @@ using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
 using evoHike.Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using System.Text.Json;
 
 namespace evoHike.Backend.Services

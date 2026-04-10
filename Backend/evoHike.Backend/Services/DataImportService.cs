@@ -86,7 +86,7 @@ public class DataImportService
         };
     }
 
-    public async Task<(int ImportedCount, string ErrorMessage)> ImportPoisFromFileAsync(string filePath)
+    public async Task<(int ImportedCount, string? ErrorMessage)> ImportPoisFromFileAsync(string filePath)
     {
         if (!File.Exists(filePath))
             return (0, $"POI file not found: {filePath}");
@@ -95,11 +95,16 @@ public class DataImportService
         {
             var json = await File.ReadAllTextAsync(filePath);
             var collection = new GeoJsonReader().Read<FeatureCollection>(json);
+
+            if (collection == null)
+                return (0, "Invalid or empty GeoJSON file.");
+
             var poisToImport = new List<PointOfInterestEntity>();
 
-            foreach (var feature in collection ?? [])
+            foreach (var feature in collection)
             {
                 if (feature.Geometry is not Point point) continue;
+                if (feature.Attributes == null) continue;
 
                 var poi = new PointOfInterestEntity
                 {
@@ -107,10 +112,10 @@ public class DataImportService
                     PointOfInterestType = ImportHelper.GetAttributeValue(feature.Attributes, "tourism", "amenity", "natural") ?? "General",
                     Location = point
                 };
+
                 poi.Location.SRID = 4326;
                 poisToImport.Add(poi);
             }
-
             if (poisToImport.Any())
             {
                 await _dataImport.AddPoisAsync(poisToImport);

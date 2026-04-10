@@ -1,5 +1,4 @@
 ﻿using evoHike.Backend.Models;
-using evoHike.Backend.Models.DTOs;
 using System.Linq.Expressions;
 
 namespace evoHike.Backend.DataAccess.Interfaces

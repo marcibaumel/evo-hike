@@ -22,10 +22,10 @@ namespace evoHike.Backend.Services
            var trailById = await _dataAccess.GetByIdAsync(id);
            return trailById ?? throw new Exception("Something went wrong :/");
         }
-        public async Task<IEnumerable<PoiDTO>?> GetPoisNearTrailAsync(int trailId, double distanceMeters)
+        public async Task<IEnumerable<PoiDTO>> GetPoisNearTrailAsync(int trailId, double distanceMeters)
         {
             var trail = await _dataAccess.GetByIdAsync(trailId);
-            if (trail == null) return null;
+            if (trail == null) return Enumerable.Empty<PoiDTO>();
             if (trail.RouteLine == null) return Enumerable.Empty<PoiDTO>();
             var poiEntities = await _dataAccess.GetPoisWithinDistanceAsync(trail.RouteLine, distanceMeters);
 
