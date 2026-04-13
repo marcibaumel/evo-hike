@@ -5,10 +5,6 @@ const meta: Meta<typeof Badge> = {
     title: 'Components/Common/Badge',
     component: Badge,
     argTypes: {
-        showExamples: {
-            control: 'boolean',
-            description: 'Show additional example badges'
-        },
         variant: {
             control: 'select',
             options: ['accent', 'blue', 'orange', 'neutral', 'outline'],
@@ -24,7 +20,6 @@ const meta: Meta<typeof Badge> = {
         }
     },
     args: {
-        showExamples: false,
         variant: 'neutral',
         children: 'Badge'
     }
@@ -38,13 +33,6 @@ export const Playground: Story = {
     render: (args) => (
         <div className="flex gap-3 flex-wrap items-center">
             <Badge {...args} />
-
-            {args.showExamples && (
-                <>
-                    <Badge {...args}>🔔 Notifications</Badge>
-                    <Badge {...args}>New</Badge>
-                </>
-            )}
         </div>
     )
 };
