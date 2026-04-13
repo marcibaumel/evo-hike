@@ -2,10 +2,9 @@
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
     variant?: 'accent' | 'blue' | 'orange' | 'neutral' | 'outline';
-    showExamples?: boolean;
 }
 
-export const Badge = ({ className = '', variant = 'neutral', children, showExamples, ...props }: BadgeProps) => {
+export const Badge = ({ className = '', variant = 'neutral', children, ...props }: BadgeProps) => {
     const variants = {
         accent: 'bg-brand-accent/10 text-brand-accent border-brand-accent/20',
         blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',

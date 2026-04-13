@@ -7,6 +7,6 @@ interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
     shape?: 'rounded' | 'circle' | 'square';
 }
 
-export const Skeleton = ({ className = '', width, height, shape, ...props }: SkeletonProps) => {
+export const Skeleton = ({ className = '', ...props }: SkeletonProps) => {
     return <div className={`animate-pulse bg-white/5 ${className}`} {...props} />;
 };
