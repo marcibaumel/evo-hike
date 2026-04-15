@@ -4,7 +4,7 @@ namespace evoHike.Backend.Services
 {
     public interface IAuthService
     {
-        Task<string?> RegisterAsync(UserRegistrationDTO request);
-        Task<string?> LoginAsync(UserLoginDTO request);
+        Task RegisterAsync(UserRegistrationDTO request);
+        Task<string> LoginAsync(UserLoginDTO request);
     }
 }

@@ -1,4 +1,6 @@
 using evoHike.Backend;
+using evoHike.Backend.Middleware;
+using evoHike.Backend.Repositories;
 using evoHike.Backend.Services;
 using OpenMeteo;
 
@@ -15,6 +17,7 @@ builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddApplicationCors(builder.Configuration);
 builder.Services.AddApplicationSwagger();
 builder.Services.AddApplicationDatabase(builder.Configuration);
+builder.Services.AddScoped<IUserDataAccess, UserDataAccess>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<ITrailService, TrailService>();
@@ -25,6 +28,7 @@ builder.Services.AddScoped<OpenMeteoClient>();
 
 var app = builder.Build();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.RegisterMiddlewares();
 app.InitializeDatabase();
 app.MapControllers();

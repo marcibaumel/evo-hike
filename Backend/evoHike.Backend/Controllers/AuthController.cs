@@ -17,25 +17,13 @@ namespace evoHike.Backend.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDTO request)
         {
-            string? errorMessage = await _authService.RegisterAsync(request);
-
-            if (errorMessage != null)
-            {
-                return BadRequest(errorMessage);
-            }
-
+            await _authService.RegisterAsync(request);
             return Ok("User registered successfully.");
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO request)
         {
-            string? token = await _authService.LoginAsync(request);
-
-            if (token == null)
-            {
-                return Unauthorized("Invalid email or password.");
-            }
-
+            string token = await _authService.LoginAsync(request);
             return Ok(new { message = "Login successful.", token });
         }
     }

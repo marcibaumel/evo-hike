@@ -1,7 +1,7 @@
-﻿using evoHike.Backend.Data;
+﻿using evoHike.Backend.Exceptions;
 using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTO;
-using Microsoft.EntityFrameworkCore;
+using evoHike.Backend.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,18 +11,18 @@ namespace evoHike.Backend.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly EvoHikeContext _context;
+        private readonly IUserDataAccess _userRepository;
         private readonly IConfiguration _configuration;
-        public AuthService(EvoHikeContext context, IConfiguration configuration)
+        public AuthService(IUserDataAccess userRepository, IConfiguration configuration)
         {
-            _context = context;
+            _userRepository = userRepository;
             _configuration = configuration;
         }
-        public async Task<string?> RegisterAsync(UserRegistrationDTO request)
+        public async Task RegisterAsync(UserRegistrationDTO request)
         {
-            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            if (await _userRepository.EmailExistsAsync(request.Email))
             {
-                return "This email is already registered.";
+                throw new ConflictException("This email is already registered.");
             }
 
             var newUser = new User
@@ -32,18 +32,15 @@ namespace evoHike.Backend.Services
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
             };
 
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-
-            return null;
+            await _userRepository.AddUserAsync(newUser);
         }
-        public async Task<string?> LoginAsync(UserLoginDTO request)
+        public async Task<string> LoginAsync(UserLoginDTO request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+            var user = await _userRepository.GetUserByEmailAsync(request.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
-                return null;
+                throw new UnauthorizedException("Invalid email or password.");
             }
 
             return CreateToken(user);
