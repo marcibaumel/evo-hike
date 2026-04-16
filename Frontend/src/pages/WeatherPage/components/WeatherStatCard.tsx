@@ -9,6 +9,7 @@ interface WeatherStatCardProps {
     subtext?: string;
     progress?: number;
     progressColor?: string;
+    dataTestForValue: string;
 }
 
 export const WeatherStatCard = ({
@@ -18,7 +19,8 @@ export const WeatherStatCard = ({
     unit,
     subtext,
     progress,
-    progressColor = 'bg-blue-500'
+    progressColor = 'bg-blue-500',
+    dataTestForValue
 }: WeatherStatCardProps) => {
     return (
         <Card variant="glass" hoverEffect className="flex flex-col justify-between p-6">
@@ -27,7 +29,7 @@ export const WeatherStatCard = ({
                 <span className="text-xs font-bold text-brand-muted uppercase tracking-wider">{label}</span>
             </div>
             <div>
-                <div className="text-4xl font-display font-bold text-white mb-1">
+                <div data-testid={dataTestForValue} className="text-4xl font-display font-bold text-white mb-1">
                     {value}
                     {unit && <span className="text-2xl ml-1">{unit}</span>}
                 </div>

@@ -19,7 +19,7 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
     };
 
     return (
-        <div className="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[2.5rem] bg-linear-to-br from-[#1a2e2e] to-[#0d1f1f] border border-white/10 group">
+        <div data-testid="current-weather-card" className="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[2.5rem] bg-linear-to-br from-[#1a2e2e] to-[#0d1f1f] border border-white/10 group">
             {/* Animated Gradient Background */}
             <div className="absolute inset-0 bg-linear-to-tr from-brand-accent/10 via-transparent to-blue-500/10 opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
 
@@ -33,7 +33,7 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
 
             <div className="absolute bottom-0 left-0 p-8 md:p-10 w-full bg-linear-to-t from-brand-dark/80 to-transparent z-10">
                 <div className="flex items-baseline gap-4 mb-2">
-                    <span className="text-8xl md:text-9xl font-display font-bold text-white tracking-tighter">
+                    <span data-testid="current-temperature" className="text-8xl md:text-9xl font-display font-bold text-white tracking-tighter">
                         {Math.round(current.temperatureC)}°
                     </span>
                     <span className="text-2xl text-brand-muted font-medium">
