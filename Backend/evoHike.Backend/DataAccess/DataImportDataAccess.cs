@@ -16,11 +16,13 @@ namespace evoHike.Backend.DataAccess
         public DataImportDataAccess(EvoHikeContext dataImport) {
             _dataImport = dataImport;
         }
+
         public async Task ImportTrailsAsync(IEnumerable<HikingTrailEntity> trails)
         {
             await _dataImport.HikingTrails.AddRangeAsync(trails);
             await _dataImport.SaveChangesAsync();
         }
+
         public async Task AddPoisAsync(IEnumerable<PointOfInterestEntity> pois)
         {
             await _dataImport.PointsOfInterest.AddRangeAsync(pois);

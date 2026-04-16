@@ -21,7 +21,7 @@ namespace evoHike.Backend.Services
 
             if (includeTrail)
             {
-                query = _plannedHike.GetBaseQuery(ph => ph.HikingTrail);
+                query = query.Include(ph => ph.HikingTrail);
             }
 
             if (filterStatus.HasValue)

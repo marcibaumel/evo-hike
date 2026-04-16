@@ -14,6 +14,7 @@ namespace evoHike.Backend.DataAccess
         {
             _context = context;
         }
+
         public async Task<IEnumerable<TrailDTO>> GetTrailsAsync()
         {
             return await _context.HikingTrails
@@ -25,12 +26,14 @@ namespace evoHike.Backend.DataAccess
                 })
                 .ToListAsync();
         }
+
         public async Task<HikingTrailEntity?> GetByIdAsync(int id)
         {
             return await _context.HikingTrails
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
+
         public async Task<HikingTrailEntity?> GetTrailByIdAsync(int trailId)
         {
             return await _context.HikingTrails.FindAsync(trailId);
