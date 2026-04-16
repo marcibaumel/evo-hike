@@ -14,6 +14,7 @@ public class DataImportService
     {
         _dataImport = dataImport; 
     }
+
     public async Task<string> ImportTrailsAsync(string folderPath)
     {
         var report = new StringBuilder();

@@ -12,16 +12,19 @@ namespace evoHike.Backend.Services
         {
            _dataAccess = dataAccess;
         }
+
         public async Task<IEnumerable<TrailDTO>> GetAllTrailsAsync()
         {
             var trails = await _dataAccess.GetTrailsAsync();
             return trails ?? Enumerable.Empty<TrailDTO>();
         }
+
         public async Task<HikingTrailEntity?> GetTrailByIdAsync(int id)
         { 
            var trailById = await _dataAccess.GetByIdAsync(id);
            return trailById ?? throw new Exception("Something went wrong :/");
         }
+
         public async Task<IEnumerable<PoiDTO>> GetPoisNearTrailAsync(int trailId, double distanceMeters)
         {
             var trail = await _dataAccess.GetByIdAsync(trailId);

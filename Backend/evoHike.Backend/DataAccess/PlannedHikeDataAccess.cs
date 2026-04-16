@@ -13,29 +13,27 @@ namespace evoHike.Backend.DataAccess
         {
             _context = context;
         }
-        public IQueryable<PlannedHikeEntity> GetBaseQuery(params Expression<Func<PlannedHikeEntity, object>>[] includes)
+
+        public IQueryable<PlannedHikeEntity> GetBaseQuery()
         {
-            IQueryable<PlannedHikeEntity> query = _context.PlannedHikes;
-
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
-
-            return query;
+            return _context.PlannedHikes;
         }
+
         public async Task<bool> TrailExistsAsync(int trailId)
         => await _context.HikingTrails.AnyAsync(r => r.Id == trailId);
+
         public async Task<PlannedHikeEntity> AddHikeAsync(PlannedHikeEntity hike)
         {
             _context.PlannedHikes.Add(hike);
             await SaveChangesAsync();
             return hike;
         }
+
         public async Task<PlannedHikeEntity?> FindHikeAsync(int trailId)
         {
             return await _context.PlannedHikes.FindAsync(trailId);
         }
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
