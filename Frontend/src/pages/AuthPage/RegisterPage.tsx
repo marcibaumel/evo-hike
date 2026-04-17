@@ -1,46 +1,28 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { EnvelopeIcon, LockIcon, UserIcon, WarningCircleIcon, UserPlusIcon } from '@phosphor-icons/react';
 import { Button } from '../../components/Button';
-import { authService } from '../../api/authService';
 import { AuthLayout } from './components/AuthLayout';
 import { AuthInput } from './components/AuthInput';
+import { useAuthActions } from '../../hooks/useAuthActions';
 
 export default function RegisterPage() {
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { handleRegister, isLoading, error } = useAuthActions();
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
-        setIsLoading(true);
-
-        try {
-            await authService.register({ username, email, password });
-
-            /** 
-             * TODO (HIKE-14): 
-             * After registration, you might want to auto-login the user 
-             * or show a success toast. For now, we redirect to login.
-             */
-            navigate('/login');
-        } catch (err: any) {
-            setError(err.response?.data || t('auth.error_generic'));
-        } finally {
-            setIsLoading(false);
-        }
+        handleRegister({ username, email, password });
     };
 
     return (
         <AuthLayout title={t('auth.register_title')} subtitle="evoHike">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-6">
                 {error && (
                     <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-fade-in">
                         <WarningCircleIcon size={20} weight="fill" />

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { authService } from '../api/authService';
-import type { LoginRequest, RegisterRequest } from '../api/authService';
+import { AxiosError } from 'axios';
+import { authService, LoginRequest, RegisterRequest } from '../api/authService';
 
 export const useAuthActions = () => {
     const { t } = useTranslation();
@@ -14,18 +14,14 @@ export const useAuthActions = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await authService.login(data);
-
-            /** 
-             * TODO (HIKE-14): 
-             * 1. Save token to Context/LocalStorage 
-             * 2. Set global auth state
-             */
-            console.log('Token:', response.token);
-
+            const { token } = await authService.login(data);
+            /* TODO (HIKE-14): Integrate with AuthContext to save the token and update global auth state. */
             navigate('/journal');
-        } catch (err: any) {
-            setError(err.response?.status === 401 ? t('auth.error_invalid') : t('auth.error_generic'));
+            // eslint-disable-next-line no-console
+            console.log('Token:', token);
+        } catch (err) {
+            const axiosError = err as AxiosError<string>;
+            setError(axiosError.response?.status === 401 ? t('auth.error_invalid') : t('auth.error_generic'));
         } finally {
             setIsLoading(false);
         }
@@ -37,8 +33,9 @@ export const useAuthActions = () => {
         try {
             await authService.register(data);
             navigate('/login');
-        } catch (err: any) {
-            setError(err.response?.data || t('auth.error_generic'));
+        } catch (err) {
+            const axiosError = err as AxiosError<string>;
+            setError(axiosError.response?.data || t('auth.error_generic'));
         } finally {
             setIsLoading(false);
         }
