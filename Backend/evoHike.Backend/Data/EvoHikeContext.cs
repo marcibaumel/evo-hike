@@ -12,5 +12,7 @@ namespace evoHike.Backend.Data
         public DbSet<HikingTrail> HikingTrails { get; set; }
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
         public DbSet<PlannedHikeEntity> PlannedHikes { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }
