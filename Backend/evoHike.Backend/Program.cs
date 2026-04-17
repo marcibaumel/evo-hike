@@ -20,6 +20,8 @@ builder.Services.AddApplicationDatabase(builder.Configuration);
 builder.Services.AddScoped<IUserDataAccess, UserDataAccess>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddApplicationAuthentication(builder.Configuration); 
+
 builder.Services.AddScoped<ITrailService, TrailService>();
 builder.Services.AddScoped<IPlannedHikeService, PlannedHikeService>();
 
