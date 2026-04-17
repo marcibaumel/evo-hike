@@ -257,5 +257,20 @@
     "description": "Congratulations, you've successfully gone off the map! Only the wilderness (and this 404 error) awaits you here. Let's find a safer, well-marked trail instead.",
     "backToHome": "Back to home",
     "contact": "Contact us"
+  },
+  "auth": {
+    "login_title": "Welcome Back",
+    "register_title": "Join the Adventure",
+    "email_label": "Email Address",
+    "password_label": "Password",
+    "username_label": "Username",
+    "login_btn": "Sign In",
+    "register_btn": "Create Account",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "link_register": "Register here",
+    "link_login": "Login here",
+    "error_invalid": "Invalid email or password.",
+    "error_generic": "Something went wrong. Please try again."
   }
 }

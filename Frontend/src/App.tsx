@@ -5,6 +5,8 @@ import RoutePage from './pages/RoutesPage';
 import SocialPage from './pages/SocialPage';
 import Weather from './pages/WeatherPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage.tsx';
+import LoginPage from './pages/AuthPage/LoginPage.tsx';
+import RegisterPage from './pages/AuthPage/RegisterPage.tsx';
 
 function App() {
     return (
@@ -14,6 +16,8 @@ function App() {
             <Route path="/weather" element={<Weather />} />
             <Route path="/journal" element={<JournalPage />} />
             <Route path="/social" element={<SocialPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
     );
