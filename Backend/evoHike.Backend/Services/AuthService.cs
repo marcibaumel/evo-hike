@@ -13,11 +13,13 @@ namespace evoHike.Backend.Services
     {
         private readonly IUserDataAccess _userRepository;
         private readonly IConfiguration _configuration;
+
         public AuthService(IUserDataAccess userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _configuration = configuration;
         }
+
         public async Task RegisterAsync(UserRegistrationDTO request)
         {
             if (await _userRepository.EmailExistsAsync(request.Email))
@@ -34,6 +36,7 @@ namespace evoHike.Backend.Services
 
             await _userRepository.AddUserAsync(newUser);
         }
+
         public async Task<string> LoginAsync(UserLoginDTO request)
         {
             var user = await _userRepository.GetUserByEmailAsync(request.Email);
@@ -45,6 +48,7 @@ namespace evoHike.Backend.Services
 
             return CreateToken(user);
         }
+
         private string CreateToken(User user)
         {
             var claims = new List<Claim>
