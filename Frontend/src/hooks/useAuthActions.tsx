@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
-import { authService, LoginRequest, RegisterRequest } from '../api/authService';
+import { authService } from '../api/authService';
+import type { LoginRequest, RegisterRequest } from '../api/authService';
 
 export const useAuthActions = () => {
     const { t } = useTranslation();
