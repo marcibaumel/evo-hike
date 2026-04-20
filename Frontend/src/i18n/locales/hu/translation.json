@@ -167,5 +167,20 @@
     "description": "Gratulálunk, sikeresen letértél a térképről! Itt már csak a vadon (és ez a 404-es hiba) vár. Inkább keressünk egy biztonságosabb, jól jelzett útvonalat.",
     "backToHome": "Vissza a főoldalra",
     "contact": "Kapcsolatfelvétel"
+  },
+  "auth": {
+    "login_title": "Üdvözlünk újra",
+    "register_title": "Csatlakozz a kalandhoz",
+    "email_label": "Email cím",
+    "password_label": "Jelszó",
+    "username_label": "Felhasználónév",
+    "login_btn": "Bejelentkezés",
+    "register_btn": "Fiók létrehozása",
+    "no_account": "Még nincs fiókod?",
+    "have_account": "Már van fiókod?",
+    "link_register": "Regisztrálj itt",
+    "link_login": "Jelentkezz be itt",
+    "error_invalid": "Érvénytelen email vagy jelszó.",
+    "error_generic": "Valami hiba történt. Próbáld újra később."
   }
 }
