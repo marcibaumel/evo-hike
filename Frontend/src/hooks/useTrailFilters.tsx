@@ -14,9 +14,22 @@ export function useTrailFilters(trails: Trail[]) {
         minRating: null as number | null,
     })
 
+    const hasActiveFilters = 
+        filters.difficulty.length > 0 ||
+        filters.minLength !== null ||
+        filters.maxLength !== null ||
+        filters.minElevation !== null ||
+        filters.maxElevation !== null ||
+        filters.maxTime !== null ||
+        filters.minRating !== null;
+
+    const query = filters.query.toLowerCase();
     const filteredTrails = useMemo(() => trails.filter(trail => {
-        if (filters.query && !trail.name.toLowerCase().includes(filters.query.toLowerCase())
-            && !trail.location.toLowerCase().includes(filters.query.toLowerCase())) return false
+
+        if (query &&
+            !trail.name.toLowerCase().includes(query) &&
+            !trail.location.toLowerCase().includes(query)
+        ) return false
 
         if (filters.difficulty.length > 0 && !filters.difficulty.includes(trail.difficulty)) return false
 
@@ -33,5 +46,5 @@ export function useTrailFilters(trails: Trail[]) {
         return true
     }), [trails, filters])
 
-    return { filteredTrails, filters, setFilters }
+    return { filteredTrails, filters, setFilters,hasActiveFilters }
 }
