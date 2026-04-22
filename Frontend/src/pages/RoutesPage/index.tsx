@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; // <-- Visszatettem az importot
 import type { FeatureCollection, Feature } from 'geojson';
 import { Map } from 'leaflet';
 import { MagnifyingGlassIcon, SlidersHorizontalIcon, PlusIcon } from 'lucide-react'; 
@@ -25,7 +26,8 @@ type TrailData = any;
 type ViewState = 'list' | 'create' | 'filter';
 
 export default function RoutePage() {
-  
+  const { t } = useTranslation();
+
   const [displayedGeoJson, setDisplayedGeoJson] = useState<FeatureCollection>(emptyGeoJson);
   const [userTrails, setUserTrails] = useState<TrailData[]>([]);
   const [selectedTrail, setSelectedTrail] = useState<Trail | null>(null);
@@ -84,12 +86,12 @@ export default function RoutePage() {
         description: String(t.description || ''),
         userPhotos: (t.userPhotos as string[]) || [],
         geojson: t.geojson as FeatureCollection | Feature | null | undefined,
-        difficulty: diffLevel
+        difficulty: diffLevel 
       });
     });
-  }, [userTrails]);
+  }, [userTrails]); 
 
-  const { filteredTrails, filters, setFilters } = useTrailFilters(allTrails);
+  const { filteredTrails, filters, setFilters, hasActiveFilters } = useTrailFilters(allTrails);
 
   const fetchPOIs = useCallback(async (coordinates: [number, number][]) => {
     try {
@@ -209,33 +211,68 @@ export default function RoutePage() {
                   <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted" size={18} />
                   <input
                     type="text"
-                    placeholder="Search trails..."
+                    placeholder={t('route.search_placeholder')}
                     onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-accent/50 transition-colors"
                   />
                 </div>
-                <Button variant="primary" className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90" size="sm" onClick={() => setView('filter')} title="Filter trails">
+                
+                <Button
+                  variant="primary"
+                  className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90 relative"
+                  size="sm"
+                  onClick={() => setView('filter')}
+                  title="Filter trails"
+                >
                   <SlidersHorizontalIcon size={20} />
+                  {hasActiveFilters && (
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 rounded-full" />
+                  )}
                 </Button>
-                <Button variant="primary" className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90" size="sm" onClick={() => setView('create')} title="Create new route">
+
+                <Button
+                  variant="primary"
+                  className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
+                  size="sm"
+                  onClick={() => setView('create')}
+                  title={t('route.create_new')}
+                >
                   <PlusIcon size={20} className="text-brand-dark" />
                 </Button>
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {filteredTrails.map((trail) => (
-                <div key={trail.id} className="hover:scale-[1.01] transition-transform duration-300">
-                  <TrailCard
-                    trail={trail}
-                    onViewDetails={() => handleTrailSelect(trail.id)}
-                    onDelete={trail.id.startsWith('user-') ? () => handleDeleteTrail(trail.id) : undefined}
-                  />
+
+            {/* Listázás */}
+            <div className="flex-1 lg:overflow-y-auto p-4 space-y-4">
+              {filteredTrails.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full py-16 gap-3">
+                  <MagnifyingGlassIcon size={40} className="text-brand-muted opacity-40" />
+                  <p className="text-brand-muted text-sm text-center">
+                    No trails match your filters.
+                  </p>
+                  <button
+                    onClick={() => setView('filter')}
+                    className="text-brand-accent text-sm underline underline-offset-2 hover:text-brand-accent/70 transition-colors"
+                  >
+                    Adjust filters
+                  </button>
                 </div>
-              ))}
+              ) : (
+                filteredTrails.map((trail) => (
+                  <div key={trail.id} className="hover:scale-[1.01] transition-transform duration-300">
+                    <TrailCard
+                      trail={trail}
+                      onViewDetails={() => handleTrailSelect(trail.id)} // <-- handleTrailSelect-re javítva
+                      onDelete={trail.id.startsWith('user-') ? () => handleDeleteTrail(trail.id) : undefined} // <-- callback-re javítva
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </>
         )}
       </div>
+
       <div className="relative flex-1 h-full">
         <RouteMap
           selectedTrailId={selectedTrail?.id}
