@@ -4,12 +4,14 @@ import type { FeatureCollection } from 'geojson';
 import { useTranslation } from 'react-i18next';
 import { TrailCard } from './components/TrailCard';
 import { RouteMap } from './components/RouteMap';
+import {FilterPanel} from './components/FilterPanel';
 import backendTrails from '../../assets/mockData/backendTrails.json';
 import type { DifficultyLevel } from '../../utils/difficulty';
-import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon, PlusIcon,SlidersHorizontalIcon } from '@phosphor-icons/react';
 import { Button } from '../../components/Button';
 import RouteEditorPanel from './components/RouteEditorPanel';
 import { Trail } from '../../utils/Trail';
+import { useTrailFilters } from '../../hooks/useTrailFilters';
 
 const emptyGeoJson: FeatureCollection = {
     type: 'FeatureCollection',
@@ -18,19 +20,19 @@ const emptyGeoJson: FeatureCollection = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TrailData = any;
+type ViewState = 'list' | 'create' | 'filter'
 
 //TODO: SEPARATE COMPONENTS FOR TRAIL LIST, TRAIL CARD, AND MAP FOR BETTER MAINTAINABILITY
 function RoutePage() {
     const { t } = useTranslation();
-    const [searchTerm, setSearchTerm] = useState('');
     const [displayedGeoJson, setDisplayedGeoJson] = useState<FeatureCollection>(emptyGeoJson);
-    const [isCreatingRoute, setIsCreatingRoute] = useState(false);
     const [newRouteName, setNewRouteName] = useState('');
     const [newRouteDescription, setNewRouteDescription] = useState('');
     const [newRouteDistance, setNewRouteDistance] = useState(0);
     const [newRouteTime, setNewRouteTime] = useState(0);
     const [currentRouteCoordinates, setCurrentRouteCoordinates] = useState<[number, number][]>([]);
     const [userTrails, setUserTrails] = useState<TrailData[]>([]);
+    const [view, setView] = useState<ViewState>('list');
 
     useEffect(() => {
         const saved = localStorage.getItem('userTrails');
@@ -116,8 +118,6 @@ function RoutePage() {
         const updatedUserTrails = [newTrail, ...userTrails];
         setUserTrails(updatedUserTrails);
         localStorage.setItem('userTrails', JSON.stringify(updatedUserTrails));
-
-        setIsCreatingRoute(false);
         setNewRouteName('');
         setNewRouteDescription('');
         setNewRouteDistance(0);
