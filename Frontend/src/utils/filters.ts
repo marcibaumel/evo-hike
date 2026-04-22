@@ -1,4 +1,4 @@
-import type { DifficultyLevel } from "./difficulty"
+import type { DifficultyLevel } from './difficulty';
 
 export type TrailFilters = {
     query: string
