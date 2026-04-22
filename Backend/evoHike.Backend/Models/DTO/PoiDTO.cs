@@ -1,19 +1,19 @@
 using NetTopologySuite.Geometries;
 
-namespace evoHike.Backend.Models
+namespace evoHike.Backend.Models.DTO
 {
-    public class PoiDto
+    public class PoiDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
         public Geometry? Location { get; set; }
 
-        public PoiDto() { }
+        public PoiDTO() { }
 
-        public PoiDto(PointOfInterest poi)
+        public PoiDTO(PointOfInterestEntity poi)
         {
-            Id = poi.PointOfInterestId;
+            Id = poi.Id;
             Name = poi.PointOfInterestName;
             Type = poi.PointOfInterestType;
             Location = poi.Location;

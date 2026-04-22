@@ -1,10 +1,10 @@
 using NetTopologySuite.Geometries;
 
-namespace evoHike.Backend.Models
+namespace evoHike.Backend.Models.DTO
 {
-    public class TrailDto
+    public class TrailDTO
     {
-        public string Id { get; set; } = string.Empty; 
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Location { get; set; } 
         public double Length { get; set; } 
@@ -16,11 +16,11 @@ namespace evoHike.Backend.Models
         public string CoverPhotoPath { get; set; } = string.Empty;
         public Geometry? RouteLine { get; set; }
 
-        public TrailDto() { }
+        public TrailDTO() { }
 
-        public TrailDto(HikingTrail trail)
+        public TrailDTO(HikingTrailEntity trail)
         {
-            Id = trail.TrailID.ToString();
+            Id = trail.Id;
             Name = trail.TrailName;
             Location = !string.IsNullOrEmpty(trail.StartLocation) 
                 ? $"{trail.StartLocation} - {trail.EndLocation}" 
