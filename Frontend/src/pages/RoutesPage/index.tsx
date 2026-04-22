@@ -179,99 +179,98 @@ export default function RoutePage() {
     if (selectedTrail?.id === id) setSelectedTrail(null);
   };
 
-  return (
-    <div className="flex flex-col lg:flex-row h-screen pt-20 bg-brand-dark overflow-hidden">
-      <div className="w-full lg:w-1/3 flex flex-col border-r border-white/10 bg-brand-dark z-20 relative h-full">
-        {view === 'create' ? (
-          <RouteEditorPanel
-            name={customRoute.name}
-            description={customRoute.description}
-            distance={customRoute.distance}
-            time={customRoute.time}
-            onNameChange={(val) => setCustomRoute(p => ({ ...p, name: val }))}
-            onDescriptionChange={(val) => setCustomRoute(p => ({ ...p, description: val }))}
-            onSave={handleSaveNewRoute}
-            closeRouteEditor={() => setView('list')}
-            onGpxLoaded={(data) => { setUploadedGpx(data); setDisplayedGeoJson(data || emptyGeoJson); }}
-            images={routeImages}
-            onImagesChange={setRouteImages}
-            onReset={handleResetForm}
-          />
-        ) : view === 'filter' ? (
-          <FilterPanel
-            onClose={() => setView('list')}
-            onFilterChange={setFilters}
-            filters={filters}
-          />
-        ) : (
-          <>
-            <div className="p-6 border-b border-white/5 bg-brand-dark/95 backdrop-blur-md sticky top-0 z-20">
-              <div className="flex gap-3">
-                <div className="relative flex-1">
-                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted" size={18} />
-                  <input
-                    type="text"
-                    placeholder={t('route.search_placeholder')}
-                    onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-accent/50 transition-colors"
-                  />
-                </div>
-                
-                <Button
-                  variant="primary"
-                  className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90 relative"
-                  size="sm"
-                  onClick={() => setView('filter')}
-                  title="Filter trails"
-                >
-                  <SlidersHorizontalIcon size={20} />
-                  {hasActiveFilters && (
-                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 rounded-full" />
-                  )}
-                </Button>
-
-                <Button
-                  variant="primary"
-                  className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
-                  size="sm"
-                  onClick={() => setView('create')}
-                  title={t('route.create_new')}
-                >
-                  <PlusIcon size={20} className="text-brand-dark" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Listázás */}
-            <div className="flex-1 lg:overflow-y-auto p-4 space-y-4">
-              {filteredTrails.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full py-16 gap-3">
-                  <MagnifyingGlassIcon size={40} className="text-brand-muted opacity-40" />
-                  <p className="text-brand-muted text-sm text-center">
-                    No trails match your filters.
-                  </p>
-                  <button
-                    onClick={() => setView('filter')}
-                    className="text-brand-accent text-sm underline underline-offset-2 hover:text-brand-accent/70 transition-colors"
-                  >
-                    Adjust filters
-                  </button>
-                </div>
-              ) : (
-                filteredTrails.map((trail) => (
-                  <div key={trail.id} className="hover:scale-[1.01] transition-transform duration-300">
-                    <TrailCard
-                      trail={trail}
-                      onViewDetails={() => handleTrailSelect(trail.id)} // <-- handleTrailSelect-re javítva
-                      onDelete={trail.id.startsWith('user-') ? () => handleDeleteTrail(trail.id) : undefined} // <-- callback-re javítva
+    return (
+        <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen pt-20 lg:overflow-hidden bg-brand-dark">
+            {/* Sidebar - Trail List or Editor */}
+            <div className="w-full lg:w-1/3 flex flex-col border-r border-white/10 bg-brand-dark z-10 relative">
+                {view === 'create' ? (
+                    <RouteEditorPanel
+                        name={newRouteName}
+                        description={newRouteDescription}
+                        distance={newRouteDistance}
+                        time={newRouteTime}
+                        onNameChange={setNewRouteName}
+                        onDescriptionChange={setNewRouteDescription}
+                        onSave={handleSaveNewRoute}
+                        closeRouteEditor={() => setView('list')}
+                        onGpxLoaded={handleGpxLoaded}
                     />
-                  </div>
-                ))
-              )}
+                ) : view === 'filter' ? (
+                    <FilterPanel
+                        onClose={() => setView('list')}
+                        onFilterChange={setFilters}
+                        filters={filters}
+                    />
+                ) : (
+                    <>
+                        {/* Header & Filter */}
+                        <div className="p-6 border-b border-white/5 bg-brand-dark/95 backdrop-blur-md sticky top-0 z-20">
+                            <div className="flex gap-3">
+                                <div className="relative flex-1">
+                                    <MagnifyingGlassIcon
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted"
+                                        size={18}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder={t('route.search_placeholder')}
+                                        onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-accent/50 transition-colors"
+                                    />
+                                </div>
+                                {/* Filter button - now correctly wired */}
+                                <Button
+                                    variant="primary"
+                                    className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90 relative"
+                                    size="sm"
+                                    onClick={() => setView('filter')}
+                                    title="Filter trails">
+                                    <SlidersHorizontalIcon size={20} />
+                                    {hasActiveFilters && (
+                                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 rounded-full" />
+                                    )}
+                                </Button>
+                                {/* Create button */}
+                                <Button
+                                    variant="primary"
+                                    className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
+                                    size="sm"
+                                    onClick={() => setView('create')}
+                                    title={t('route.create_new')}>
+                                    <PlusIcon size={20} weight="bold" className="text-brand-dark" />
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Scrollable List */}
+                        <div className="flex-1 lg:overflow-y-auto p-4 space-y-4">
+                            {filteredTrails.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center h-full py-16 gap-3">
+                                    <MagnifyingGlassIcon size={40} className="text-brand-muted opacity-40" />
+                                    <p className="text-brand-muted text-sm text-center">
+                            No trails match your filters.
+                                    </p>
+                                    <button
+                                        onClick={() => setView('filter')}
+                                        className="text-brand-accent text-sm underline underline-offset-2 hover:text-brand-accent/70 transition-colors">
+                            Adjust filters
+                                    </button>
+                                </div>
+                            ) : (
+                                filteredTrails.map((trail) => (
+                                    <div key={trail.id} className="hover:scale-[1.01] transition-transform duration-300">
+                                        <TrailCard
+                                            trail={trail}
+                                            onViewDetails={handleViewDetails}
+                                            onDelete={trail.id.startsWith('user-') ? handleDeleteTrail : undefined}
+                                        />
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </>
+                )}
             </div>
-          </>
-        )}
-      </div>
 
       <div className="relative flex-1 h-full">
         <RouteMap

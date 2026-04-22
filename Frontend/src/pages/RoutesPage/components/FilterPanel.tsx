@@ -1,14 +1,14 @@
-import type { TrailFilters } from '../../../utils/filters'
-import type { Dispatch, SetStateAction } from 'react'
-import { XIcon } from '@phosphor-icons/react'
-import type { DifficultyLevel } from '../../../utils/difficulty'
+import type { TrailFilters } from '../../../utils/filters';
+import type { Dispatch, SetStateAction } from 'react';
+import { XIcon } from '@phosphor-icons/react';
+import type { DifficultyLevel } from '../../../utils/difficulty';
 
 const DIFFICULTY_LABELS: Record<DifficultyLevel, string> = {
     0: 'Easy',
     1: 'Moderate',
     2: 'Hard',
     3: 'Expert'
-}
+};
 
 interface FilterPanelProps {
     onClose: () => void
@@ -18,16 +18,16 @@ interface FilterPanelProps {
 
 export const FilterPanel = ({ onClose, filters, onFilterChange }: FilterPanelProps) => {
     const update = (patch: Partial<TrailFilters>) =>
-        onFilterChange(prev => ({ ...prev, ...patch }))
+        onFilterChange(prev => ({ ...prev, ...patch }));
 
     const toggleDifficulty = (level: DifficultyLevel) => {
-        const already = filters.difficulty.includes(level)
+        const already = filters.difficulty.includes(level);
         update({
             difficulty: already
                 ? filters.difficulty.filter(d => d !== level)
                 : [...filters.difficulty, level]
-        })
-    }
+        });
+    };
 
     const handleReset = () => {
         onFilterChange({
@@ -38,9 +38,9 @@ export const FilterPanel = ({ onClose, filters, onFilterChange }: FilterPanelPro
             minElevation: null,
             maxElevation: null,
             maxTime: null,
-            minRating: null,
-        })
-    }
+            minRating: null
+        });
+    };
 
     return (
         <div className="flex flex-col h-full">
@@ -65,9 +65,9 @@ export const FilterPanel = ({ onClose, filters, onFilterChange }: FilterPanelPro
                                 onClick={() => toggleDifficulty(level)}
                                 className={`py-2 px-3 rounded-xl text-sm font-medium border transition-colors
                                     ${filters.difficulty.includes(level)
-                                        ? 'bg-brand-accent text-brand-dark border-brand-accent'
-                                        : 'bg-white/5 text-brand-muted border-white/10 hover:border-white/20'
-                                    }`}
+                                ? 'bg-brand-accent text-brand-dark border-brand-accent'
+                                : 'bg-white/5 text-brand-muted border-white/10 hover:border-white/20'
+                            }`}
                             >
                                 {DIFFICULTY_LABELS[level]}
                             </button>
@@ -139,9 +139,9 @@ export const FilterPanel = ({ onClose, filters, onFilterChange }: FilterPanelPro
                                 onClick={() => update({ minRating: filters.minRating === star ? null : star })}
                                 className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-colors
                                     ${filters.minRating !== null && star <= filters.minRating
-                                        ? 'bg-brand-accent text-brand-dark border-brand-accent'
-                                        : 'bg-white/5 text-brand-muted border-white/10 hover:border-white/20'
-                                    }`}
+                                ? 'bg-brand-accent text-brand-dark border-brand-accent'
+                                : 'bg-white/5 text-brand-muted border-white/10 hover:border-white/20'
+                            }`}
                             >
                                 {star}★
                             </button>
@@ -165,5 +165,5 @@ export const FilterPanel = ({ onClose, filters, onFilterChange }: FilterPanelPro
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
