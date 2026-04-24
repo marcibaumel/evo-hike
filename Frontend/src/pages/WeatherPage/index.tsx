@@ -48,7 +48,7 @@ function Weather() {
             <div className="min-h-screen flex items-center justify-center bg-brand-dark px-6 pt-24">
                 <div className="bg-red-500/10 border border-red-500/20 p-8 rounded-3xl text-center max-w-md backdrop-blur-md">
                     <CloudLightningIcon size={48} className="mx-auto text-red-400 mb-4" />
-                    <h2 className="text-xl font-bold text-white mb-2">{t('weather_page.error.failed')}</h2>
+                    <h2 data-testid="weather-page-network-error" className="text-xl font-bold text-white mb-2">{t('weather_page.error.failed')}</h2>
                     <p className="text-red-200/60 mb-6">{error}</p>
                     <Button
                         onClick={refetch}
@@ -103,6 +103,7 @@ function Weather() {
                             label={t('weatherWind')}
                             value={current.windSpeed_ms.toPrecision(3)}
                             subtext={t('weather_page.units.meters_per_sec')}
+                            dataTestForValue='weather-stat-wind-value'
                         />
                     )}
 
@@ -115,6 +116,7 @@ function Weather() {
                             unit={t('weather_page.units.percent')}
                             subtext={t('weather_page.labels.humidity')}
                             progress={current.humidityPercent}
+                            dataTestForValue='weather-stat-humidity-value'
                         />
                     )}
 
