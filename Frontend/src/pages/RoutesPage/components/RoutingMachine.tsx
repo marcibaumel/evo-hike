@@ -9,7 +9,6 @@ interface RoutingMachineProps {
     onRouteFound?: (summary: { totalDistance: number; totalTime: number; coordinates: [number, number][] }) => void;
 }
 
-//TODO: Refactor this components
 export default function RoutingMachine({ waypoints, onRouteFound }: RoutingMachineProps) {
     const map = useMap();
     const onRouteFoundRef = useRef(onRouteFound);
@@ -21,26 +20,24 @@ export default function RoutingMachine({ waypoints, onRouteFound }: RoutingMachi
     useEffect(() => {
         if (!map) return;
 
-        // létrehozzuk az útvonaltervező vezérlőt
-        // l as any kell mert a ts nem ismeri a routing kiegészítést
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const routingControl = (L as any).Routing.control({
             waypoints: waypoints.map((p) => L.latLng(p[0], p[1])),
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             router: (L as any).Routing.osrmv1({
                 serviceUrl: 'https://routing.openstreetmap.de/routed-foot/route/v1',
-                profile: 'driving' // ez egy szenvedés volt minden dokumentációban csak a profilra hivatkoznak de közben más urlje van a footnak
+                profile: 'driving' // A dokumentációs probléma megkerülése
             }),
-            routeWhileDragging: false, // húzogatással módosítható az útvonal
+            routeWhileDragging: false,
             lineOptions: {
-                styles: [{ color: '#6FA1EC', weight: 5 }] // kék útvonal
+                styles: [{ color: '#6FA1EC', weight: 5 }]
             },
-            show: false, // az útvonal kiírás letiltása
-            addWaypoints: false, // ne lehessen köztes pontokat hozzáadni
+            show: false,
+            addWaypoints: false,
             draggableWaypoints: false,
-            fitSelectedRoutes: false, // ne zoomoljon rá automatikusan minden kattintásnál mert zavaró
-            showAlternatives: true, // mutassa meg az alternatív útvonalakat is
-            createMarker: () => null // kikapcsoljuk az alapértelmezett markereket mert sajátokat használunk
+            fitSelectedRoutes: false,
+            showAlternatives: true,
+            createMarker: () => null
         }).addTo(map);
 
         const container = routingControl.getContainer();
@@ -48,7 +45,6 @@ export default function RoutingMachine({ waypoints, onRouteFound }: RoutingMachi
             container.style.display = 'none';
         }
 
-        // eseményfigyelő amikor az útvonal elkészült kinyerjük az adatokat
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         routingControl.on('routesfound', function (e: any) {
             const routes = e.routes;
@@ -56,21 +52,22 @@ export default function RoutingMachine({ waypoints, onRouteFound }: RoutingMachi
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const coordinates = routes[0].coordinates.map((c: any) => [c.lng, c.lat]);
 
-            // visszaküldjük a szülőnek a távolságot és időt
+            const walkingSpeedMetersPerSecond = 4000 / 3600; // 4km/h átlagsebesség
+            const correctedTime = summary.totalDistance / walkingSpeedMetersPerSecond;
+
             if (onRouteFoundRef.current) {
                 onRouteFoundRef.current({
                     totalDistance: summary.totalDistance,
-                    totalTime: summary.totalTime,
+                    totalTime: correctedTime,
                     coordinates: coordinates
                 });
             }
         });
 
-        // takarítás ha a komponens megszűnik töröljük a térképről
         return () => {
             map.removeControl(routingControl);
         };
-    }, [map, waypoints]); // onRouteFound removed from deps
+    }, [map, waypoints]);
 
     return null;
 }

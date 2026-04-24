@@ -6,7 +6,6 @@ import { Button } from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
 import type { Trail } from '../../../utils/Trail';
 
-//TODO: Refactor this components
 interface TrailCardProps {
     trail: Trail;
     onViewDetails?: (trail: Trail) => void;
@@ -15,31 +14,21 @@ interface TrailCardProps {
 
 const getDifficultyLabel = (level: number) => {
     switch (level) {
-    case 0:
-        return 'Easy';
-    case 1:
-        return 'Moderate';
-    case 2:
-        return 'Hard';
-    case 3:
-        return 'Extreme';
-    default:
-        return 'Unknown';
+        case 0: return 'Easy';
+        case 1: return 'Moderate';
+        case 2: return 'Hard';
+        case 3: return 'Extreme';
+        default: return 'Unknown';
     }
 };
 
 const getDifficultyVariant = (level: number) => {
     switch (level) {
-    case 0:
-        return 'accent';
-    case 1:
-        return 'neutral';
-    case 2:
-        return 'orange';
-    case 3:
-        return 'orange';
-    default:
-        return 'neutral';
+        case 0: return 'accent';
+        case 1: return 'neutral';
+        case 2: return 'orange';
+        case 3: return 'orange';
+        default: return 'neutral';
     }
 };
 
@@ -56,10 +45,7 @@ export const TrailCard = ({ trail, onViewDetails, onDelete }: TrailCardProps) =>
         <Card variant="glass" hoverEffect className="flex flex-col h-full overflow-hidden p-0">
             <div className="relative h-48 overflow-hidden group">
                 <img
-                    src={
-                        trail.coverPhotoPath ||
-                        'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop'
-                    }
+                    src={trail.coverPhotoPath || 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop'}
                     alt={trail.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

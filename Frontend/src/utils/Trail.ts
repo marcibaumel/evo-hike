@@ -13,6 +13,7 @@ export class Trail {
     coverPhotoPath: string;
     description: string;
     userPhotos: string[];
+    geojson?: any;
 
     constructor(data: {
         id: string;
@@ -27,6 +28,7 @@ export class Trail {
         coverPhotoPath: string;
         description?: string;
         userPhotos?: string[];
+        geojson?: any;
     }) {
         this.id = data.id;
         this.name = data.name;
@@ -40,5 +42,6 @@ export class Trail {
         this.coverPhotoPath = data.coverPhotoPath;
         this.description = data.description || '';
         this.userPhotos = data.userPhotos || [];
+        this.geojson = data.geojson;
     }
 }

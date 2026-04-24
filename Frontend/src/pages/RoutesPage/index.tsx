@@ -1,218 +1,132 @@
-/* eslint-disable no-console */
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import type { FeatureCollection } from 'geojson';
-import { useTranslation } from 'react-i18next';
-import { TrailCard } from './components/TrailCard';
+//import { useTranslation } from 'react-i18next';
 import { RouteMap } from './components/RouteMap';
-import backendTrails from '../../assets/mockData/backendTrails.json';
-import type { DifficultyLevel } from '../../utils/difficulty';
-import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react';
-import { Button } from '../../components/Button';
 import RouteEditorPanel from './components/RouteEditorPanel';
+import TrailListPanel from './components/TrailListPanel';
+//import PlanHikeModal from './components/PlanHikeModel';
+import SelectedTrailDetails from './components/SelectedTrailDetails';
 import { Trail } from '../../utils/Trail';
+import { getNearbyPOIs, type OverpassElement } from '../../api/overpassApi';
+import routeData from '../../assets/mockData/routes.json';
+import backendTrails from '../../assets/mockData/backendTrails.json';
+import type { DifficultyLevel } from '../../utils/difficulty.ts';
 
-const emptyGeoJson: FeatureCollection = {
-    type: 'FeatureCollection',
-    features: []
-};
+const geojson = routeData as FeatureCollection;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type TrailData = any;
+export default function RoutePage() {
+   // const { t } = useTranslation();
 
-//TODO: SEPARATE COMPONENTS FOR TRAIL LIST, TRAIL CARD, AND MAP FOR BETTER MAINTAINABILITY
-function RoutePage() {
-    const { t } = useTranslation();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [displayedGeoJson, setDisplayedGeoJson] = useState<FeatureCollection>(emptyGeoJson);
+    // --- ÁLLAPOTOK ---
+    const [userTrails, setUserTrails] = useState<any[]>([]);
+    const [selectedTrail, setSelectedTrail] = useState<Trail | null>(null);
+    const [pois, setPois] = useState<OverpassElement[]>([]);
     const [isCreatingRoute, setIsCreatingRoute] = useState(false);
-    const [newRouteName, setNewRouteName] = useState('');
-    const [newRouteDescription, setNewRouteDescription] = useState('');
-    const [newRouteDistance, setNewRouteDistance] = useState(0);
-    const [newRouteTime, setNewRouteTime] = useState(0);
-    const [currentRouteCoordinates, setCurrentRouteCoordinates] = useState<[number, number][]>([]);
-    const [userTrails, setUserTrails] = useState<TrailData[]>([]);
+    //const [planningTrail, setPlanningTrail] = useState<{ id: number; name: string } | null>(null);
+    const [mapInstance, setMapInstance] = useState<any>(null);
 
+    // Egyedi útvonalhoz
+    const [customRoute, setCustomRoute] = useState({ name: '', description: '', distance: 0, time: 0, coordinates: [] as [number, number][] });
+    const [uploadedGpx, setUploadedGpx] = useState<FeatureCollection | null>(null);
+
+    // --- ADATOK BETÖLTÉSE ---
     useEffect(() => {
         const saved = localStorage.getItem('userTrails');
         if (saved) {
-            try {
-                setUserTrails(JSON.parse(saved));
-            } catch (e) {
-                console.error('Failed to parse user trails', e);
-            }
+            try { setUserTrails(JSON.parse(saved)); } catch (e) { console.error('Failed to parse user trails', e); }
         }
     }, []);
 
-    const allTrailsData = useMemo(() => {
-        return [...userTrails, ...backendTrails];
+    const allTrails = useMemo(() => {
+        return [...userTrails, ...backendTrails].map(t => new Trail({
+            ...t,
+            difficulty: (t.difficulty === 'Easy' ? 0 : t.difficulty === 'Moderate' ? 1 : t.difficulty === 'Hard' ? 2 : 3) as DifficultyLevel
+        }));
     }, [userTrails]);
 
-    const allTrails = useMemo(() => {
-        return allTrailsData.map((t) => {
-            let difficulty: DifficultyLevel = 1;
-            if (t.difficulty === 'Easy') difficulty = 0;
-            else if (t.difficulty === 'Moderate') difficulty = 1;
-            else if (t.difficulty === 'Hard') difficulty = 2;
-            else if (t.difficulty === 'Extreme') difficulty = 3;
+    // --- POI LEKÉRÉS ---
+    const fetchPOIs = useCallback(async (coordinates: [number, number][]) => {
+        const results = await getNearbyPOIs(coordinates.map(([lon, lat]) => ({ lat, lon })), 200);
+        setPois(results.filter(p => p.tags?.name));
+    }, []);
 
-            return new Trail({
-                ...t,
-                difficulty: difficulty
-            });
-        });
-    }, [allTrailsData]);
-
-    const filteredTrails = allTrails.filter((trail) => trail.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    const handleViewDetails = (trail: Trail) => {
-        const originalData = allTrailsData.find((t: TrailData) => t.id === trail.id);
-
-        if (originalData && originalData.geojson) {
-            const feature = originalData.geojson;
-            const collection: FeatureCollection = {
-                type: 'FeatureCollection',
-                features: [feature]
-            };
-            setDisplayedGeoJson(collection);
+    // --- KIVÁLASZTÁS LISTÁBÓL VAGY TÉRKÉPRŐL ---
+    const handleTrailSelect = useCallback((trailId: string) => {
+        const trail = allTrails.find(t => String(t.id) === String(trailId));
+        if (trail) {
+            setSelectedTrail(trail);
+            // Ha van geojson adata (pl. saját vagy mock), akkor lekérjük a POI-kat a vonal mentén
+            const feature = geojson.features.find(f => String(f.properties?.id) === String(trailId)) || trail.geojson;
+            if (feature && feature.geometry.type === 'LineString') {
+                fetchPOIs(feature.geometry.coordinates as [number, number][]);
+            }
         }
-    };
+    }, [allTrails, fetchPOIs]);
 
+    // --- ÚTVONAL MENTÉSE (local) ---
     const handleSaveNewRoute = () => {
-        if (!newRouteName) {
-            alert('Please enter a route name.');
-            return;
-        }
+        if (!customRoute.name) return alert('Kérlek add meg a túra nevét!');
 
         const newId = `user-${Date.now()}`;
-
-        const geometry = {
-            type: 'LineString',
-            coordinates: currentRouteCoordinates
-        };
-
-        const newTrail: TrailData = {
+        const newTrail = {
             id: newId,
-            name: newRouteName,
+            name: customRoute.name,
             location: 'Custom Route',
-            length: newRouteDistance,
-            difficulty: newRouteDistance < 5000 ? 'Easy' : newRouteDistance > 15000 ? 'Hard' : 'Moderate',
+            length: customRoute.distance,
+            difficulty: customRoute.distance < 5000 ? 'Easy' : customRoute.distance > 15000 ? 'Hard' : 'Moderate',
             elevationGain: 0,
-            time: newRouteTime,
-            rating: 0,
-            reviewCount: 0,
-            coverPhotoPath: '',
-            description: newRouteDescription,
-            userPhotos: [],
-            geojson: {
-                type: 'Feature',
-                properties: {
-                    id: newId,
-                    name: newRouteName
-                },
-                geometry: geometry
-            }
+            time: customRoute.time,
+            rating: 0, reviewCount: 0, coverPhotoPath: '', description: customRoute.description, userPhotos: [],
+            geojson: uploadedGpx || { type: 'Feature', properties: { id: newId, name: customRoute.name }, geometry: { type: 'LineString', coordinates: customRoute.coordinates } }
         };
 
-        const updatedUserTrails = [newTrail, ...userTrails];
-        setUserTrails(updatedUserTrails);
-        localStorage.setItem('userTrails', JSON.stringify(updatedUserTrails));
+        const updated = [newTrail, ...userTrails];
+        setUserTrails(updated);
+        localStorage.setItem('userTrails', JSON.stringify(updated));
 
         setIsCreatingRoute(false);
-        setNewRouteName('');
-        setNewRouteDescription('');
-        setNewRouteDistance(0);
-        setNewRouteTime(0);
-        setCurrentRouteCoordinates([]);
-    };
-
-    const handleDeleteTrail = (trail: Trail) => {
-        if (confirm(t('route.confirm_delete', 'Are you sure you want to delete this trail?'))) {
-            const updatedUserTrails = userTrails.filter((t) => t.id !== trail.id);
-            setUserTrails(updatedUserTrails);
-            localStorage.setItem('userTrails', JSON.stringify(updatedUserTrails));
-
-            setDisplayedGeoJson(emptyGeoJson);
-        }
-    };
-
-    const handleRouteCalculated = (distance: number, time: number, coordinates: [number, number][] = []) => {
-        setNewRouteDistance(distance);
-        setNewRouteTime(time);
-        setCurrentRouteCoordinates(coordinates);
-    };
-
-    const handleGpxLoaded = (data: FeatureCollection | null) => {
-        if (data) {
-            setDisplayedGeoJson(data);
-            setNewRouteDistance(5000);
-            setNewRouteTime(3600);
-        }
+        setCustomRoute({ name: '', description: '', distance: 0, time: 0, coordinates: [] });
+        setUploadedGpx(null);
     };
 
     return (
-        <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen pt-20 lg:overflow-hidden bg-brand-dark">
-            {/* Sidebar - Trail List or Editor */}
-            <div className="w-full lg:w-1/3 flex flex-col border-r border-white/10 bg-brand-dark z-10 relative">
+        <div className="flex flex-col lg:flex-row h-screen pt-20 bg-brand-dark overflow-hidden">
+            {/* SIDEBAR */}
+            <div className="w-full lg:w-1/3 flex flex-col border-r border-white/10 bg-brand-dark z-20 relative h-full">
                 {isCreatingRoute ? (
                     <RouteEditorPanel
-                        name={newRouteName}
-                        description={newRouteDescription}
-                        distance={newRouteDistance}
-                        time={newRouteTime}
-                        onNameChange={setNewRouteName}
-                        onDescriptionChange={setNewRouteDescription}
+                        name={customRoute.name} description={customRoute.description} distance={customRoute.distance} time={customRoute.time}
+                        onNameChange={(val) => setCustomRoute(p => ({...p, name: val}))}
+                        onDescriptionChange={(val) => setCustomRoute(p => ({...p, description: val}))}
                         onSave={handleSaveNewRoute}
                         closeRouteEditor={() => setIsCreatingRoute(false)}
-                        onGpxLoaded={handleGpxLoaded}
+                        onGpxLoaded={(data) => setUploadedGpx(data)}
                     />
                 ) : (
-                    <>
-                        {/* Header & Filter */}
-                        <div className="p-6 border-b border-white/5 bg-brand-dark/95 backdrop-blur-md sticky top-0 z-20">
-                            <div className="flex gap-3">
-                                <div className="relative flex-1">
-                                    <MagnifyingGlassIcon
-                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-muted"
-                                        size={18}
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder={t('route.search_placeholder')}
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-accent/50 transition-colors"
-                                    />
-                                </div>
-                                <Button
-                                    variant="primary"
-                                    className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
-                                    size="sm"
-                                    onClick={() => setIsCreatingRoute(true)}
-                                    title={t('route.create_new')}>
-                                    <PlusIcon size={20} weight="bold" className="text-brand-dark" />
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Scrollable List */}
-                        <div className="flex-1 lg:overflow-y-auto p-4 space-y-4">
-                            {filteredTrails.map((trail) => (
-                                <div key={trail.id} className="hover:scale-[1.01] transition-transform duration-300">
-                                    <TrailCard
-                                        trail={trail}
-                                        onViewDetails={handleViewDetails}
-                                        onDelete={trail.id.startsWith('user-') ? handleDeleteTrail : undefined}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </>
+                    <TrailListPanel onSelectTrail={handleTrailSelect} onStartCreateRoute={() => setIsCreatingRoute(true)} />
                 )}
             </div>
 
-            {/* Map Area */}
-            <RouteMap geojson={displayedGeoJson} onRouteCalculated={handleRouteCalculated} />
+            {/* TÉRKÉP ENGINE */}
+            <div className="relative flex-1 h-full">
+                <RouteMap
+                    selectedTrailId={selectedTrail?.id}
+                    customGeojson={uploadedGpx}
+                    allGeojson={geojson}
+                    pois={pois}
+                    onRouteCalculated={(d, t, c) => setCustomRoute(p => ({ ...p, distance: d, time: t, coordinates: c }))}
+                    onMapReady={setMapInstance}
+                    onTrailClick={handleTrailSelect}
+                />
+
+                {selectedTrail && (
+                    <div className="absolute bottom-6 right-6 left-6 lg:left-auto lg:w-96 z-[1000] animate-fadeIn">
+                        <SelectedTrailDetails trail={selectedTrail} pois={pois} map={mapInstance} />
+                    </div>
+                )}
+            </div>
+
+            {/* {planningTrail && <PlanHikeModal routeId={planningTrail.id} trailName={planningTrail.name} onClose={() => setPlanningTrail(null)} />}*/}
         </div>
     );
 }
-export default RoutePage;
