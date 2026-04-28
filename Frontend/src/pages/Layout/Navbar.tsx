@@ -1,8 +1,9 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import { MountainsIcon, ListIcon, XIcon } from '@phosphor-icons/react';
+import { useAuth } from '../../context/AuthContext';
 
 const NavbarLink = ({ to, children }: { to: string; children: ReactNode }) => (
     <NavLink
@@ -29,6 +30,10 @@ function Navbar() {
     const { t } = useTranslation();
     const navbarRef = useRef<HTMLDivElement>(null);
 
+    const navigate = useNavigate();
+
+    const { isAuthenticated, logout } = useAuth();
+
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (navbarRef.current && !navbarRef.current.contains(event.target as Node)) {
             setOpen(false);
@@ -40,6 +45,13 @@ function Navbar() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [open, handleClickOutside]);
+
+    const handleLogout = () => {
+        logout();
+
+        setOpen(false);
+        navigate('/');
+    };
 
     return (
         <nav
@@ -61,12 +73,14 @@ function Navbar() {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center space-x-10">
-                    <NavbarLink to="/routes">{t('navbarLink1')}</NavbarLink>
-                    <NavbarLink to="/weather">{t('navbarLink2')}</NavbarLink>
-                    <NavbarLink to="/journal">{t('navbarLink3')}</NavbarLink>
-                    <NavbarLink to="/social">{t('navbarLink4')}</NavbarLink>
-                </div>
+                {isAuthenticated && (
+                    <div className="hidden md:flex items-center space-x-10">
+                        <NavbarLink to="/routes">{t('navbarLink1')}</NavbarLink>
+                        <NavbarLink to="/weather">{t('navbarLink2')}</NavbarLink>
+                        <NavbarLink to="/journal">{t('navbarLink3')}</NavbarLink>
+                        <NavbarLink to="/social">{t('navbarLink4')}</NavbarLink>
+                    </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className="flex items-center space-x-4">
@@ -74,11 +88,17 @@ function Navbar() {
                         <LanguageSwitcher />
                     </div>
 
-                    <NavLink
-                        to="/login"
-                        className="hidden md:inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-brand-dark bg-brand-accent rounded-full hover:bg-green-400 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-[0_0_20px_rgba(34,197,94,0.2)] hover:shadow-[0_0_30px_rgba(34,197,94,0.4)]">
-                        {t('navbarLink6')}
-                    </NavLink>
+                    {isAuthenticated ? (
+                        <button onClick={handleLogout} className='hidden md:inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white bg-red-500/80 rounded-full hover:bg-red-500 transition-all duration-300 shadow-[0_0_20px_rgba(239,68,68,0.2)]'>
+                            {t('logout')}
+                        </button>
+                    ) : (
+                        <NavLink
+                            to='/login'
+                            className='hidden md:inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-brand-dark bg-brand-accent rounded-full hover:bg-green-400 transition-all duration-300 shadow-[0_0_20px_rgba(34,197,94,0.2)]'>
+                            {t('navbarLink6')}
+                        </NavLink>
+                    )}
 
                     {/* Mobile Toggle */}
                     <button
@@ -93,24 +113,32 @@ function Navbar() {
                     className={`absolute top-20 left-0 w-full bg-brand-dark/95 backdrop-blur-3xl border-b border-white/10 md:hidden transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) overflow-hidden ${open ? 'max-h-125 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'
                     }`}>
                     <ul className="flex flex-col p-6 space-y-4">
-                        <li>
-                            <NavbarLink to="/routes">{t('navbarLink1')}</NavbarLink>
-                        </li>
-                        <li>
-                            <NavbarLink to="/weather">{t('navbarLink2')}</NavbarLink>
-                        </li>
-                        <li>
-                            <NavbarLink to="/journal">{t('navbarLink3')}</NavbarLink>
-                        </li>
-                        <li>
-                            <NavbarLink to="/social">{t('navbarLink4')}</NavbarLink>
-                        </li>
-                        <li className="pt-6 border-t border-white/10 flex flex-col gap-6">
-                            <NavLink
-                                to="/login"
-                                className="w-full text-center py-3 rounded-xl bg-brand-accent text-brand-dark font-bold shadow-lg shadow-brand-accent/20">
-                                {t('navbarLink6')}
-                            </NavLink>
+                        {isAuthenticated && (
+                            <>
+                                <li>
+                                    <NavbarLink to='/routes'>{t('navbarLink1')}</NavbarLink>
+                                </li>
+                                <li>
+                                    <NavbarLink to='/weather'>{t('navbarLink2')}</NavbarLink></li>
+                                <li>
+                                    <NavbarLink to='/journal'>{t('navbarLink3')}</NavbarLink>
+                                </li>
+                                <li>
+                                    <NavbarLink to='/social'>{t('navbarLink4')}</NavbarLink></li>
+                            </>
+                        )}
+                        <li className='pt-6 border-t border-white/10 flex flex-col gap-6'>
+                            {isAuthenticated ? (
+                                <button onClick={handleLogout} className='w-full text-center py-3 rounded-xl bg-red-500/80 text-white font-bold'>
+                                    {t('logout')}
+                                </button>
+                            ) : (
+                                <NavLink
+                                    to='/login'
+                                    className='w-full text-center py-3 rounded-xl bg-brand-accent text-brand-dark font-bold'>
+                                    {t('navbarLink6')}
+                                </NavLink>
+                            )}
                             <div className="flex justify-center py-2">
                                 <LanguageSwitcher />
                             </div>

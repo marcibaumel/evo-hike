@@ -1,6 +1,11 @@
 import {test,expect} from '@playwright/test';
+import { authenticatePage } from './auth.setup';
 
 test.describe('Leaflet and buttons test', () =>{
+
+    test.beforeEach(async ({page})=> {
+        await authenticatePage(page);
+    });
 
     test('check the start, end buttons are working',async ({page}) =>{
         await page.goto('http://localhost:5173');
