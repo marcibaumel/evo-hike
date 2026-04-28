@@ -4,22 +4,22 @@ import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { authService } from '../api/authService';
 import type { LoginRequest, RegisterRequest } from '../api/authService';
+import { useAuth } from '../context/AuthContext';
 
 export const useAuthActions = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { login } = useAuth;
 
     const handleLogin = async (data: LoginRequest) => {
         setIsLoading(true);
         setError(null);
         try {
             const { token } = await authService.login(data);
-            /* TODO (HIKE-14): Integrate with AuthContext to save the token and update global auth state. */
             navigate('/journal');
-            // eslint-disable-next-line no-console
-            console.log('Token:', token);
+            login(token);
         } catch (err) {
             const axiosError = err as AxiosError<string>;
             setError(axiosError.response?.status === 401 ? t('auth.error_invalid') : t('auth.error_generic'));
