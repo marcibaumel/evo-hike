@@ -11,7 +11,7 @@ export const useAuthActions = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { login } = useAuth;
+    const { login } = useAuth();
 
     const handleLogin = async (data: LoginRequest) => {
         setIsLoading(true);
