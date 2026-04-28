@@ -90,7 +90,7 @@ function Navbar() {
 
                     {isAuthenticated ? (
                         <button onClick={handleLogout} className='hidden md:inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white bg-red-500/80 rounded-full hover:bg-red-500 transition-all duration-300 shadow-[0_0_20px_rgba(239,68,68,0.2)]'>
-                            Logout
+                            {t('logout')}
                         </button>
                     ) : (
                         <NavLink
@@ -130,7 +130,7 @@ function Navbar() {
                         <li className='pt-6 border-t border-white/10 flex flex-col gap-6'>
                             {isAuthenticated ? (
                                 <button onClick={handleLogout} className='w-full text-center py-3 rounded-xl bg-red-500/80 text-white font-bold'>
-                                    Logout
+                                    {t('logout')}
                                 </button>
                             ) : (
                                 <NavLink
