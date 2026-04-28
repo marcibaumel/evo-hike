@@ -182,6 +182,11 @@
     "link_register": "Regisztrálj itt",
     "link_login": "Jelentkezz be itt",
     "error_invalid": "Érvénytelen email vagy jelszó.",
-    "error_generic": "Valami hiba történt. Próbáld újra később."
+    "error_generic": "Valami hiba történt. Próbáld újra később.",
+    "error_password_format": "A jelszónak legalább 8 karakterből kell állnia, és tartalmaznia kell kis- és nagybetűt, számot és speciális karaktert.",
+    "error_email_invalid": "Kérjük, adj meg egy érvényes email címet.",
+    "error_username_length": "A felhasználónévnek 3 és 20 karakter között kell lennie.",
+    "error_email_taken": "Ez az email cím már regisztrálva van.",
+    "error_required_fields": "Kérjük, tölts ki minden kötelező mezőt."
   }
 }

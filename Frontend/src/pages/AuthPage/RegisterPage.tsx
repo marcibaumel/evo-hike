@@ -22,7 +22,7 @@ export default function RegisterPage() {
 
     return (
         <AuthLayout title={t('auth.register_title')} subtitle="evoHike">
-            <form onSubmit={onSubmit} className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-6" noValidate>
                 {error && (
                     <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-fade-in">
                         <WarningCircleIcon size={20} weight="fill" />

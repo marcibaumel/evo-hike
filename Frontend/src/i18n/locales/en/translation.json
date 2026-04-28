@@ -272,6 +272,11 @@
     "link_register": "Register here",
     "link_login": "Login here",
     "error_invalid": "Invalid email or password.",
-    "error_generic": "Something went wrong. Please try again."
+    "error_generic": "Something went wrong. Please try again.",
+    "error_password_format": "Password must be at least 8 characters, with upper, lower, number, and special characters.",
+    "error_email_invalid": "Please enter a valid email address.",
+    "error_username_length": "Username must be between 3 and 20 characters.",
+    "error_email_taken": "This email is already registered.",
+    "error_required_fields": "Please fill in all required fields."
   }
 }
