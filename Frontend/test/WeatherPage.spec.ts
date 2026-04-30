@@ -1,11 +1,13 @@
 import { expect, test } from '@playwright/test';
 import { mockGeocodingResponse, mockWeatherResponse } from './mocks/geocodingResponses';
+import { authenticatePage } from './auth.setup';
 
 test.describe('WeatherPage', () => {
     test.beforeEach(async ({ page }) => {
+        await authenticatePage(page);
+
         await page.route('**/*', async (route) => {
             const url = route.request().url();
-
             if (url.includes('geocoding-api.open-meteo.com')) {
                 await route.fulfill({
                     status: 200,
