@@ -8,9 +8,9 @@ namespace evoHike.Backend.Data
         public EvoHikeContext(DbContextOptions<EvoHikeContext> options) : base(options)
         {
         }
-
-        public DbSet<HikingTrail> HikingTrails { get; set; }
-        public DbSet<PointOfInterest> PointsOfInterest { get; set; }
-        public DbSet<PlannedHikeEntity> PlannedHikes { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<HikingTrailEntity> HikingTrails { get; set; } = null!;
+        public DbSet<PointOfInterestEntity> PointsOfInterest { get; set; } = null!;
+        public DbSet<PlannedHikeEntity> PlannedHikes { get; set; } = null!;
     }
 }

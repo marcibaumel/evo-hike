@@ -8,7 +8,10 @@ import pluginReact from 'eslint-plugin-react';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
-    { files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'], plugins: { js }, extends: ['js/recommended'], languageOptions: { globals: globals.browser } },
+    {
+        ignores: ['node_modules', 'dist', 'build', 'storybook-static', 'playwright-report', 'test-results']
+    },
+    { files: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'], plugins: { js }, extends: ['js/recommended'], languageOptions: { globals: globals.browser } },
     tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,
     {
@@ -48,5 +51,9 @@ export default defineConfig([
             'react/react-in-jsx-scope': 'off'
         }
     },
-    ...storybook.configs['flat/recommended']
+    {
+        files: ['src/**/*.stories.{ts,tsx}']
+    },
+    // @ts-expect-error - Storybook config returns non-standard array format
+    ...(storybook.configs['flat/recommended'])
 ]);

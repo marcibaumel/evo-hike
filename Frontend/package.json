@@ -14,6 +14,7 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "test:ui": "npx playwright test --ui",
+    "build-storybook": "storybook build",
     "test:headless": "npx playwright test"
   },
   "dependencies": {
