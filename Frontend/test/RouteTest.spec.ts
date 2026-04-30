@@ -1,8 +1,10 @@
 import {expect, test} from '@playwright/test';
+import { authenticatePage } from './auth.setup';
 
 test.describe('RouteTest', () =>{
 
     test.beforeEach(async ({page})=> {
+        await authenticatePage(page);
         await page.goto('http://localhost:5173');
     });
 
