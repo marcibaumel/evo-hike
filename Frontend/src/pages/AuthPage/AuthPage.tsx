@@ -20,13 +20,14 @@ export default function AuthPage({ mode }: AuthPageProps) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState(import.meta.env.DEV ? 'test@evohike.hu' : '');
     const [password, setPassword] = useState(import.meta.env.DEV ? 'Password123!' : '');
+    const [confirmPassword, setConfirmPassword] = useState(import.meta.env.DEV ? 'Password123!' : '');
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (isLogin) {
             handleLogin({ email, password });
         } else {
-            handleRegister({ username, email, password });
+            handleRegister({ username, email, password }, confirmPassword);
         }
     };
 
@@ -84,6 +85,17 @@ export default function AuthPage({ mode }: AuthPageProps) {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+
+                    {!isLogin && (
+                        <Input
+                            label={t('auth.confirm_password_label')}
+                            icon={<LockIcon size={14} />}
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                    )}
 
                     <Button type="submit" className="w-full group" isLoading={isLoading} size="lg">
                         {isLogin ? t('auth.login_btn') : t('auth.register_btn')}

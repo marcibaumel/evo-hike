@@ -25,26 +25,25 @@ export const useAuthActions = () => {
         const errData = err.response.data;
 
         switch (status) {
-            case 401:
-                return t('auth.error_invalid');
+        case 401:
+            return t('auth.error_invalid');
 
-            case 409:
-                return t('auth.error_email_taken');
+        case 409:
+            return t('auth.error_email_taken');
 
-            case 400:
-                if (errData?.errors && typeof errData.errors === 'object') {
-                    const errorKeys = Object.keys(errData.errors);
-                    if (errorKeys.includes('Password')) return t('auth.error_password_format');
-                    if (errorKeys.includes('Email')) return t('auth.error_email_invalid');
-                    if (errorKeys.includes('Username')) return t('auth.error_username_length');
-                    return t('auth.error_required_fields');
-                }
-                return t('auth.error_generic');
+        case 400:
+            if (errData?.errors && typeof errData.errors === 'object') {
+                const errorKeys = Object.keys(errData.errors);
+                if (errorKeys.includes('Password')) return t('auth.error_password_format');
+                if (errorKeys.includes('Email')) return t('auth.error_email_invalid');
+                if (errorKeys.includes('Username')) return t('auth.error_username_length');
+                return t('auth.error_required_fields');
+            }
+            return t('auth.error_generic');
 
-            default:
-                return t('auth.error_generic');
+        default:
+            return t('auth.error_generic');
         }
-
     };
 
     const handleLogin = async (data: LoginRequest) => {
@@ -72,13 +71,17 @@ export const useAuthActions = () => {
         }
     };
 
-    const handleRegister = async (data: RegisterRequest) => {
-        if (!data.username || !data.email || !data.password) {
+    const handleRegister = async (data: RegisterRequest, confirmPassword?: string) => {
+        if (!data.username || !data.email || !data.password || !confirmPassword) {
             setError(t('auth.error_required_fields'));
             return;
         }
         if (!isValidEmail(data.email)) {
             setError(t('auth.error_email_invalid'));
+            return;
+        }
+        if (data.password !== confirmPassword) {
+            setError(t('auth.error_passwords_match'));
             return;
         }
 
