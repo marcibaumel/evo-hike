@@ -6,15 +6,15 @@ import SocialPage from './pages/SocialPage';
 import Weather from './pages/WeatherPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage.tsx';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import LoginPage from './pages/AuthPage/LoginPage.tsx';
-import RegisterPage from './pages/AuthPage/RegisterPage.tsx';
+import AuthPage from './pages/AuthPage/AuthPage.tsx';
+
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<AuthPage mode="login" />} />
+            <Route path="/register" element={<AuthPage mode="register" />} />
             <Route element={<ProtectedRoute />}>
                 <Route path="/journal" element={<JournalPage />} />
                 <Route path="/social" element={<SocialPage />} />
