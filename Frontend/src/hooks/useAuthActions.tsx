@@ -18,22 +18,33 @@ export const useAuthActions = () => {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const getTranslatedError = (errData: any): string => {
-        if (!errData) return t('auth.error_generic');
+    const getTranslatedError = (err: AxiosError<any>): string => {
+        if (!err.response) return t('auth.error_generic');
 
-        if (errData.errors && typeof errData.errors === 'object') {
-            const errorKeys = Object.keys(errData.errors);
-            if (errorKeys.includes('Password')) return t('auth.error_password_format');
-            if (errorKeys.includes('Email')) return t('auth.error_email_invalid');
-            if (errorKeys.includes('Username')) return t('auth.error_username_length');
-            return t('auth.error_required_fields');
+        const status = err.response.status;
+        const errData = err.response.data;
+
+        switch (status) {
+            case 401:
+                return t('auth.error_invalid');
+
+            case 409:
+                return t('auth.error_email_taken');
+
+            case 400:
+                if (errData?.errors && typeof errData.errors === 'object') {
+                    const errorKeys = Object.keys(errData.errors);
+                    if (errorKeys.includes('Password')) return t('auth.error_password_format');
+                    if (errorKeys.includes('Email')) return t('auth.error_email_invalid');
+                    if (errorKeys.includes('Username')) return t('auth.error_username_length');
+                    return t('auth.error_required_fields');
+                }
+                return t('auth.error_generic');
+
+            default:
+                return t('auth.error_generic');
         }
 
-        const msg = errData.message || (typeof errData === 'string' ? errData : '');
-        if (msg.includes('already registered')) return t('auth.error_email_taken');
-        if (msg.includes('Invalid email or password')) return t('auth.error_invalid');
-
-        return t('auth.error_generic');
     };
 
     const handleLogin = async (data: LoginRequest) => {
@@ -55,11 +66,7 @@ export const useAuthActions = () => {
         } catch (err) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const axiosError = err as AxiosError<any>;
-            if (axiosError.response?.status === 401) {
-                setError(t('auth.error_invalid'));
-            } else {
-                setError(getTranslatedError(axiosError.response?.data));
-            }
+            setError(getTranslatedError(axiosError));
         } finally {
             setIsLoading(false);
         }
@@ -83,7 +90,7 @@ export const useAuthActions = () => {
         } catch (err) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const axiosError = err as AxiosError<any>;
-            setError(getTranslatedError(axiosError.response?.data));
+            setError(getTranslatedError(axiosError));
         } finally {
             setIsLoading(false);
         }
