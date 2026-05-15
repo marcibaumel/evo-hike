@@ -32,8 +32,8 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
             </div>
 
             <div className="absolute bottom-0 left-0 p-8 md:p-10 w-full bg-linear-to-t from-brand-dark/80 to-transparent z-10">
-                <div className="flex items-baseline gap-4 mb-2">
-                    <span data-testid="current-temperature" className="text-8xl md:text-9xl font-display font-bold text-white tracking-tighter">
+                <div data-testid="weather-container" className="flex flex-row items_baseline gap-4 lg:flex">
+                    <span data-testid="current-temperature" className="text-6xl md:text-9xl font-display font-bold text-white tracking-tighter">
                         {Math.round(current.temperatureC)}°
                     </span>
                     <span className="text-2xl text-brand-muted font-medium">
@@ -49,7 +49,7 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
                 </div>
             </div>
 
-            <div className="absolute top-8 left-8 z-10">
+            <div className="absolute top-5 left-8 z-10 lg:top-8 md:top-8">
                 <Badge variant="neutral">
                     <CalendarBlankIcon size={14} />
                     <span>{t('weather_page.current_weather')}</span>
