@@ -168,5 +168,27 @@
     "description": "Gratulálunk, sikeresen letértél a térképről! Itt már csak a vadon (és ez a 404-es hiba) vár. Inkább keressünk egy biztonságosabb, jól jelzett útvonalat.",
     "backToHome": "Vissza a főoldalra",
     "contact": "Kapcsolatfelvétel"
+  },
+  "auth": {
+    "login_title": "Üdvözlünk újra",
+    "register_title": "Csatlakozz a kalandhoz",
+    "email_label": "Email cím",
+    "password_label": "Jelszó",
+    "confirm_password_label": "Jelszó megerősítése",
+    "username_label": "Felhasználónév",
+    "login_btn": "Bejelentkezés",
+    "register_btn": "Fiók létrehozása",
+    "no_account": "Még nincs fiókod?",
+    "have_account": "Már van fiókod?",
+    "link_register": "Regisztrálj itt",
+    "link_login": "Jelentkezz be itt",
+    "error_invalid": "Érvénytelen email vagy jelszó.",
+    "error_generic": "Valami hiba történt. Próbáld újra később.",
+    "error_password_format": "A jelszónak legalább 8 karakterből kell állnia, és tartalmaznia kell kis- és nagybetűt, számot és speciális karaktert.",
+    "error_email_invalid": "Kérjük, adj meg egy érvényes email címet.",
+    "error_username_length": "A felhasználónévnek 3 és 20 karakter között kell lennie.",
+    "error_email_taken": "Ez az email cím már regisztrálva van.",
+    "error_required_fields": "Kérjük, tölts ki minden kötelező mezőt.",
+    "error_password_match": "A jelszavak nem egyeznek."
   }
 }
