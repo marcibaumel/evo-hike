@@ -32,7 +32,7 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
             </div>
 
             <div className="absolute bottom-0 left-0 p-8 md:p-10 w-full bg-linear-to-t from-brand-dark/80 to-transparent z-10">
-                <div data-testid="weather-container" className="flex flex-row items_baseline gap-4 lg:flex">
+                <div data-testid="weather-container" className="flex flex-row items_baseline gap-4">
                     <span data-testid="current-temperature" className="text-6xl md:text-9xl font-display font-bold text-white tracking-tighter">
                         {Math.round(current.temperatureC)}°
                     </span>
