@@ -6,11 +6,12 @@ test.describe('Responsive weather page', () =>{
 
         const weatherCard = page.getByTestId('current-weather-card');
         const weatherCelsius = page.getByTestId('weather-celsius');
-        const weatherCointainer = page.getByTestId('weather-container');
+        const weatherContainer = page.getByTestId('weather-container');
+        await page.getByTestId('weather-container').waitFor({state : 'visible'});
         const weatherString = page.getByTestId('weather-string');
         const rowsAndGrid = page.getByTestId('row-and-grid');
 
-        await expect(weatherCointainer).toHaveCSS('display', 'flex');
+        await expect(weatherContainer).toHaveCSS('display', 'flex');
         await expect(weatherCelsius).toHaveCSS('display', 'flex');
 
         let columnCount = 0;
@@ -24,8 +25,7 @@ test.describe('Responsive weather page', () =>{
                 return window.getComputedStyle(el).getPropertyValue('grid-template-columns').split(' ').length;
             });
             expect(columnCount).toBe(1);
-        }
-        else{
+        } else {
             await expect(weatherCard).toHaveCSS('grid-row-start','span 2');
             await expect(weatherString).toHaveCSS('top', '32px');
             await expect(weatherString).toHaveCSS('left', '32px');
