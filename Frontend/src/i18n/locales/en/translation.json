@@ -10,6 +10,7 @@
   "navbarLink4": "Social",
   "navbarLink5": "Contacts",
   "navbarLink6": "Login",
+  "logout": "Logout",
   "weatherForecast": "Weather Forecast",
   "refresh": "Refresh",
   "weatherTime": "Time",
@@ -257,5 +258,27 @@
     "description": "Congratulations, you've successfully gone off the map! Only the wilderness (and this 404 error) awaits you here. Let's find a safer, well-marked trail instead.",
     "backToHome": "Back to home",
     "contact": "Contact us"
+  },
+  "auth": {
+    "login_title": "Welcome Back",
+    "register_title": "Join the Adventure",
+    "email_label": "Email Address",
+    "password_label": "Password",
+    "confirm_password_label": "Confirm password",
+    "username_label": "Username",
+    "login_btn": "Sign In",
+    "register_btn": "Create Account",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "link_register": "Register here",
+    "link_login": "Login here",
+    "error_invalid": "Invalid email or password.",
+    "error_generic": "Something went wrong. Please try again.",
+    "error_password_format": "Password must be at least 8 characters, with upper, lower, number, and special characters.",
+    "error_email_invalid": "Please enter a valid email address.",
+    "error_username_length": "Username must be between 3 and 20 characters.",
+    "error_email_taken": "This email is already registered.",
+    "error_required_fields": "Please fill in all required fields.",
+    "error_password_match": "Passwords do not match."
   }
 }
