@@ -11,6 +11,7 @@ import { getNearbyPOIs, type OverpassElement } from '../../api/overpassApi';
 import routeData from '../../assets/mockData/routes.json';
 import backendTrails from '../../assets/mockData/backendTrails.json';
 import type { DifficultyLevel } from '../../utils/difficulty.ts';
+import './routespage.css';
 
 const geojson = routeData as FeatureCollection;
 
@@ -28,6 +29,9 @@ export default function RoutePage() {
     // Egyedi útvonalhoz
     const [customRoute, setCustomRoute] = useState({ name: '', description: '', distance: 0, time: 0, coordinates: [] as [number, number][] });
     const [uploadedGpx, setUploadedGpx] = useState<FeatureCollection | null>(null);
+    const [routeImages, setRouteImages] = useState<File[]>([]);
+    const [points, setPoints] = useState<{ start: [number, number] | null; end: [number, number] | null; mids: [number, number][]; }>({ start: null, end: null, mids: [] });
+    
 
     // --- ADATOK BETÖLTÉSE ---
     useEffect(() => {
@@ -89,6 +93,17 @@ export default function RoutePage() {
         setUploadedGpx(null);
     };
 
+    const handleClearRoute = () => {
+        setPoints({ start: null, end: null, mids: [] });
+    };
+
+    const handleResetForm = () => {
+        setRouteImages([]);
+        setUploadedGpx(null);
+        setCustomRoute({ name: '', description: '', distance: 0, time: 0, coordinates: [] });
+        setPoints({ start: null, end: null, mids: [] });
+    };
+
     return (
         <div className="flex flex-col lg:flex-row h-screen pt-20 bg-brand-dark overflow-hidden">
             {/* SIDEBAR */}
@@ -101,6 +116,9 @@ export default function RoutePage() {
                         onSave={handleSaveNewRoute}
                         closeRouteEditor={() => setIsCreatingRoute(false)}
                         onGpxLoaded={(data) => setUploadedGpx(data)}
+                        images={routeImages}
+                        onImagesChange={setRouteImages}
+                        onReset={handleResetForm}
                     />
                 ) : (
                     <TrailListPanel onSelectTrail={handleTrailSelect} onStartCreateRoute={() => setIsCreatingRoute(true)} />
@@ -117,6 +135,10 @@ export default function RoutePage() {
                     onRouteCalculated={(d, t, c) => setCustomRoute(p => ({ ...p, distance: d, time: t, coordinates: c }))}
                     onMapReady={setMapInstance}
                     onTrailClick={handleTrailSelect}
+                    onClear={handleClearRoute}
+                    creatingRouteState={isCreatingRoute}
+                    points={points}
+                    setPoints={setPoints}
                 />
 
                 {selectedTrail && (

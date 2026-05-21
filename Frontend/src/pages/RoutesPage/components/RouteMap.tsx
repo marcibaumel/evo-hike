@@ -19,6 +19,11 @@ interface RouteMapProps {
     onRouteCalculated: (dist: number, time: number, coords: [number, number][]) => void;
     onMapReady: (map: L.Map) => void;
     onTrailClick: (trailId: string) => void;
+    onClear: () => void;
+    creatingRouteState: boolean;
+    
+    points: { start: [number, number] | null; end: [number, number] | null; mids: [number, number][]; };
+    setPoints: React.Dispatch<React.SetStateAction<{ start: [number, number] | null; end: [number, number] | null; mids: [number, number][]; }>>;
 }
 
 
@@ -31,16 +36,14 @@ const MapEventsHandler = ({ onContextMenu, onClick }: any) => {
 };
 
 
-export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onRouteCalculated, onMapReady, onTrailClick }: RouteMapProps) => {
+export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onRouteCalculated, onMapReady, onTrailClick, onClear, creatingRouteState, points, setPoints }: RouteMapProps) => {
     //const { t } = useTranslation();
     const [map, setMap] = useState<L.Map | null>(null);
-    const [points, setPoints] = useState<{ start: [number, number] | null; end: [number, number] | null; mids: [number, number][]; }>({ start: null, end: null, mids: [] });
     const [selectionMode, setSelectionMode] = useState<'start' | 'end' | 'waypoint' | null>(null);
     const [contextMenu, setContextMenu] = useState<{ x: number, y: number, lat: number, lng: number } | null>(null);
 
     useEffect(() => { if (map) onMapReady(map); }, [map, onMapReady]);
-
-    // Zoomolás a kiválasztott túrára
+    
     const selectedFeature = useMemo(() => {
         if (!selectedTrailId) return null;
         return allGeojson.features.find((f: any) => String(f.properties?.id) === String(selectedTrailId));
@@ -66,11 +69,17 @@ export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onR
     const onEachFeature = (feature: any, layer: L.Layer) => {
         layer.on({
             click: () => {
-                if (selectionMode || points.start) return; // Ha épp navigálunk, ne válasszon ki túrát
+                if (selectionMode || points.start) return; 
                 if (feature.properties?.id) onTrailClick(String(feature.properties.id));
             }
         });
     };
+
+    useEffect(() => {
+        if (!points.start || !points.end) {
+            onRouteCalculated(0, 0, []);
+        }
+    }, [points.start, points.end]);
 
     const waypoints = useMemo(() => points.start && points.end ? [points.start, ...points.mids, points.end] : [], [points]);
 
@@ -83,15 +92,57 @@ export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onR
                 />
 
                 <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+
+                {points.start && points.end && waypoints.length >= 2 && (
+                    <RoutingMachine
+                        waypoints={waypoints}
+                        onRouteFound={(s) => onRouteCalculated(s.totalDistance, s.totalTime, s.coordinates)}
+                    />
+                )}
                 
-
-                {waypoints.length >= 2 && <RoutingMachine waypoints={waypoints} onRouteFound={(s) => onRouteCalculated(s.totalDistance, s.totalTime, s.coordinates)} />}
-
-                {points.start && <Marker position={points.start} icon={startIcon}><Popup><button onClick={() => setPoints(p => ({...p, start: null}))} className="bg-red-500 text-white p-1 rounded text-xs"><MdDelete/></button></Popup></Marker>}
-                {points.end && <Marker position={points.end} icon={endIcon}><Popup><button onClick={() => setPoints(p => ({...p, end: null}))} className="bg-red-500 text-white p-1 rounded text-xs"><MdDelete/></button></Popup></Marker>}
-                {points.mids.map((p, i) => <Marker key={i} position={p} icon={waypointIcon}><Popup><button onClick={() => setPoints(prev => ({...prev, mids: prev.mids.filter((_, idx) => idx !== i)}))} className="bg-red-500 text-white p-1 rounded text-xs"><MdDelete/></button></Popup></Marker>)}
-
-                {/* Kiválasztott túra (Kék vonal) és interakciós réteg (Láthatatlan, kattintható vastag vonal) */}
+                {points.start && (
+                    <Marker position={points.start} icon={startIcon}>
+                        <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
+                            <button
+                                onClick={() => setPoints(p => ({...p, start: null}))}
+                                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
+                                title="Pont törlése"
+                            >
+                                <MdDelete size={18} />
+                            </button>
+                        </Popup>
+                    </Marker>
+                )}
+                
+                {points.end && (
+                    <Marker position={points.end} icon={endIcon}>
+                        <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
+                            <button
+                                onClick={() => setPoints(p => ({...p, end: null}))}
+                                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
+                                title="Pont törlése"
+                            >
+                                <MdDelete size={18} />
+                            </button>
+                        </Popup>
+                    </Marker>
+                )}
+                
+                {points.mids.map((p, i) => (
+                    <Marker key={i} position={p} icon={waypointIcon}>
+                        <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
+                            <button
+                                onClick={() => setPoints(prev => ({...prev, mids: prev.mids.filter((_, idx) => idx !== i)}))}
+                                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
+                                title="Pont törlése"
+                            >
+                                <MdDelete size={18} />
+                            </button>
+                        </Popup>
+                    </Marker>
+                ))}
+                
                 {selectedFeature && <GeoJSON key={`visual-${selectedTrailId}`} data={selectedFeature} style={visualLayerStyle} />}
                 {selectedFeature && <GeoJSON key={`interact-${selectedTrailId}`} data={selectedFeature} style={interactionLayerStyle} onEachFeature={onEachFeature} />}
 
@@ -112,21 +163,26 @@ export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onR
             </MapContainer>
 
             <MapLegend />
+            {creatingRouteState && (
             <MapNavigationControls
                 selectionMode={selectionMode}
                 onSelectStartMode={() => setSelectionMode('start')}
                 onSelectEndMode={() => setSelectionMode('end')}
                 onSelectWaypointMode={() => setSelectionMode('waypoint')}
-                onClear={() => setPoints({ start: null, end: null, mids: [] })}
+                onClear={onClear}
             />
+            )}
 
-            {contextMenu && (
+            {(contextMenu && creatingRouteState) && (
                 <MapContextMenu
                     x={contextMenu.x} y={contextMenu.y}
                     onNavFrom={() => { setPoints(p => ({...p, start: [contextMenu.lat, contextMenu.lng]})); setContextMenu(null); }}
                     onNavTo={() => { setPoints(p => ({...p, end: [contextMenu.lat, contextMenu.lng]})); setContextMenu(null); }}
                     onAddWaypoint={() => { setPoints(p => ({...p, mids: [...p.mids, [contextMenu.lat, contextMenu.lng]]})); setContextMenu(null); }}
-                    onClearNav={() => { setPoints({ start: null, end: null, mids: [] }); setContextMenu(null); }}
+                    onClearNav={() => {
+                        onClear();
+                        setContextMenu(null); 
+                    }}
                 />
             )}
         </div>

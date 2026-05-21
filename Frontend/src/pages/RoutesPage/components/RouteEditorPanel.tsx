@@ -29,20 +29,30 @@ interface RouteEditorPanelProps {
     closeRouteEditor: () => void;
     onGpxLoaded: (data: FeatureCollection | null) => void;
     disableGpxUpload?: boolean;
+    images: File[];
+    onImagesChange: (files: File[] | ((prev: File[]) => File[])) => void;
+    onReset: () => void;
 }
 
 export default function RouteEditorPanel({
                                              name, description, distance, time,
                                              onNameChange, onDescriptionChange, onSave,
-                                             closeRouteEditor, onGpxLoaded, disableGpxUpload
+                                             closeRouteEditor, onGpxLoaded, disableGpxUpload, images, onImagesChange, onReset
                                          }: RouteEditorPanelProps) {
     const { t } = useTranslation();
     const { gpxInputRef, handleGpxChange, triggerGpxInput, gpxFile, clearGpx } = useRouteForm();
-    const [images, setImages] = useState<File[]>([]);
     const [showErrors, setShowErrors] = useState(false);
     const carouselRef = useRef<HTMLDivElement>(null);
 
     const isFormValid = name.trim().length > 0 && description.trim().length > 0 && distance > 0;
+
+    const handleResetClick = () => {
+        if (window.confirm(t('routeForm.confirm_reset', 'Biztosan törölni szeretnél minden beírt adatot?'))) {
+            onReset();
+            clearGpx(); 
+            setShowErrors(false);
+        }
+    };
     
     const formatTime = (seconds: number) => {
         const h = Math.floor(seconds / 3600);
@@ -71,13 +81,14 @@ export default function RouteEditorPanel({
         if (e.target.files?.[0]) {
             const file = e.target.files[0];
             if (file.size > 5 * 1024 * 1024) return alert(t('routeForm.image_too_big'));
-            setImages(prev => [...prev, file]);
+            onImagesChange(prev => [...prev, file]);
             setTimeout(() => carouselRef.current?.scrollBy({ left: 120, behavior: 'smooth' }), 100);
         }
     };
 
     return (
         <div className="h-full flex flex-col bg-brand-dark overflow-y-auto custom-scrollbar">
+            
             <div className="p-6 border-b border-white/5 flex items-center justify-between sticky top-0 bg-brand-dark/95 backdrop-blur-md z-20">
                 <div className="flex items-center gap-3">
                     <div className="p-2 rounded-full bg-brand-accent/10 text-brand-accent">
@@ -85,7 +96,20 @@ export default function RouteEditorPanel({
                     </div>
                     <h2 className="text-xl font-display font-bold text-white">{t('routeForm.title')}</h2>
                 </div>
-                <button onClick={closeRouteEditor} className="p-2 rounded-full hover:bg-white/5 text-brand-muted hover:text-white"><XIcon size={20} /></button>
+                <div className="flex items-center gap-1">
+                    <button
+                        onClick={handleResetClick}
+                        className="p-2 rounded-full hover:bg-red-500/10 text-brand-muted hover:text-red-400 transition-colors"
+                        title={t('routeForm.reset_tooltip', 'Űrlap alaphelyzetbe állítása')}>
+                        <span className="text-xs font-medium px-2 py-1 bg-white/5 rounded-lg border border-white/10 hover:border-red-500/30">
+                            {t('routeForm.reset_btn', 'Alaphelyzet')}
+                        </span>
+                    </button>
+
+                    <button onClick={closeRouteEditor} className="p-2 rounded-full hover:bg-white/5 text-brand-muted hover:text-white">
+                        <XIcon size={20} />
+                    </button>
+                </div>
             </div>
 
             <div className="p-6 space-y-6 flex-1">
@@ -131,7 +155,7 @@ export default function RouteEditorPanel({
                         {images.map((img, idx) => (
                             <div key={idx} className="shrink-0 w-24 h-24 rounded-xl overflow-hidden relative border border-white/10 snap-start">
                                 <img src={URL.createObjectURL(img)} className="w-full h-full object-cover" />
-                                <button onClick={() => setImages(p => p.filter((_, i) => i !== idx))} className="absolute top-1 right-1 p-1 bg-red-500 rounded-lg text-white"><XIcon size={12} /></button>
+                                <button onClick={() => onImagesChange(p => p.filter((_, i) => i !== idx))} className="absolute top-1 right-1 p-1 bg-red-500 rounded-lg text-white"><XIcon size={12} /></button>
                             </div>
                         ))}
                         <label className="shrink-0 w-24 h-24 rounded-xl bg-white/5 border border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:bg-white/10 text-brand-muted">
