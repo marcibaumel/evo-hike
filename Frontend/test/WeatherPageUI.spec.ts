@@ -1,6 +1,29 @@
 import { expect, test } from '@playwright/test';
+import { mockGeocodingResponse, mockWeatherResponse } from './mocks/geocodingResponses';
 
 test.describe('Responsive weather page', () =>{
+    test.beforeEach(async ({ page }) => {
+        await page.route('**/*', async (route) => {
+            const url = route.request().url();
+
+            if (url.includes('geocoding-api.open-meteo.com')) {
+                await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(mockGeocodingResponse)
+                });
+            } else if (url.includes('api.open-meteo.com')) {
+                await route.fulfill({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(mockWeatherResponse)
+                });
+            } else {
+                await route.continue();
+            }
+        });
+    });
+
     test('check weather card',async ({page, isMobile}) =>{
         await page.goto('http://localhost:5173/weather');
 
