@@ -30,9 +30,10 @@ test.describe('Responsive weather page', () =>{
         const weatherCard = page.getByTestId('current-weather-card');
         const weatherCelsius = page.getByTestId('weather-celsius');
         const weatherContainer = page.getByTestId('weather-container');
-        //await page.getByTestId('weather-container').waitFor({state : 'visible'});
         const weatherString = page.getByTestId('weather-string');
         const rowsAndGrid = page.getByTestId('row-and-grid');
+
+        await weatherContainer.waitFor({ state: 'visible' });
 
         await expect(weatherContainer).toHaveCSS('display', 'flex');
         await expect(weatherCelsius).toHaveCSS('display', 'flex');
