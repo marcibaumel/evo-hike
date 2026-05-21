@@ -3,10 +3,10 @@ using NetTopologySuite.Geometries;
 
 namespace evoHike.Backend.Models;
 
-public class HikingTrail
+public class HikingTrailEntity
 {
     [Key]
-    public int TrailID { get; set; }
+    public int Id { get; set; }
     public required string TrailName { get; set; }
     public string? TrailSymbol { get; set; }
     public string? Description { get; set; }

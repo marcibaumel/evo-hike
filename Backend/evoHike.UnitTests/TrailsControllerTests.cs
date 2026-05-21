@@ -1,77 +1,52 @@
 ﻿using evoHike.Backend.Controllers;
-using evoHike.Backend.Models;
-using evoHike.Backend.Services;
+using evoHike.Backend.DataAccess.Interfaces;
+using evoHike.Backend.Models.DTO;
+using evoHike.Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace evoHike.UnitTests;
 
-    [TestFixture]
-    public class TrailsControllerTests
+[TestFixture]
+public class TrailsControllerTests
+{
+    private Mock<ITrailService> _mockService;
+    private TrailsController _controller;
+
+    [SetUp]
+    public void Setup()
     {
-        private Mock<ITrailService> _mocktrailService;
-        private TrailsController _controller;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocktrailService = new Mock<ITrailService>();
-            _controller = new TrailsController(_mocktrailService.Object);
-        }
-
-        [Test]
-        public async Task GetTrails_ReturnsOkResult_WithListOfTrails()
-        {
-            var fakeTrails = new List<HikingTrail>
-            {
-                new HikingTrail
-                {
-                    TrailID = 1,
-                    TrailName = "Test Trail 1",
-                    StartLocation = "Test Loc 1",
-                    Length = 5.0,
-                    Difficulty = 1,
-                    Elevation = 100
-                },
-                new HikingTrail
-                {
-                    TrailID = 2,
-                    TrailName = "Test Trail 2",
-                    StartLocation = "Test Loc 2",
-                    Length = 10.0,
-                    Difficulty = 3,
-                    Elevation = 500
-                }
-            };
-            
-            _mocktrailService.Setup(
-                    service => service.GetAllTrailsAsync())
-                    .ReturnsAsync(fakeTrails);
-            
-            var result = await _controller.GetTrails();
-
-            var actionResult = result.Result as OkObjectResult;
-            Assert.That(actionResult, Is.Not.Null);
-            Assert.That(actionResult.StatusCode, Is.EqualTo(200));
-            
-            var returnedTrails = (actionResult.Value as IEnumerable<TrailDto>)?.ToList();
-            Assert.That(returnedTrails, Is.Not.Null);
-            Assert.That(returnedTrails, Has.Count.EqualTo(2));
-        }
-
-        [Test]
-        public async Task GetTrails_ReturnBadRequest_WhenServiceThrowsException()
-        {
-            _mocktrailService.Setup(
-                    service => service.GetAllTrailsAsync())
-                    .ThrowsAsync(new Exception("Database error"));
-            
-            var result = await _controller.GetTrails();
-            
-            var actionResult = result.Result as BadRequestObjectResult;
-            Assert.That(actionResult, Is.Not.Null);
-            Assert.That(actionResult.StatusCode, Is.EqualTo(400));
-            Assert.That(actionResult.Value, Is.EqualTo("Database error"));
-        }
-        
+        _mockService = new Mock<ITrailService>();
+        _controller = new TrailsController(_mockService.Object);
     }
+
+    [Test]
+    public async Task GetTrails_ReturnsOkResult_WithListOfTrails()
+    {
+        var fakeTrails = new List<TrailDTO>
+        {
+            new TrailDTO { Id = 1, Name = "Test Trail" }
+        };
+
+        _mockService.Setup(s => s.GetAllTrailsAsync())
+                    .ReturnsAsync(fakeTrails);
+
+        var actionResult = await _controller.GetTrails();
+
+        Assert.That(actionResult.Result, Is.InstanceOf<OkObjectResult>());
+
+        var okResult = (actionResult.Result as OkObjectResult)!;
+
+        Assert.That(okResult.Value, Is.EqualTo(fakeTrails));
+    }
+
+    [Test]
+    public async Task GetTrails_ReturnBadRequest_WhenServiceThrowsException()
+    {
+        _mockService.Setup(s => s.GetAllTrailsAsync())
+                    .ThrowsAsync(new Exception("Hiba történt"));
+
+        var result = await _controller.GetTrails();
+        Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+    }
+}
