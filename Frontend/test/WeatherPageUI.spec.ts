@@ -3,37 +3,33 @@ import { mockGeocodingResponse, mockWeatherResponse } from './mocks/geocodingRes
 
 test.describe('Responsive weather page', () =>{
     test.beforeEach(async ({ page }) => {
-        await page.route('**/*', async (route) => {
-            const url = route.request().url();
+        await page.route('**/geocoding-api.open-meteo.com/**', async (route) => {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(mockGeocodingResponse)
+            });
+        });
 
-            if (url.includes('geocoding-api.open-meteo.com')) {
-                await route.fulfill({
-                    status: 200,
-                    contentType: 'application/json',
-                    body: JSON.stringify(mockGeocodingResponse)
-                });
-            } else if (url.includes('api.open-meteo.com')) {
-                await route.fulfill({
-                    status: 200,
-                    contentType: 'application/json',
-                    body: JSON.stringify(mockWeatherResponse)
-                });
-            } else {
-                await route.continue();
-            }
+        await page.route('**/api.open-meteo.com/**', async (route) => {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(mockWeatherResponse)
+            });
         });
     });
 
     test('check weather card',async ({page, isMobile}) =>{
         await page.goto('http://localhost:5173/weather');
 
+        await page.waitForSelector('[data-testid="current-weather-card"]', { state: 'visible' });
+
         const weatherCard = page.getByTestId('current-weather-card');
         const weatherCelsius = page.getByTestId('weather-celsius');
         const weatherContainer = page.getByTestId('weather-container');
         const weatherString = page.getByTestId('weather-string');
         const rowsAndGrid = page.getByTestId('row-and-grid');
-
-        await weatherContainer.waitFor({ state: 'visible' });
 
         await expect(weatherContainer).toHaveCSS('display', 'flex');
         await expect(weatherCelsius).toHaveCSS('display', 'flex');
