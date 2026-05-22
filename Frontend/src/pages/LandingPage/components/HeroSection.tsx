@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '../../../components/Card';
 import { Badge } from '../../../components/Badge';
 import { Button } from '../../../components/Button';
+import { useAuth } from '../../../context/AuthContext';
 
 export const HeroSection = () => {
     const { t } = useTranslation();
+    const { isAuthenticated } = useAuth();
 
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -43,7 +45,7 @@ export const HeroSection = () => {
                     </p>
 
                     <div className="flex flex-wrap items-center gap-4 pt-4">
-                        <Link to="/routes">
+                        <Link to={isAuthenticated ? '/routes' : '/login'}>
                             <Button size="lg" className="rounded-full group relative overflow-hidden">
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                 <span className="relative flex items-center gap-2">
@@ -52,7 +54,7 @@ export const HeroSection = () => {
                             </Button>
                         </Link>
 
-                        <Link to="/social">
+                        <Link to={isAuthenticated ? '/social' : '/login'}>
                             <Button variant="secondary" size="lg" className="rounded-full backdrop-blur-sm">
                                 {t('landing.hero.cta_secondary')}
                             </Button>
