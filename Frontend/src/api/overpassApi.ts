@@ -31,13 +31,13 @@ const CACHE_LIMIT = 50;
  */
 export const getNearbyPOIs = async (
     coordinates: { lat: number; lon: number }[],
-    radius: number = 200,
+    radius: number = 200
 ): Promise<OverpassElement[]> => {
     // Az API gyorsítása érdekében 10 re állitottam a pontok számát
     const targetPoints = 10;
     const step = Math.ceil(coordinates.length / targetPoints);
     const sampledCoordinates = coordinates.filter(
-        (_, index) => index % step === 0,
+        (_, index) => index % step === 0
     );
 
     // Biztosítjuk hogy az utolsó pont is benne legyen ha a lépésköz miatt kimaradt volna
@@ -82,13 +82,14 @@ export const getNearbyPOIs = async (
         const response = await axios.post<OverpassResponse>(
             'https://overpass-api.de/api/interpreter',
             `data=${encodeURIComponent(query)}`,
-            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         );
 
         // Cache limit ellenőrzése: ha elértük az 50-et, töröljük a legrégebbit
         if (poiCache.size >= CACHE_LIMIT) {
             const oldestKey = poiCache.keys().next().value;
             if (oldestKey) {
+                // eslint-disable-next-line no-console
                 console.log('Cache limit elérve, legrégebbi elem törlése:', oldestKey);
                 poiCache.delete(oldestKey);
             }
@@ -98,6 +99,7 @@ export const getNearbyPOIs = async (
         poiCache.set(cacheKey, response.data.elements);
         return response.data.elements;
     } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Hiba az Overpass API lekérdezésekor:', error);
         return [];
     }

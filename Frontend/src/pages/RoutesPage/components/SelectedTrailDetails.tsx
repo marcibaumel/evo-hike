@@ -2,11 +2,12 @@ import { Trail } from '../../../utils/Trail';
 import type { OverpassElement } from '../../../api/overpassApi';
 import { MapPinIcon, CameraIcon, MapTrifoldIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
+import {Map} from 'leaflet';
 
 interface SelectedTrailDetailsProps {
     trail: Trail;
     pois: OverpassElement[];
-    map: any;
+    map: Map | null;
 }
 
 export default function SelectedTrailDetails({ trail, pois, map }: SelectedTrailDetailsProps) {
@@ -30,7 +31,7 @@ export default function SelectedTrailDetails({ trail, pois, map }: SelectedTrail
                     <h3 className="flex items-center text-sm font-bold text-white uppercase tracking-wider"><CameraIcon className="mr-2" /> {t('selectedTrail.user_photos')}</h3>
                     <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x">
                         {trail.userPhotos.map((url, idx) => (
-                            <img key={idx} src={url} className="h-24 w-32 object-cover rounded-xl border border-white/10 snap-start shrink-0" />
+                            <img key={idx} src={url} className="h-24 w-32 object-cover rounded-xl border border-white/10 snap-start shrink-0" alt="" />
                         ))}
                     </div>
                 </div>

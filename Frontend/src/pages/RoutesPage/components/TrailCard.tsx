@@ -14,21 +14,21 @@ interface TrailCardProps {
 
 const getDifficultyLabel = (level: number) => {
     switch (level) {
-        case 0: return 'Easy';
-        case 1: return 'Moderate';
-        case 2: return 'Hard';
-        case 3: return 'Extreme';
-        default: return 'Unknown';
+    case 0: return 'Easy';
+    case 1: return 'Moderate';
+    case 2: return 'Hard';
+    case 3: return 'Extreme';
+    default: return 'Unknown';
     }
 };
 
 const getDifficultyVariant = (level: number) => {
     switch (level) {
-        case 0: return 'accent';
-        case 1: return 'neutral';
-        case 2: return 'orange';
-        case 3: return 'orange';
-        default: return 'neutral';
+    case 0: return 'accent';
+    case 1: return 'neutral';
+    case 2: return 'orange';
+    case 3: return 'orange';
+    default: return 'neutral';
     }
 };
 

@@ -2,6 +2,8 @@ import { MdLocationOn, MdFlag, MdDelete, MdAddLocation } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../../../components/Card';
 
+import type { ReactNode } from 'react';
+
 interface MapNavigationControlsProps {
     onSelectStartMode: () => void;
     onSelectEndMode: () => void;
@@ -10,22 +12,30 @@ interface MapNavigationControlsProps {
     selectionMode: 'start' | 'end' | 'waypoint' | null;
 }
 
+interface ControlButtonProps {
+    onClick: () => void;
+    isActive: boolean;
+    icon: ReactNode;
+    label: string;
+    colorClass: string;
+}
+
 export default function MapNavigationControls({
-                                                  onSelectStartMode,
-                                                  onSelectEndMode,
-                                                  onSelectWaypointMode,
-                                                  onClear,
-                                                  selectionMode,
-                                              }: MapNavigationControlsProps) {
+    onSelectStartMode,
+    onSelectEndMode,
+    onSelectWaypointMode,
+    onClear,
+    selectionMode
+}: MapNavigationControlsProps) {
     const { t } = useTranslation();
 
-    const ControlButton = ({ onClick, isActive, icon, label, colorClass }: any) => (
+    const ControlButton = ({ onClick, isActive, icon, label, colorClass }: ControlButtonProps) => (
         <button
             onClick={onClick}
             title={label}
             className={`flex items-center justify-center w-11 h-11 rounded-xl transition-all border ${
                 isActive
-                    ? `bg-white/10 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]`
+                    ? 'bg-white/10 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                     : 'bg-transparent border-transparent hover:bg-white/5'
             }`}
         >

@@ -5,7 +5,9 @@ import { TrailCard } from './TrailCard';
 import { Button } from '../../../components/Button.tsx';
 import backendTrails from '../../../assets/mockData/backendTrails.json';
 import { Trail } from '../../../utils/Trail';
+
 import type { DifficultyLevel } from '../../../utils/difficulty';
+import type { Feature, FeatureCollection } from 'geojson';
 
 interface TrailListPanelProps {
     onSelectTrail: (trailId: string) => void;
@@ -15,9 +17,9 @@ interface TrailListPanelProps {
 export default function TrailListPanel({ onSelectTrail, onStartCreateRoute }: TrailListPanelProps) {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
-    
+
     const trails = useMemo(() => {
-        return backendTrails.map((rawData) => {
+        return (backendTrails as Record<string, unknown>[]).map((rawData) => {
             let mappedDifficulty = 0;
             if (rawData.difficulty === 'Easy') mappedDifficulty = 0;
             else if (rawData.difficulty === 'Moderate') mappedDifficulty = 1;
@@ -25,8 +27,19 @@ export default function TrailListPanel({ onSelectTrail, onStartCreateRoute }: Tr
             else if (rawData.difficulty === 'Extreme') mappedDifficulty = 3;
 
             return new Trail({
-                ...rawData,
-                difficulty: mappedDifficulty as DifficultyLevel,
+                id: String(rawData.id),
+                name: String(rawData.name || ''),
+                location: String(rawData.location || ''),
+                length: Number(rawData.length) || 0,
+                elevationGain: Number(rawData.elevationGain) || 0,
+                time: Number(rawData.time) || 0,
+                rating: Number(rawData.rating) || 0,
+                reviewCount: Number(rawData.reviewCount) || 0,
+                coverPhotoPath: String(rawData.coverPhotoPath || ''),
+                description: String(rawData.description || ''),
+                userPhotos: (rawData.userPhotos as string[]) || [],
+                geojson: rawData.geojson as FeatureCollection | Feature | null | undefined,
+                difficulty: mappedDifficulty as DifficultyLevel
             });
         });
     }, []);

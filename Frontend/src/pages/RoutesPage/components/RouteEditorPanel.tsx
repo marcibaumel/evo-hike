@@ -35,10 +35,10 @@ interface RouteEditorPanelProps {
 }
 
 export default function RouteEditorPanel({
-                                             name, description, distance, time,
-                                             onNameChange, onDescriptionChange, onSave,
-                                             closeRouteEditor, onGpxLoaded, disableGpxUpload, images, onImagesChange, onReset
-                                         }: RouteEditorPanelProps) {
+    name, description, distance, time,
+    onNameChange, onDescriptionChange, onSave,
+    closeRouteEditor, onGpxLoaded, disableGpxUpload, images, onImagesChange, onReset
+}: RouteEditorPanelProps) {
     const { t } = useTranslation();
     const { gpxInputRef, handleGpxChange, triggerGpxInput, gpxFile, clearGpx } = useRouteForm();
     const [showErrors, setShowErrors] = useState(false);
@@ -49,17 +49,17 @@ export default function RouteEditorPanel({
     const handleResetClick = () => {
         if (window.confirm(t('routeForm.confirm_reset', 'Biztosan törölni szeretnél minden beírt adatot?'))) {
             onReset();
-            clearGpx(); 
+            clearGpx();
             setShowErrors(false);
         }
     };
-    
+
     const formatTime = (seconds: number) => {
         const h = Math.floor(seconds / 3600);
         const m = Math.floor((seconds % 3600) / 60);
         return h > 0 ? `${h} ${t('routeForm.hours')} ${m} ${t('routeForm.minutes')}` : `${m} ${t('routeForm.minutes')}`;
     };
-    
+
     useEffect(() => {
         if (gpxFile) {
             const reader = new FileReader();
@@ -69,14 +69,20 @@ export default function RouteEditorPanel({
                     if (gpxFile.name.toLowerCase().endsWith('.gpx')) {
                         onGpxLoaded(parseGpxToGeoJSON(text));
                     } else {
-                        try { onGpxLoaded(JSON.parse(text)); } catch { onGpxLoaded(null); }
+                        try {
+                            onGpxLoaded(JSON.parse(text));
+                        } catch {
+                            onGpxLoaded(null);
+                        }
                     }
                 }
             };
             reader.readAsText(gpxFile);
-        } else { onGpxLoaded(null); }
+        } else {
+            onGpxLoaded(null);
+        }
     }, [gpxFile, onGpxLoaded]);
-    
+
     const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
             const file = e.target.files[0];
@@ -88,7 +94,7 @@ export default function RouteEditorPanel({
 
     return (
         <div className="h-full flex flex-col bg-brand-dark overflow-y-auto custom-scrollbar">
-            
+
             <div className="p-6 border-b border-white/5 flex items-center justify-between sticky top-0 bg-brand-dark/95 backdrop-blur-md z-20">
                 <div className="flex items-center gap-3">
                     <div className="p-2 rounded-full bg-brand-accent/10 text-brand-accent">
@@ -168,7 +174,9 @@ export default function RouteEditorPanel({
                     <input type="file" ref={gpxInputRef} onChange={handleGpxChange} className="hidden" accept=".gpx,.geojson" />
                     <Button variant="secondary" className="w-full justify-between" onClick={disableGpxUpload ? undefined : triggerGpxInput}>
                         <span className="flex items-center gap-2"><UploadSimpleIcon /> {gpxFile ? gpxFile.name : t('routeForm.upload_file')}</span>
-                        {gpxFile && <XIcon onClick={(e) => { e.stopPropagation(); clearGpx(); }} />}
+                        {gpxFile && <XIcon onClick={(e) => {
+                            e.stopPropagation(); clearGpx();
+                        }} />}
                     </Button>
                     <Button variant="primary" className="w-full py-4" onClick={() => isFormValid ? onSave() : setShowErrors(true)}>
                         <PlusIcon size={20} weight="bold" className="mr-2" /> {t('routeForm.add_route')}
