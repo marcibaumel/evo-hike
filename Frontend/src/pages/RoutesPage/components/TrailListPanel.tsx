@@ -68,6 +68,7 @@ export default function TrailListPanel({ onSelectTrail, onStartCreateRoute }: Tr
                         variant="primary"
                         className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
                         onClick={onStartCreateRoute}
+                        data-testid="btn-create-route"
                     >
                         <PlusIcon size={20} weight="bold" className="text-brand-dark" />
                     </Button>

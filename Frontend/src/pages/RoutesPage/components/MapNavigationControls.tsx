@@ -18,6 +18,7 @@ interface ControlButtonProps {
     icon: ReactNode;
     label: string;
     colorClass: string;
+    testName: string;
 }
 
 export default function MapNavigationControls({
@@ -29,7 +30,7 @@ export default function MapNavigationControls({
 }: MapNavigationControlsProps) {
     const { t } = useTranslation();
 
-    const ControlButton = ({ onClick, isActive, icon, label, colorClass }: ControlButtonProps) => (
+    const ControlButton = ({ onClick, isActive, icon, label, colorClass, testName }: ControlButtonProps) => (
         <button
             onClick={onClick}
             title={label}
@@ -38,6 +39,7 @@ export default function MapNavigationControls({
                     ? 'bg-white/10 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                     : 'bg-transparent border-transparent hover:bg-white/5'
             }`}
+            data-testid={testName}
         >
             <div className={`text-2xl ${colorClass}`}>
                 {icon}
@@ -54,6 +56,7 @@ export default function MapNavigationControls({
                     icon={<MdLocationOn />}
                     colorClass="text-green-500"
                     label={t('routePage.navFrom')}
+                    testName="btn-menuitem-nav-from"
                 />
                 <ControlButton
                     onClick={onSelectEndMode}
@@ -61,6 +64,7 @@ export default function MapNavigationControls({
                     icon={<MdFlag />}
                     colorClass="text-red-500"
                     label={t('routePage.navTo')}
+                    testName="btn-menuitem-nav-to"
                 />
                 <ControlButton
                     onClick={onSelectWaypointMode}
@@ -68,6 +72,7 @@ export default function MapNavigationControls({
                     icon={<MdAddLocation />}
                     colorClass="text-blue-500"
                     label={t('routePage.addWaypoint')}
+                    testName="btn-menuitem-nav-addwaypoint"
                 />
 
                 <div className="h-px w-8 mx-auto bg-white/10 my-1" />
@@ -78,6 +83,7 @@ export default function MapNavigationControls({
                     icon={<MdDelete />}
                     colorClass="text-gray-400 hover:text-red-400"
                     label={t('routePage.clearNav')}
+                    testName="btn-menuitem-nav-clear"
                 />
             </Card>
         </div>

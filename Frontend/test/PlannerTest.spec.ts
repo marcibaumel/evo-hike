@@ -8,6 +8,8 @@ test.describe('Leaflet and buttons test', () =>{
         await page.getByRole('link', {name: 'Planner'}).click();
         await expect(page).toHaveURL(/\/routes$/);
 
+        await page.getByTestId('btn-create-route').click();
+
         const mapPointer = page.locator('.leaflet-container');
 
         expect(mapPointer).toBeVisible();
@@ -16,19 +18,21 @@ test.describe('Leaflet and buttons test', () =>{
         if (!mapBound) {
             throw new Error('The map is not visible.');
         }
-        await page.getByRole('button', {name: 'Set start'}).click();
+        page.waitForTimeout(500);
+        
+        await page.getByTestId('btn-menuitem-nav-from').click();
 
         await page.mouse.click(mapBound.x + mapBound.width * 0.25, mapBound.y + mapBound.height * 0.5 );
 
         await page.waitForTimeout(1000);
-
-        await page.getByRole('button', {name: 'Add Point'}).click();
+        
+        await page.getByTestId('btn-menuitem-nav-addwaypoint').click();
 
         await page.mouse.click(mapBound.x + mapBound.width * 0.33, mapBound.y + mapBound.height * 0.33 );
 
         await page.waitForTimeout(1000);
-
-        await page.getByRole('button', {name: 'Set end'}).click();
+        
+        await page.getByTestId('btn-menuitem-nav-to').click();
 
         await page.mouse.click(mapBound.x + mapBound.width * 0.75, mapBound.y + mapBound.height * 0.33 );
 
@@ -37,8 +41,8 @@ test.describe('Leaflet and buttons test', () =>{
         let marker = page.locator('.leaflet-marker-icon');
 
         expect(marker).toHaveCount(3);
-
-        await page.getByRole('button', {name: 'Clear route'}).click();
+        
+        await page.getByTestId('btn-menuitem-nav-clear').click();
 
         await page.waitForTimeout(1000);
 
