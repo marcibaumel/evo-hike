@@ -40,16 +40,16 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
                         {getWeatherDescription(current.weatherCode)}
                     </span>
                 </div>
-                <div data-testid="weather-celsius" className="flex gap-4 text-sm font-bold tracking-widest text-brand-accent uppercase">
-                    <span>H: {Math.round(current.temperatureC + 3)}°</span>
-                    <span>L: {Math.round(current.temperatureC - 2)}°</span>
+                <div data-testid="weather-values" className="flex gap-4 text-sm font-bold tracking-widest text-brand-accent uppercase">
+                    <span data-testid="highest-weather-value">H: {Math.round(current.temperatureC + 3)}°</span>
+                    <span data-testid="lowest-weather-value">L: {Math.round(current.temperatureC - 2)}°</span>
                     <span>
                         {t('weatherFeelsLike')} {Math.round(current.feelsLikeC)}°
                     </span>
                 </div>
             </div>
 
-            <div data-testid="weather-string" className="absolute top-5 left-8 z-10 lg:top-8 md:top-8">
+            <div data-testid="weather-title" className="absolute top-5 left-8 z-10 lg:top-8 md:top-8">
                 <Badge variant="neutral">
                     <CalendarBlankIcon size={14} />
                     <span>{t('weather_page.current_weather')}</span>

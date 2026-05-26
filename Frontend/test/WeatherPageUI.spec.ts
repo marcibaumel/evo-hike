@@ -28,11 +28,15 @@ test.describe('Responsive weather page', () =>{
         await page.waitForSelector('[data-testid="current-weather-card"]', { state: 'visible' });
 
         const weatherCard = page.getByTestId('current-weather-card');
-        const weatherCelsius = page.getByTestId('weather-celsius');
+        const weatherCelsius = page.getByTestId('weather-values');
         const weatherContainer = page.getByTestId('weather-container');
-        const weatherString = page.getByTestId('weather-string');
+        const weatherString = page.getByTestId('weather-title');
         const rowsAndGrid = page.getByTestId('row-and-grid');
+        const lowestWeatherValue = page.getByTestId('lowest-weather-value');
+        const highestWeatherValue = page.getByTestId('highest-weather-value');
 
+        await expect(highestWeatherValue).toHaveText(/^H: -?\d+°$/);
+        await expect(lowestWeatherValue).toHaveText(/^L: -?\d+°$/);
         await expect(weatherContainer).toHaveCSS('display', 'flex');
         await expect(weatherCelsius).toHaveCSS('display', 'flex');
 
