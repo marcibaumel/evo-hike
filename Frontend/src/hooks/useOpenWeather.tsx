@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useState, useEffect, useCallback } from 'react';
 import type { OpenWeatherForecast } from '../utils/openweather';
-import apiClient from '../api/Client';
+import axios from 'axios';
 
 export function useOpenWeather(city: string = 'Miskolc') {
     const [data, setData] = useState<OpenWeatherForecast[]>([]);
@@ -12,7 +12,8 @@ export function useOpenWeather(city: string = 'Miskolc') {
         try {
             setLoading(true);
             setError(null);
-            const response = await apiClient.get('https://geocoding-api.open-meteo.com/v1/search', {
+            
+            const response = await axios.get('/geocode/v1/search', {
                 params: {
                     name: city,
                     count: 1,
@@ -23,7 +24,7 @@ export function useOpenWeather(city: string = 'Miskolc') {
 
             if (response.data.results && response.data.results.length > 0) {
                 const location = response.data.results[0];
-                const weatherResponse = await apiClient.get('https://api.open-meteo.com/v1/forecast', {
+                const weatherResponse = await axios.get('open_meteo/v1/forecast', {
                     params: {
                         latitude: location.latitude,
                         longitude: location.longitude,

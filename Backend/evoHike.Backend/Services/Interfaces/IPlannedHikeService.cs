@@ -9,5 +9,8 @@ namespace evoHike.Backend.Services.Interfaces
         Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlannedHikeDTO request);
 
         Task<bool> MarkHikeAsCompletedAsync(int id);
+        
+
+        Task<Models.DTO.PlannedHikeWeatherDTO> GetHikeWeatherAssessmentAsync(int plannedHikeId);
     }
 }

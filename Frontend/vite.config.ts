@@ -25,7 +25,19 @@ export default defineConfig({
                 target: 'https://localhost:7275',
                 changeOrigin: true,
                 secure: false
-            }
+            },
+
+            '/geocode': {
+                target: 'https://geocoding-api.open-meteo.com',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/geocode/, '')
+            },
+
+            '/open_meteo': {
+                target: 'https://api.open-meteo.com',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/open_meteo/, '')
+            },
         }
     },
     test: {

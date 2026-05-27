@@ -73,5 +73,23 @@ namespace evoHike.Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("{id}/weather-assessment")]
+        public async Task<ActionResult<Models.DTO.PlannedHikeWeatherDTO>> GetWeatherAssessment(int id)
+        {
+            try
+            {
+                var assessment = await _plannedHikeService.GetHikeWeatherAssessmentAsync(id);
+                return Ok(assessment);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
