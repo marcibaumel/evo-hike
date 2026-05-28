@@ -32,24 +32,24 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
             </div>
 
             <div className="absolute bottom-0 left-0 p-8 md:p-10 w-full bg-linear-to-t from-brand-dark/80 to-transparent z-10">
-                <div className="flex items-baseline gap-4 mb-2">
-                    <span data-testid="current-temperature" className="text-8xl md:text-9xl font-display font-bold text-white tracking-tighter">
+                <div data-testid="weather-container" className="flex flex-row items_baseline gap-4">
+                    <span data-testid="current-temperature" className="text-6xl md:text-9xl font-display font-bold text-white tracking-tighter">
                         {Math.round(current.temperatureC)}°
                     </span>
                     <span className="text-2xl text-brand-muted font-medium">
                         {getWeatherDescription(current.weatherCode)}
                     </span>
                 </div>
-                <div className="flex gap-4 text-sm font-bold tracking-widest text-brand-accent uppercase">
-                    <span>H: {Math.round(current.temperatureC + 3)}°</span>
-                    <span>L: {Math.round(current.temperatureC - 2)}°</span>
+                <div data-testid="weather-values" className="flex gap-4 text-sm font-bold tracking-widest text-brand-accent uppercase">
+                    <span data-testid="highest-weather-value">H: {Math.round(current.temperatureC + 3)}°</span>
+                    <span data-testid="lowest-weather-value">L: {Math.round(current.temperatureC - 2)}°</span>
                     <span>
                         {t('weatherFeelsLike')} {Math.round(current.feelsLikeC)}°
                     </span>
                 </div>
             </div>
 
-            <div className="absolute top-8 left-8 z-10">
+            <div data-testid="weather-title" className="absolute top-5 left-8 z-10 lg:top-8 md:top-8">
                 <Badge variant="neutral">
                     <CalendarBlankIcon size={14} />
                     <span>{t('weather_page.current_weather')}</span>
