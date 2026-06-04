@@ -55,12 +55,19 @@
     "elevation": "Elevation",
     "rating": "Rating",
     "button_text": "To Planner",
+    "time":"Max Time",
+    "timePlaceholder":"e.g. 120",
     "difficulties": {
       "0": "Easy",
       "1": "Medium",
       "2": "Hard",
       "3": "Extreme"
     }
+  },
+  "filterPage":{
+    "filterTrails": "Filter trails",
+    "reset":"Alaphelyzet",
+    "done": "Kész"
   },
   "landing": {
     "hero": {

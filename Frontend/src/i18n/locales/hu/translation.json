@@ -55,12 +55,19 @@
     "elevation": "Emelkedés",
     "rating": "Értékelés",
     "button_text": "Tervezőbe",
+    "time":"Időtartam",
+    "timePlaceholder":"120 perc",
     "difficulties": {
       "0": "Könnyű",
       "1": "Közepes",
       "2": "Nehéz",
       "3": "Extrém"
     }
+  },
+  "filterPage":{
+    "filterTrails": "Útvonalak szűrése",
+    "reset":"Alaphelyzet",
+    "done": "Kész"
   },
   "routeForm": {
     "route_name": "Útvonal neve",
