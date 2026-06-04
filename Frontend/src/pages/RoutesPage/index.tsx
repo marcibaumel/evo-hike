@@ -73,25 +73,13 @@ export default function RoutePage() {
         diffLevel = t.difficulty as DifficultyLevel;
       }
 
-      return new Trail({
-        id: String(t.id),
-        name: String(t.name || ''),
-        location: String(t.location || ''),
-        length: Number(t.length) || 0,
-        elevationGain: Number(t.elevationGain) || 0,
-        time: Number(t.time) || 0,
-        rating: Number(t.rating) || 0,
-        reviewCount: Number(t.reviewCount) || 0,
-        coverPhotoPath: String(t.coverPhotoPath || ''),
-        description: String(t.description || ''),
-        userPhotos: (t.userPhotos as string[]) || [],
-        geojson: t.geojson as FeatureCollection | Feature | null | undefined,
-        difficulty: diffLevel 
-      });
-    });
-  }, [userTrails]); 
-
-  const { filteredTrails, filters, setFilters, hasActiveFilters } = useTrailFilters(allTrails);
+            return new Trail({
+                ...t,
+                difficulty: difficulty
+            });
+        });
+    }, [allTrailsData]);
+    const { filteredTrails, filters, setFilters } = useTrailFilters(allTrails);
 
   const fetchPOIs = useCallback(async (coordinates: [number, number][]) => {
     try {
@@ -181,7 +169,6 @@ export default function RoutePage() {
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen pt-20 lg:overflow-hidden bg-brand-dark">
-            {/* Sidebar - Trail List or Editor */}
             <div className="w-full lg:w-1/3 flex flex-col border-r border-white/10 bg-brand-dark z-10 relative">
                 {view === 'create' ? (
                     <RouteEditorPanel
@@ -203,7 +190,6 @@ export default function RoutePage() {
                     />
                 ) : (
                     <>
-                        {/* Header & Filter */}
                         <div className="p-6 border-b border-white/5 bg-brand-dark/95 backdrop-blur-md sticky top-0 z-20">
                             <div className="flex gap-3">
                                 <div className="relative flex-1">
@@ -214,11 +200,14 @@ export default function RoutePage() {
                                     <input
                                         type="text"
                                         placeholder={t('route.search_placeholder')}
-                                        onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
+                                        onChange={(e) => setFilters(prev => {
+                                            const nextFilter = prev.clone();
+                                            nextFilter.searchText = e.target.value;
+                                            return nextFilter;
+                                        })}
                                         className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-brand-muted focus:outline-none focus:border-brand-accent/50 transition-colors"
                                     />
                                 </div>
-                                {/* Filter button - now correctly wired */}
                                 <Button
                                     variant="primary"
                                     className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90 relative"
@@ -226,11 +215,7 @@ export default function RoutePage() {
                                     onClick={() => setView('filter')}
                                     title="Filter trails">
                                     <SlidersHorizontalIcon size={20} />
-                                    {hasActiveFilters && (
-                                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 rounded-full" />
-                                    )}
                                 </Button>
-                                {/* Create button */}
                                 <Button
                                     variant="primary"
                                     className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
@@ -242,7 +227,6 @@ export default function RoutePage() {
                             </div>
                         </div>
 
-                        {/* Scrollable List */}
                         <div className="flex-1 lg:overflow-y-auto p-4 space-y-4">
                             {filteredTrails.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center h-full py-16 gap-3">
