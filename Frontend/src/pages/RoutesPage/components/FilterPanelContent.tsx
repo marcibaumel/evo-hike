@@ -9,7 +9,7 @@ interface FilterPanelContentProps {
 }
 
 export const FilterPanelContent = ({ filters, update }: FilterPanelContentProps) => {
-    const {t} =useTranslation();
+    const {t} = useTranslation();
     const toggleDifficulty = (level: DifficultyLevel) => {
         const already = filters.difficulty.includes(level);
         update({
@@ -22,7 +22,7 @@ export const FilterPanelContent = ({ filters, update }: FilterPanelContentProps)
     return (
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             <div className="space-y-3">
-                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t("trail.difficulty_label")}</label>
+                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t('trail.difficulty_label')}</label>
                 <div className="grid grid-cols-2 gap-2">
                     {ALL_DIFFICULTY_LEVELS.map(level => (
                         <button
@@ -41,7 +41,7 @@ export const FilterPanelContent = ({ filters, update }: FilterPanelContentProps)
                 </div>
             </div>
             <div className="space-y-3">
-                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t("trail.distance")} (km)</label>
+                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t('trail.distance')} (km)</label>
                 <div className="flex gap-3">
                     <FilterNumberInput
                         placeholder='Min'
@@ -56,7 +56,7 @@ export const FilterPanelContent = ({ filters, update }: FilterPanelContentProps)
                 </div>
             </div>
             <div className="space-y-3">
-                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t("trail.elevation")} (m)</label>
+                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t('trail.elevation')} (m)</label>
                 <div className="flex gap-3">
                     <FilterNumberInput
                         placeholder='Min'
@@ -71,15 +71,15 @@ export const FilterPanelContent = ({ filters, update }: FilterPanelContentProps)
                 </div>
             </div>
             <div className="space-y-3">
-                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t("trail.time")} (min)</label>
+                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t('trail.time')} (min)</label>
                 <FilterNumberInput
-                    placeholder={t("trail.timePlaceholder")}
+                    placeholder={t('trail.timePlaceholder')}
                     value={filters.maxTime}
                     onChange={(val) => update({ maxTime: val })}
                 />
             </div>
             <div className="space-y-3">
-                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t("trail.rating")}</label>
+                <label className="text-sm text-brand-muted uppercase tracking-wide block">{t('trail.rating')}</label>
                 <div className="flex gap-2">
                     {Array.from({ length: 5 }, (_, i) => i + 1).map(star => (
                         <button

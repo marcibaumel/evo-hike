@@ -9,7 +9,7 @@ interface FilterPanelFooterProps{
 }
 
 export const FilterPanelFooter = ({onClose,onFilterChange,filters}:FilterPanelFooterProps)=>{
-    const{t} = useTranslation();
+    const {t} = useTranslation();
     const handleReset = () => {
         onFilterChange(new TrailFilters({
             searchText: filters.searchText,
@@ -28,12 +28,12 @@ export const FilterPanelFooter = ({onClose,onFilterChange,filters}:FilterPanelFo
             <button
                 onClick={handleReset}
                 className="flex-1 border border-white/10 text-brand-muted rounded-xl py-2.5 text-sm font-semibold hover:border-white/20 transition-colors">
-                    {t("filterPage.reset")}
+                {t('filterPage.reset')}
             </button>
             <button
                 onClick={onClose}
                 className="flex-1 bg-brand-accent text-brand-dark rounded-xl py-2.5 text-sm font-semibold">
-                     {t("filterPage.done")}
+                {t('filterPage.done')}
             </button>
         </div>
     );
