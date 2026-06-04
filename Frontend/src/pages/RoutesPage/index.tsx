@@ -213,12 +213,12 @@ function RoutePage() {
                                 <div className="flex flex-col items-center justify-center h-full py-16 gap-3">
                                     <MagnifyingGlassIcon size={40} className="text-brand-muted opacity-40" />
                                     <p className="text-brand-muted text-sm text-center">
-                            No trails match your filters.
+                                        {t('filterPage.noMatch')}
                                     </p>
                                     <button
                                         onClick={() => setView('filter')}
                                         className="text-brand-accent text-sm underline underline-offset-2 hover:text-brand-accent/70 transition-colors">
-                            Adjust filters
+                                        {t('filterPage.adjustFilters')}
                                     </button>
                                 </div>
                             ) : (

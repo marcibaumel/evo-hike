@@ -66,6 +66,8 @@
   },
   "filterPage":{
     "filterTrails": "Filter trails",
+    "adjustFilters":"Adjust filters",
+    "noMatch":"No trails match your filters.",
     "reset":"Alaphelyzet",
     "done": "Kész"
   },
