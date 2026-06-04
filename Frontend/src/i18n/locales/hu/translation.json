@@ -67,8 +67,21 @@
   },
   "filterPage":{
     "filterTrails": "Útvonalak szűrése",
+    "adjustFilters":"Szűrők módosítása",
+    "noMatch":"Nincs a keresettnek megfelelő túra",
     "reset":"Alaphelyzet",
     "done": "Kész"
+  },
+   "route": {
+    "search_placeholder": "Keress egy túrát...",
+    "showing_count": "Találatok száma: {{count}}",
+    "active_trails": "Aktív túrák",
+    "view_details": "Részletek",
+    "stats": {
+      "dist": "Táv",
+      "elev": "Emelkedés",
+      "time": "Idő"
+    }
   },
   "routeForm": {
     "route_name": "Útvonal neve",
