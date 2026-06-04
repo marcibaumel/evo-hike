@@ -4,7 +4,6 @@ import { FilterPanelContent } from './FilterPanelContent';
 import { FilterPanelHeader } from './FilterPanelHeader';
 import { FilterPanelFooter } from './FilterPanelFooter';
 
-
 interface FilterPanelProps {
     onClose: () => void
     filters: TrailFilters
