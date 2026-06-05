@@ -51,79 +51,61 @@ export const startIcon = createReactIcon(<MdLocationOn />, '#22c55e', true);
 export const endIcon = createReactIcon(<MdFlag />, '#ef4444', true);
 export const waypointIcon = createReactIcon(<MdPlace />, '#3b82f6', true);
 
-const PREMADE_ICONS = {
-    terrain: createReactIcon(<MdTerrain />, '#795548'),
-    water: createReactIcon(<MdWaterDrop />, '#3b82f6'),
-    cave: createReactIcon(<GiCaveEntrance />, '#4b5563'),
-    waterfall: createReactIcon(<GiWaterfall />, '#06b6d4'),
-    viewpoint: createReactIcon(<MdVisibility />, '#f97316'),
-    attraction: createReactIcon(<MdPlace />, '#ef4444'),
-    museum: createReactIcon(<MdMuseum />, '#8b5cf6'),
-    castle: createReactIcon(<GiCastle />, '#d946ef'),
-    ruins: createReactIcon(<GiBrokenWall />, '#9ca3af'),
-    church: createReactIcon(<MdChurch />, '#64748b'),
-    drink: createReactIcon(<MdLocalDrink />, '#0ea5e9'),
-    restaurant: createReactIcon(<MdRestaurant />, '#f43f5e'),
-    park: createReactIcon(<MdPark />, '#22c55e'),
-    historicDefault: createReactIcon(<MdMuseum />, '#795548'),
-    tourismDefault: createReactIcon(<MdPlace />, '#eab308'),
-    default: createReactIcon(<MdPlace />, '#3b82f6')
+const ICON_RECIPES: Record<string, { icon: React.ReactElement, color: string }> = {
+    'natural=peak': { icon: <MdTerrain />, color: '#795548' },
+    'natural=saddle': { icon: <MdTerrain />, color: '#795548' },
+    'natural=spring': { icon: <MdWaterDrop />, color: '#3b82f6' },
+    'natural=cave_entrance': { icon: <GiCaveEntrance />, color: '#4b5563' },
+    'natural=waterfall': { icon: <GiWaterfall />, color: '#06b6d4' },
+    'waterway=waterfall': { icon: <GiWaterfall />, color: '#06b6d4' },
+    'tourism=viewpoint': { icon: <MdVisibility />, color: '#f97316' },
+    'tourism=attraction': { icon: <MdPlace />, color: '#ef4444' },
+    'tourism=museum': { icon: <MdMuseum />, color: '#8b5cf6' },
+    'historic=castle': { icon: <GiCastle />, color: '#d946ef' },
+    'historic=ruins': { icon: <GiBrokenWall />, color: '#9ca3af' },
+    'historic=memorial': { icon: <MdChurch />, color: '#64748b' },
+    'historic=monument': { icon: <MdChurch />, color: '#64748b' },
+    'amenity=drinking_water': { icon: <MdLocalDrink />, color: '#0ea5e9' },
+    'amenity=place_of_worship': { icon: <MdChurch />, color: '#8b5cf6' },
+    'amenity=restaurant': { icon: <MdRestaurant />, color: '#f43f5e' }
 };
 
-const TAG_TO_ICON: Record<string, L.DivIcon> = {
-    'natural=peak': PREMADE_ICONS.terrain,
-    'natural=saddle': PREMADE_ICONS.terrain,
-    'natural=spring': PREMADE_ICONS.water,
-    'natural=cave_entrance': PREMADE_ICONS.cave,
-    'natural=waterfall': PREMADE_ICONS.waterfall,
-    'waterway=waterfall': PREMADE_ICONS.waterfall,
-    'tourism=viewpoint': PREMADE_ICONS.viewpoint,
-    'tourism=attraction': PREMADE_ICONS.attraction,
-    'tourism=museum': PREMADE_ICONS.museum,
-    'historic=castle': PREMADE_ICONS.castle,
-    'historic=ruins': PREMADE_ICONS.ruins,
-    'historic=memorial': PREMADE_ICONS.church,
-    'historic=monument': PREMADE_ICONS.church,
-    'amenity=drinking_water': PREMADE_ICONS.drink,
-    'amenity=place_of_worship': PREMADE_ICONS.church,
-    'amenity=restaurant': PREMADE_ICONS.restaurant
-};
-
-const iconCache: Record<number, L.DivIcon> = {};
+const iconCache: Record<string | number, L.DivIcon> = {};
 
 export const getIconForPoi = (poi: OverpassElement): L.DivIcon => {
-    if (!poi || !poi.id || !poi.tags) {
-        return PREMADE_ICONS.default;
+    const poiId = poi?.id || `fallback-${Math.random()}`;
+
+    if (iconCache[poiId]) {
+        return iconCache[poiId];
     }
-    if (iconCache[poi.id]) {
-        return iconCache[poi.id];
-    }
-    const tags = poi.tags;
-    let finalIcon = PREMADE_ICONS.default;
+    const tags = poi?.tags || {};
+    let finalIcon: L.DivIcon | null = null;
 
     const keysToCheck = ['natural', 'waterway', 'tourism', 'historic', 'amenity'];
+
     for (let i = 0; i < keysToCheck.length; i++) {
         const key = keysToCheck[i];
         const value = tags[key];
 
         if (value) {
             const mapKey = key + '=' + value;
-            const foundIcon = TAG_TO_ICON[mapKey];
+            const recipe = ICON_RECIPES[mapKey];
 
-            if (foundIcon) {
-                finalIcon = foundIcon;
+            if (recipe) {
+                finalIcon = createReactIcon(recipe.icon, recipe.color);
                 break;
             }
         }
     }
 
-    if (finalIcon === PREMADE_ICONS.default) {
-        if (tags.natural) finalIcon = PREMADE_ICONS.park;
-        else if (tags.historic) finalIcon = PREMADE_ICONS.historicDefault;
-        else if (tags.tourism) finalIcon = PREMADE_ICONS.tourismDefault;
+    if (!finalIcon) {
+        if (tags.natural) finalIcon = createReactIcon(<MdPark />, '#22c55e');
+        else if (tags.historic) finalIcon = createReactIcon(<MdMuseum />, '#795548');
+        else if (tags.tourism) finalIcon = createReactIcon(<MdPlace />, '#eab308');
+        else finalIcon = createReactIcon(<MdPlace />, '#3b82f6');
     }
 
-    iconCache[poi.id] = finalIcon;
+    iconCache[poiId] = finalIcon;
 
     return finalIcon;
 };
