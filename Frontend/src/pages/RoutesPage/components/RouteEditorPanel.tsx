@@ -34,11 +34,7 @@ interface RouteEditorPanelProps {
     onReset: () => void;
 }
 
-export default function RouteEditorPanel({
-    name, description, distance, time,
-    onNameChange, onDescriptionChange, onSave,
-    closeRouteEditor, onGpxLoaded, disableGpxUpload, images, onImagesChange, onReset
-}: RouteEditorPanelProps) {
+export default function RouteEditorPanel({name, description, distance, time, onNameChange, onDescriptionChange, onSave, closeRouteEditor, onGpxLoaded, disableGpxUpload, images, onImagesChange, onReset}: RouteEditorPanelProps) {
     const { t } = useTranslation();
     const { gpxInputRef, handleGpxChange, triggerGpxInput, gpxFile, clearGpx } = useRouteForm();
     const [showErrors, setShowErrors] = useState(false);
@@ -148,7 +144,7 @@ export default function RouteEditorPanel({
                     />
                 </div>
 
-                {/* KÉP CAROUSEL */}
+                {/* IMAGE CAROUSEL */}
                 <div className="space-y-3">
                     <div className="flex justify-between items-center text-sm text-brand-muted font-medium">
                         <span>{t('routeForm.image_alt')}</span>

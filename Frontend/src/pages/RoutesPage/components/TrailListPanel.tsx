@@ -44,14 +44,13 @@ export default function TrailListPanel({ onSelectTrail, onStartCreateRoute }: Tr
         });
     }, []);
 
-    // Szűrés a keresőszó alapján
     const filteredTrails = trails.filter((trail) =>
         trail.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div className="flex flex-col h-full bg-brand-dark">
-            {/* Kereső fejléc */}
+            {/* Search header */}
             <div className="p-6 border-b border-white/5 bg-brand-dark/95 backdrop-blur-md sticky top-0 z-20">
                 <div className="flex gap-3">
                     <div className="relative flex-1">
@@ -75,7 +74,7 @@ export default function TrailListPanel({ onSelectTrail, onStartCreateRoute }: Tr
                 </div>
             </div>
 
-            {/* Görgethető lista */}
+            {/* Scrollable list */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
                 {filteredTrails.length > 0 ? (
                     filteredTrails.map((trail) => (

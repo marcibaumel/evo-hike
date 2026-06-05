@@ -1,10 +1,8 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import type { FeatureCollection, Feature } from 'geojson';
-//import { useTranslation } from 'react-i18next';
 import { RouteMap } from './components/RouteMap';
 import RouteEditorPanel from './components/RouteEditorPanel';
 import TrailListPanel from './components/TrailListPanel';
-//import PlanHikeModal from './components/PlanHikeModel';
 import SelectedTrailDetails from './components/SelectedTrailDetails';
 import { Trail } from '../../utils/Trail';
 import { getNearbyPOIs, type OverpassElement } from '../../api/overpassApi';
@@ -17,30 +15,23 @@ import {Map} from 'leaflet';
 const geojson = routeData as FeatureCollection;
 
 export default function RoutePage() {
-    // const { t } = useTranslation();
 
-    // --- ÁLLAPOTOK ---
-    //const [userTrails, setUserTrails] = useState<any[]>([]);
     const [userTrails, setUserTrails] = useState<ConstructorParameters<typeof Trail>[0][]>([]);
     const [selectedTrail, setSelectedTrail] = useState<Trail | null>(null);
     const [pois, setPois] = useState<OverpassElement[]>([]);
     const [isCreatingRoute, setIsCreatingRoute] = useState(false);
-    //const [planningTrail, setPlanningTrail] = useState<{ id: number; name: string } | null>(null);
     const [mapInstance, setMapInstance] = useState<Map | null>(null);
 
-    // Egyedi útvonalhoz
     const [customRoute, setCustomRoute] = useState({ name: '', description: '', distance: 0, time: 0, coordinates: [] as [number, number][] });
     const [uploadedGpx, setUploadedGpx] = useState<FeatureCollection | null>(null);
     const [routeImages, setRouteImages] = useState<File[]>([]);
     const [points, setPoints] = useState<{ start: [number, number] | null; end: [number, number] | null; mids: [number, number][]; }>({ start: null, end: null, mids: [] });
 
 
-    // --- ADATOK BETÖLTÉSE ---
     useEffect(() => {
         const saved = localStorage.getItem('userTrails');
         if (saved) {
             try {
-                // A JSON.parse eredményét kasztoljuk a Trail paramétereinek tömbjévé
                 const parsedTrails = JSON.parse(saved) as ConstructorParameters<typeof Trail>[0][];
                 setUserTrails(parsedTrails);
             } catch (e) {
@@ -80,23 +71,19 @@ export default function RoutePage() {
         });
     }, [userTrails]);
 
-    // --- POI LEKÉRÉS ---
     const fetchPOIs = useCallback(async (coordinates: [number, number][]) => {
         const results = await getNearbyPOIs(coordinates.map(([lon, lat]) => ({ lat, lon })), 200);
         setPois(results.filter(p => p.tags?.name));
     }, []);
 
-    // --- KIVÁLASZTÁS LISTÁBÓL VAGY TÉRKÉPRŐL ---
     const handleTrailSelect = useCallback((trailId: string) => {
         const trail = allTrails.find(t => String(t.id) === String(trailId));
         if (trail) {
             setSelectedTrail(trail);
 
-            // Kikeressük az adatot (ami lehet Feature vagy FeatureCollection)
             const geoData = geojson.features.find(f => String(f.properties?.id) === String(trailId)) || trail.geojson;
 
             if (geoData) {
-                // 1. ESET: Ha ez egy sima Feature (mock adatokból)
                 if (geoData.type === 'Feature' && geoData.geometry?.type === 'LineString') {
                     fetchPOIs(geoData.geometry.coordinates as [number, number][]);
                 } else if (geoData.type === 'FeatureCollection') {
@@ -109,7 +96,6 @@ export default function RoutePage() {
         }
     }, [allTrails, fetchPOIs]);
 
-    // --- ÚTVONAL MENTÉSE (local) ---
     const handleSaveNewRoute = () => {
         if (!customRoute.name) return alert('Kérlek add meg a túra nevét!');
 
@@ -177,7 +163,7 @@ export default function RoutePage() {
                 )}
             </div>
 
-            {/* TÉRKÉP ENGINE */}
+            {/* MAP ENGINE */}
             <div className="relative flex-1 h-full">
                 <RouteMap
                     selectedTrailId={selectedTrail?.id}
@@ -200,7 +186,6 @@ export default function RoutePage() {
                 )}
             </div>
 
-            {/* {planningTrail && <PlanHikeModal routeId={planningTrail.id} trailName={planningTrail.name} onClose={() => setPlanningTrail(null)} />}*/}
         </div>
     );
 }

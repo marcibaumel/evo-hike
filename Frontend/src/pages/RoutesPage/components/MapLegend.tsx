@@ -40,7 +40,7 @@ export default function MapLegend() {
             </div>
 
             <div className="space-y-6">
-                {/* Természeti dolgok */}
+                {/* Natural stuff */}
                 <div className="space-y-3">
                     <h4 className="text-[10px] uppercase font-bold text-brand-muted tracking-[0.2em]">{t('mapLegend.natural')}</h4>
                     <LegendItem icon={<MdTerrain />} color="#8d6e63" label={t('mapLegend.peak')} />
@@ -49,7 +49,7 @@ export default function MapLegend() {
                     <LegendItem icon={<GiWaterfall />} color="#26c6da" label={t('mapLegend.waterfall')} />
                 </div>
 
-                {/* Turista dolgok */}
+                {/* Tourist stuff */}
                 <div className="space-y-3">
                     <h4 className="text-[10px] uppercase font-bold text-brand-muted tracking-[0.2em]">{t('mapLegend.tourism')}</h4>
                     <LegendItem icon={<MdVisibility />} color="#ffa726" label={t('mapLegend.viewpoint')} />
@@ -57,7 +57,7 @@ export default function MapLegend() {
                     <LegendItem icon={<MdMuseum />} color="#a1887f" label={t('mapLegend.museum')} />
                 </div>
 
-                {/* Történelmi cuccok */}
+                {/* Historical stuff */}
                 <div className="space-y-3">
                     <h4 className="text-[10px] uppercase font-bold text-brand-muted tracking-[0.2em]">{t('mapLegend.historic')}</h4>
                     <LegendItem icon={<GiCastle />} color="#ab47bc" label={t('mapLegend.castle')} />
@@ -65,7 +65,7 @@ export default function MapLegend() {
                     <LegendItem icon={<MdChurch />} color="#78909c" label={t('mapLegend.monument')} />
                 </div>
 
-                {/* Szolgáltatások */}
+                {/* Services stuff */}
                 <div className="space-y-3">
                     <h4 className="text-[10px] uppercase font-bold text-brand-muted tracking-[0.2em]">{t('mapLegend.service')}</h4>
                     <LegendItem icon={<MdLocalDrink />} color="#29b6f6" label={t('mapLegend.drinking_water')} />

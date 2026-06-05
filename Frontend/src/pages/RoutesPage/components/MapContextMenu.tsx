@@ -11,14 +11,7 @@ interface MapContextMenuProps {
     onClearNav: () => void;
 }
 
-export default function MapContextMenu({
-    x,
-    y,
-    onNavFrom,
-    onNavTo,
-    onAddWaypoint,
-    onClearNav
-}: MapContextMenuProps) {
+export default function MapContextMenu({x, y, onNavFrom, onNavTo, onAddWaypoint, onClearNav}: MapContextMenuProps) {
     const { t } = useTranslation();
     const handleKeyDown = (e: React.KeyboardEvent, action: () => void) => {
         if (e.key === 'Enter' || e.key === ' ') {

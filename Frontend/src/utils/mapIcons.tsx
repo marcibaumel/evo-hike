@@ -51,43 +51,79 @@ export const startIcon = createReactIcon(<MdLocationOn />, '#22c55e', true);
 export const endIcon = createReactIcon(<MdFlag />, '#ef4444', true);
 export const waypointIcon = createReactIcon(<MdPlace />, '#3b82f6', true);
 
-export const getIconForPoi = (poi: OverpassElement) => {
-    const tags = poi.tags || {};
+const PREMADE_ICONS = {
+    terrain: createReactIcon(<MdTerrain />, '#795548'),
+    water: createReactIcon(<MdWaterDrop />, '#3b82f6'),
+    cave: createReactIcon(<GiCaveEntrance />, '#4b5563'),
+    waterfall: createReactIcon(<GiWaterfall />, '#06b6d4'),
+    viewpoint: createReactIcon(<MdVisibility />, '#f97316'),
+    attraction: createReactIcon(<MdPlace />, '#ef4444'),
+    museum: createReactIcon(<MdMuseum />, '#8b5cf6'),
+    castle: createReactIcon(<GiCastle />, '#d946ef'),
+    ruins: createReactIcon(<GiBrokenWall />, '#9ca3af'),
+    church: createReactIcon(<MdChurch />, '#64748b'),
+    drink: createReactIcon(<MdLocalDrink />, '#0ea5e9'),
+    restaurant: createReactIcon(<MdRestaurant />, '#f43f5e'),
+    park: createReactIcon(<MdPark />, '#22c55e'),
+    historicDefault: createReactIcon(<MdMuseum />, '#795548'),
+    tourismDefault: createReactIcon(<MdPlace />, '#eab308'),
+    default: createReactIcon(<MdPlace />, '#3b82f6')
+};
 
-    if (tags.natural === 'peak' || tags.natural === 'saddle')
-        return createReactIcon(<MdTerrain />, '#795548');
-    if (tags.natural === 'spring')
-        return createReactIcon(<MdWaterDrop />, '#3b82f6');
-    if (tags.natural === 'cave_entrance')
-        return createReactIcon(<GiCaveEntrance />, '#4b5563');
-    if (tags.waterway === 'waterfall' || tags.natural === 'waterfall')
-        return createReactIcon(<GiWaterfall />, '#06b6d4');
+const TAG_TO_ICON: Record<string, L.DivIcon> = {
+    'natural=peak': PREMADE_ICONS.terrain,
+    'natural=saddle': PREMADE_ICONS.terrain,
+    'natural=spring': PREMADE_ICONS.water,
+    'natural=cave_entrance': PREMADE_ICONS.cave,
+    'natural=waterfall': PREMADE_ICONS.waterfall,
+    'waterway=waterfall': PREMADE_ICONS.waterfall,
+    'tourism=viewpoint': PREMADE_ICONS.viewpoint,
+    'tourism=attraction': PREMADE_ICONS.attraction,
+    'tourism=museum': PREMADE_ICONS.museum,
+    'historic=castle': PREMADE_ICONS.castle,
+    'historic=ruins': PREMADE_ICONS.ruins,
+    'historic=memorial': PREMADE_ICONS.church,
+    'historic=monument': PREMADE_ICONS.church,
+    'amenity=drinking_water': PREMADE_ICONS.drink,
+    'amenity=place_of_worship': PREMADE_ICONS.church,
+    'amenity=restaurant': PREMADE_ICONS.restaurant
+};
 
-    if (tags.tourism === 'viewpoint')
-        return createReactIcon(<MdVisibility />, '#f97316');
-    if (tags.tourism === 'attraction')
-        return createReactIcon(<MdPlace />, '#ef4444');
-    if (tags.tourism === 'museum')
-        return createReactIcon(<MdMuseum />, '#8b5cf6');
+const iconCache: Record<number, L.DivIcon> = {};
 
-    if (tags.historic === 'castle')
-        return createReactIcon(<GiCastle />, '#d946ef');
-    if (tags.historic === 'ruins')
-        return createReactIcon(<GiBrokenWall />, '#9ca3af');
-    if (tags.historic === 'memorial' || tags.historic === 'monument')
-        return createReactIcon(<MdChurch />, '#64748b');
+export const getIconForPoi = (poi: OverpassElement): L.DivIcon => {
+    if (!poi || !poi.id || !poi.tags) {
+        return PREMADE_ICONS.default;
+    }
+    if (iconCache[poi.id]) {
+        return iconCache[poi.id];
+    }
+    const tags = poi.tags;
+    let finalIcon = PREMADE_ICONS.default;
 
-    if (tags.amenity === 'drinking_water')
-        return createReactIcon(<MdLocalDrink />, '#0ea5e9');
-    if (tags.amenity === 'place_of_worship')
-        return createReactIcon(<MdChurch />, '#8b5cf6');
-    if (tags.amenity === 'restaurant')
-        return createReactIcon(<MdRestaurant />, '#f43f5e');
+    const keysToCheck = ['natural', 'waterway', 'tourism', 'historic', 'amenity'];
+    for (let i = 0; i < keysToCheck.length; i++) {
+        const key = keysToCheck[i];
+        const value = tags[key];
 
+        if (value) {
+            const mapKey = key + '=' + value;
+            const foundIcon = TAG_TO_ICON[mapKey];
 
-    if (tags.natural) return createReactIcon(<MdPark />, '#22c55e');
-    if (tags.historic) return createReactIcon(<MdMuseum />, '#795548');
-    if (tags.tourism) return createReactIcon(<MdPlace />, '#eab308');
+            if (foundIcon) {
+                finalIcon = foundIcon;
+                break;
+            }
+        }
+    }
 
-    return createReactIcon(<MdPlace />, '#3b82f6');
+    if (finalIcon === PREMADE_ICONS.default) {
+        if (tags.natural) finalIcon = PREMADE_ICONS.park;
+        else if (tags.historic) finalIcon = PREMADE_ICONS.historicDefault;
+        else if (tags.tourism) finalIcon = PREMADE_ICONS.tourismDefault;
+    }
+
+    iconCache[poi.id] = finalIcon;
+
+    return finalIcon;
 };

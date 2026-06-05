@@ -21,13 +21,7 @@ interface ControlButtonProps {
     testName: string;
 }
 
-export default function MapNavigationControls({
-    onSelectStartMode,
-    onSelectEndMode,
-    onSelectWaypointMode,
-    onClear,
-    selectionMode
-}: MapNavigationControlsProps) {
+export default function MapNavigationControls({onSelectStartMode, onSelectEndMode, onSelectWaypointMode, onClear, selectionMode}: MapNavigationControlsProps) {
     const { t } = useTranslation();
 
     const ControlButton = ({ onClick, isActive, icon, label, colorClass, testName }: ControlButtonProps) => (

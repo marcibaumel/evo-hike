@@ -8,10 +8,10 @@ export interface OverpassElement {
     lon: number;
     tags?: {
         name?: string;
-        tourism?: string; // pl. viewpoint, attraction
-        natural?: string; // pl. peak, spring, cave_entrance
-        historic?: string; // pl. ruins, castle
-        amenity?: string; // pl. drinking_water, place_of_worship
+        tourism?: string;
+        natural?: string;
+        historic?: string;
+        amenity?: string;
         [key: string]: string | undefined;
     };
 }
@@ -20,7 +20,7 @@ interface OverpassResponse {
     elements: OverpassElement[];
 }
 
-// Egyszerű in-memory cache a válaszok tárolására
+
 const poiCache = new Map<string, OverpassElement[]>();
 const CACHE_LIMIT = 50;
 
@@ -33,14 +33,14 @@ export const getNearbyPOIs = async (
     coordinates: { lat: number; lon: number }[],
     radius: number = 200
 ): Promise<OverpassElement[]> => {
-    // Az API gyorsítása érdekében 10 re állitottam a pontok számát
+
     const targetPoints = 10;
     const step = Math.ceil(coordinates.length / targetPoints);
     const sampledCoordinates = coordinates.filter(
         (_, index) => index % step === 0
     );
 
-    // Biztosítjuk hogy az utolsó pont is benne legyen ha a lépésköz miatt kimaradt volna
+
     if (
         coordinates.length > 0 &&
         sampledCoordinates[sampledCoordinates.length - 1] !==
@@ -49,17 +49,16 @@ export const getNearbyPOIs = async (
         sampledCoordinates.push(coordinates[coordinates.length - 1]);
     }
 
-    // Koordináták összefűzése stringgé az API számára: "lat1,lon1,lat2,lon2..."
-    // Optimalizáció: toFixed(5) használata
+
     const coordString = sampledCoordinates
         .map((c) => `${c.lat.toFixed(5)},${c.lon.toFixed(5)}`)
         .join(',');
 
-    // Cache ellenőrzése: Ha már lekértük ezt a sugarat ehhez az útvonalhoz, visszaadjuk a tárolt választ
+
     const cacheKey = `${radius}-${coordString}`;
     if (poiCache.has(cacheKey)) {
         const cachedData = poiCache.get(cacheKey)!;
-        // frissítjük a sorrendet (vagyis elsőnek kötöröljük majd ujra hozzáadjuk) hogy ez legyen a legújabb
+
         poiCache.delete(cacheKey);
         poiCache.set(cacheKey, cachedData);
         return cachedData;
@@ -85,7 +84,6 @@ export const getNearbyPOIs = async (
             { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         );
 
-        // Cache limit ellenőrzése: ha elértük az 50-et, töröljük a legrégebbit
         if (poiCache.size >= CACHE_LIMIT) {
             const oldestKey = poiCache.keys().next().value;
             if (oldestKey) {
@@ -95,7 +93,7 @@ export const getNearbyPOIs = async (
             }
         }
 
-        // Eredmény mentése a cache-be
+
         poiCache.set(cacheKey, response.data.elements);
         return response.data.elements;
     } catch (error) {

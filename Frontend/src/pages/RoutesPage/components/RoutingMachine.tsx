@@ -26,7 +26,7 @@ export default function RoutingMachine({ waypoints, onRouteFound }: RoutingMachi
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             router: (L as any).Routing.osrmv1({
                 serviceUrl: 'https://routing.openstreetmap.de/routed-foot/route/v1',
-                profile: 'driving' // A dokumentációs probléma megkerülése
+                profile: 'driving' // Getting around the documentation problem
             }),
             routeWhileDragging: false,
             lineOptions: {
@@ -52,7 +52,7 @@ export default function RoutingMachine({ waypoints, onRouteFound }: RoutingMachi
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const coordinates = routes[0].coordinates.map((c: any) => [c.lng, c.lat]);
 
-            const walkingSpeedMetersPerSecond = 4000 / 3600; // 4km/h átlagsebesség
+            const walkingSpeedMetersPerSecond = 4000 / 3600; // 4km/h average speed
             const correctedTime = summary.totalDistance / walkingSpeedMetersPerSecond;
 
             if (onRouteFoundRef.current) {

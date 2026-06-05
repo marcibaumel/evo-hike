@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { latLngBounds } from 'leaflet';
-//import { useTranslation } from 'react-i18next';
 import RoutingMachine from './RoutingMachine';
 import MapContextMenu from './MapContextMenu';
 import MapLegend from './MapLegend';
@@ -47,7 +46,6 @@ const MapEventsHandler = ({ onContextMenu, onClick }: MapEventsHandlerProps) => 
 
 
 export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onRouteCalculated, onMapReady, onTrailClick, onClear, creatingRouteState, points, setPoints }: RouteMapProps) => {
-    //const { t } = useTranslation();
     const [map, setMap] = useState<Map | null>(null);
     const [selectionMode, setSelectionMode] = useState<'start' | 'end' | 'waypoint' | null>(null);
     const [contextMenu, setContextMenu] = useState<{ x: number, y: number, lat: number, lng: number } | null>(null);
@@ -160,7 +158,7 @@ export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onR
                 {selectedFeature && <GeoJSON key={`visual-${selectedTrailId}`} data={selectedFeature} style={visualLayerStyle} />}
                 {selectedFeature && <GeoJSON key={`interact-${selectedTrailId}`} data={selectedFeature} style={interactionLayerStyle} onEachFeature={onEachFeature} />}
 
-                {/* Feltöltött GPX (Kék szaggatott vonal) */}
+                {/* Uploaded GPX (Blue dashed line) */}
                 {customGeojson && <GeoJSON key="custom-gpx" data={customGeojson} style={{ ...visualLayerStyle, dashArray: '10, 10' }} />}
 
                 <MarkerClusterGroup chunkedLoading iconCreateFunction={createClusterCustomIcon}>
