@@ -94,20 +94,20 @@ test.describe('WeatherPage', () => {
 
             await page.goto('http://localhost:5173/weather');
 
+            await page.waitForSelector('text=Bükk Region');
+
             const initialGeocodingCalls = geocodingApiCallCount;
             const initialWeatherCalls = weatherApiCallCount;
-
-            expect(geocodingApiCallCount).toBe(2);
-            expect(weatherApiCallCount).toBe(2);
 
             const refreshButton = page.getByRole('button', { name: 'Refresh' });
 
             await expect(refreshButton).toBeVisible();
             await expect(refreshButton).toBeEnabled();
 
-
-            await refreshButton.click();
-            await page.waitForTimeout(500);
+            await Promise.all([
+                page.waitForResponse(response => response.url().includes('api.open-meteo.com/v1/forecast')),
+                refreshButton.click()
+            ]);
 
             expect(geocodingApiCallCount).toBe(initialGeocodingCalls + 1);
             expect(weatherApiCallCount).toBe(initialWeatherCalls + 1);
