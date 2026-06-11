@@ -238,6 +238,7 @@ export default function RoutePage() {
                                     size="sm"
                                     onClick={() => setView('create')}
                                     title={t('route.create_new')}
+                                    data-testid="btn-create-route"
                                 >
                                     <PlusIcon size={20} className="text-brand-dark" />
                                 </Button>
