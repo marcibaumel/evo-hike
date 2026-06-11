@@ -56,11 +56,31 @@
     "elevation": "Emelkedés",
     "rating": "Értékelés",
     "button_text": "Tervezőbe",
+    "time":"Időtartam",
+    "timePlaceholder":"120 perc",
     "difficulties": {
       "0": "Könnyű",
       "1": "Közepes",
       "2": "Nehéz",
       "3": "Extrém"
+    }
+  },
+  "filterPage":{
+    "filterTrails": "Útvonalak szűrése",
+    "adjustFilters":"Szűrők módosítása",
+    "noMatch":"Nincs a keresettnek megfelelő túra",
+    "reset":"Alaphelyzet",
+    "done": "Kész"
+  },
+   "route": {
+    "search_placeholder": "Keress egy túrát...",
+    "showing_count": "Találatok száma: {{count}}",
+    "active_trails": "Aktív túrák",
+    "view_details": "Részletek",
+    "stats": {
+      "dist": "Táv",
+      "elev": "Emelkedés",
+      "time": "Idő"
     }
   },
   "routeForm": {
