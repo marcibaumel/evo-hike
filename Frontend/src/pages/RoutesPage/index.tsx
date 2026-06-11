@@ -1,23 +1,22 @@
 /* eslint-disable no-console */
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { FeatureCollection, Feature } from 'geojson';
 import { Map } from 'leaflet';
-import { MagnifyingGlassIcon, SlidersHorizontalIcon, PlusIcon } from '@phosphor-icons/react';
-
+import type { FeatureCollection, Feature } from 'geojson';
 import { RouteMap } from './components/RouteMap';
+import {FilterPanel} from './components/FilterPanel';
+import { Button } from '../../components/Button';
+import { TrailCard } from './components/TrailCard';
 import RouteEditorPanel from './components/RouteEditorPanel';
 import SelectedTrailDetails from './components/SelectedTrailDetails';
-import { FilterPanel } from './components/FilterPanel';
-import { TrailCard } from './components/TrailCard';
-import { Button } from '../../components/Button';
+import backendTrails from '../../assets/mockData/backendTrails.json';
+import type { DifficultyLevel } from '../../utils/difficulty';
+import { MagnifyingGlassIcon, PlusIcon,SlidersHorizontalIcon } from '@phosphor-icons/react';
 
 import { Trail } from '../../utils/Trail';
-import type { DifficultyLevel } from '../../utils/difficulty';
 import { useTrailFilters } from '../../hooks/useTrailFilters';
 import { getNearbyPOIs, type OverpassElement } from '../../api/overpassApi';
 import routeData from '../../assets/mockData/routes.json';
-import backendTrails from '../../assets/mockData/backendTrails.json';
 
 import './routespage.css';
 
@@ -30,7 +29,6 @@ type ViewState = 'list' | 'create' | 'filter';
 
 export default function RoutePage() {
     const { t } = useTranslation();
-
     const [displayedGeoJson, setDisplayedGeoJson] = useState<FeatureCollection>(emptyGeoJson);
     const [userTrails, setUserTrails] = useState<TrailData[]>([]);
     const [selectedTrail, setSelectedTrail] = useState<Trail | null>(null);
