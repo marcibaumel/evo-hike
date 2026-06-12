@@ -33,7 +33,7 @@ namespace evoHike.Backend.Services
                 .OrderBy(ph => ph.PlannedStartDateTime)
                 .ToListAsync();
         }
-        public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlannedHikeDTO request)
+        public async Task<PlannedHikeEntity> CreatePlannedHikeAsync(PlannedHikeDTO request, int userId)
         {
             if (request.RouteId == 0)
             {
@@ -57,9 +57,15 @@ namespace evoHike.Backend.Services
                 ChecklistJson = request.ChecklistItems?.Any() == true
                                 ? JsonSerializer.Serialize(request.ChecklistItems)
                                 : null,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+
+                OrganizerId = userId
             };
-            return await _plannedHike.AddHikeAsync(newPlan);
+            var createdHike = await _plannedHike.AddHikeAsync(newPlan);
+
+            await _plannedHike.AddParticipantAsync(createdHike.Id, userId);
+
+            return createdHike;
         }
 
         public async Task<bool> MarkHikeAsCompletedAsync(int id)
@@ -74,6 +80,23 @@ namespace evoHike.Backend.Services
             await _plannedHike.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task JoinHikeAsync(int hikeId, int userId)
+        {
+            var hike = await _plannedHike.FindHikeAsync(hikeId);
+            if (hike == null)
+            {
+                throw new ArgumentException("The requested hike was not found.");
+            }
+
+            bool alreadyJoined = await _plannedHike.HasUserJoinedAsync(hikeId, userId);
+            if (alreadyJoined)
+            {
+                throw new ArgumentException("Already joined this hike");
+            }
+
+            await _plannedHike.AddParticipantAsync(hikeId, userId);
         }
     }
 }
