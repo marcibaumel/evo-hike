@@ -1,4 +1,5 @@
 import type { DifficultyLevel } from './difficulty';
+import type { Feature, FeatureCollection } from 'geojson';
 
 export class Trail {
     id: string;
@@ -13,6 +14,7 @@ export class Trail {
     coverPhotoPath: string;
     description: string;
     userPhotos: string[];
+    geojson?: FeatureCollection | Feature | null;
 
     constructor(data: {
         id: string;
@@ -27,6 +29,7 @@ export class Trail {
         coverPhotoPath: string;
         description?: string;
         userPhotos?: string[];
+        geojson?: FeatureCollection | Feature | null;
     }) {
         this.id = data.id;
         this.name = data.name;
@@ -40,5 +43,6 @@ export class Trail {
         this.coverPhotoPath = data.coverPhotoPath;
         this.description = data.description || '';
         this.userPhotos = data.userPhotos || [];
+        this.geojson = data.geojson;
     }
 }
