@@ -16,11 +16,17 @@ import { MagnifyingGlassIcon, PlusIcon,SlidersHorizontalIcon } from '@phosphor-i
 import { Trail } from '../../utils/Trail';
 import { useTrailFilters } from '../../hooks/useTrailFilters';
 import { getNearbyPOIs, type OverpassElement } from '../../api/overpassApi';
-import routeData from '../../assets/mockData/routes.json';
+
+import { trailService } from '../../api/trailService';
 
 import './routespage.css';
 
-const geojson = routeData as FeatureCollection;
+const geojson: FeatureCollection = {
+    type: "FeatureCollection",
+    features: backendTrails
+        .map(t => t.geojson)
+        .filter(g => g !== null && g !== undefined) as Feature[]
+};
 const emptyGeoJson: FeatureCollection = { type: 'FeatureCollection', features: [] };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,7 +114,7 @@ export default function RoutePage() {
         if (trail) {
             setSelectedTrail(trail);
 
-            const geoData = geojson.features.find(f => String(f.properties?.id) === String(trailId)) || trail.geojson;
+            const geoData = trail.geojson;
 
             if (geoData) {
                 if (geoData.type === 'Feature' && geoData.geometry?.type === 'LineString') {
@@ -129,37 +135,59 @@ export default function RoutePage() {
         }
     }, [allTrails, fetchPOIs]);
 
-    const handleSaveNewRoute = () => {
+    const handleSaveNewRoute = async () => {
         if (!customRoute.name) return alert('Kérlek add meg a túra nevét!');
 
-        const newId = `user-${Date.now()}`;
-
-        const newTrail: ConstructorParameters<typeof Trail>[0] = {
-            id: newId,
+        if (!customRoute.coordinates || customRoute.coordinates.length < 2) {
+            return alert('Kérlek rajzolj fel egy útvonalat a térképre mentés előtt!');
+        }
+        
+        const payload = {
             name: customRoute.name,
-            location: 'Custom Route',
-            length: customRoute.distance,
-            difficulty: (customRoute.distance < 5000 ? 0 : customRoute.distance > 15000 ? 2 : 1) as DifficultyLevel,
-            elevationGain: 0,
-            time: customRoute.time,
-            rating: 0,
-            reviewCount: 0,
-            coverPhotoPath: '',
             description: customRoute.description,
-            userPhotos: [],
-            geojson: uploadedGpx || ({
-                type: 'Feature',
-                properties: { id: newId, name: customRoute.name },
-                geometry: { type: 'LineString', coordinates: customRoute.coordinates }
-            } as Feature)
+            length: customRoute.distance, 
+            difficulty: customRoute.distance < 5000 ? 0 : customRoute.distance > 15000 ? 2 : 1, 
+            time: Math.round(customRoute.time),
+            routeLine: {
+                type: 'LineString' as const,
+                coordinates: customRoute.coordinates
+            }
         };
 
-        const updated = [newTrail, ...userTrails];
-        setUserTrails(updated);
-        localStorage.setItem('userTrails', JSON.stringify(updated));
+        try {
+            const savedTrailDTO = await trailService.createTrail(payload);
+            
+            const newTrail: ConstructorParameters<typeof Trail>[0] = {
+                id: String(savedTrailDTO.id),
+                name: savedTrailDTO.name,
+                location: savedTrailDTO.location || 'Custom Route',
+                length: savedTrailDTO.length,
+                difficulty: savedTrailDTO.difficulty as DifficultyLevel,
+                elevationGain: savedTrailDTO.elevationGain || 0,
+                time: savedTrailDTO.estimatedDuration || 0,
+                rating: savedTrailDTO.rating || 0,
+                reviewCount: savedTrailDTO.reviewCount || 0,
+                coverPhotoPath: savedTrailDTO.coverPhotoPath || '',
+                description: savedTrailDTO.description || '',
+                userPhotos: [],
+                geojson: uploadedGpx || ({
+                    type: 'Feature',
+                    properties: { id: String(savedTrailDTO.id), name: savedTrailDTO.name },
+                    geometry: { type: 'LineString', coordinates: customRoute.coordinates }
+                } as Feature)
+            };
+            
+            const updated = [newTrail, ...userTrails];
+            setUserTrails(updated);
+            localStorage.setItem('userTrails', JSON.stringify(updated));
+            
+            setView('list');
+            handleResetForm();
 
-        setView('list');
-        handleResetForm();
+        } catch (error) {
+            console.error('Mentési hiba:', error);
+            alert('Nem sikerült elmenteni a túrát a szerverre. Ellenőrizd a kapcsolatot!');
+        }
     };
 
     const handleClearRoute = () => {

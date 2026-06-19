@@ -46,6 +46,12 @@ namespace evoHike.Backend.DataAccess
                 .Where(poi => poi.Location.IsWithinDistance(region, distanceMeters))
                 .ToListAsync();
         }
+        
+        public async Task AddTrailAsync(HikingTrailEntity trail)
+        {
+            await _context.HikingTrails.AddAsync(trail);
+            await _context.SaveChangesAsync();
+        }
     }
        
 }

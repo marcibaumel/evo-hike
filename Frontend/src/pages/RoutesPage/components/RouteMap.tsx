@@ -15,6 +15,8 @@ import type { LeafletMouseEvent, Layer } from 'leaflet';
 import type { OverpassElement } from '../../../api/overpassApi.ts';
 import type { FeatureCollection, Feature, Geometry } from 'geojson';
 
+
+
 interface RouteMapProps {
     selectedTrailId?: string;
     customGeojson?: FeatureCollection | Feature | null;

@@ -43,5 +43,24 @@ namespace evoHike.Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+		public async Task<ActionResult<TrailDTO>> CreateTrail([FromBody] CreateTrailDTO dto)
+		{
+    		System.Console.WriteLine("---------------------------------------");
+    		System.Console.WriteLine($"[Szerver] Megérkezett! Túra neve: {dto.Name}");
+   			System.Console.WriteLine("---------------------------------------");
+
+    		try
+    		{
+        		var savedTrail = await _trailService.CreateTrailAsync(dto);
+        		return Ok(savedTrail);
+    		}
+    		catch (Exception ex)
+    		{
+        		System.Console.WriteLine($"HIBA: {ex.Message}");
+        		return BadRequest(ex.Message);
+    		}
+		}
     }
 }
