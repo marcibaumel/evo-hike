@@ -16,9 +16,12 @@ public class EmailController : ControllerBase
     }
 
     [HttpPost("test")]
-    public async Task<IActionResult> Test(SendEmailRequest sendEmailRequest)
+    public async Task<IActionResult> Test([FromBody]SendEmailRequest sendMailRequest)
     {
-        await _emailService.SendEmail(sendEmailRequest);
-        return Ok("Email sikeresn elküldve.");
+        var response = await _emailService.Send(sendMailRequest);
+        if(response.IsSuccessful){
+            return Ok("Email sikeresen elküldve");
+        }
+        return BadRequest($"Hiba történt: {response.StatusCode} - {response.Content} - {response.ErrorMessage}");
     }
 }

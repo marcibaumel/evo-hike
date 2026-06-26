@@ -31,13 +31,13 @@ builder.Services.AddScoped<ITrailsDataAccess, TrailsDataAccess>();
 builder.Services.AddScoped<IPlannedHikeDataAccess, PlannedHikeDataAccess>();
 builder.Services.AddScoped<IDataImportDataAccess, DataImportDataAccess>();
 builder.Services.AddScoped<IPlannedHikeService, PlannedHikeService>();
-builder.Services.AddScoped<IEmailService, GmailService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<DataImportService>();
 builder.Services.AddScoped<OpenMeteoClient>();
 
-builder.Services.Configure<GmailOptions>(
-    builder.Configuration.GetSection(GmailOptions.GmailOptionKey));
+builder.Services.Configure<BrevoOptions>(
+    builder.Configuration.GetSection(BrevoOptions.BrevoOptionKey));
 
 var app = builder.Build();
 
