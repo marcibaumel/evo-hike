@@ -1,6 +1,7 @@
 import { CloudSunIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../../../components/Card';
+import bgImage from '../../../assets/pictures/weatherBg.jpg';
 
 export const WeatherCard = () => {
     const { t } = useTranslation();
@@ -8,7 +9,8 @@ export const WeatherCard = () => {
     return (
         <Card
             variant="solid"
-            className="p-8 relative overflow-hidden group hover:border-blue-400/30 transition-all duration-500">
+            style={{ backgroundImage: `url(${bgImage})` }}
+            className="p-8 bg-black/55 bg-blend-overlay bg-cover bg-center bg-no repeat relative overflow-hidden group hover:border-blue-400/30 transition-all duration-500">
             <div className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500 rotate-12">
                 <CloudSunIcon size={140} weight="thin" />
             </div>
