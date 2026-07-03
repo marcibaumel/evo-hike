@@ -11,6 +11,7 @@ interface TrailCardProps {
     trail: Trail;
     onViewDetails?: (trail: Trail) => void;
     onDelete?: (trail: Trail) => void;
+    onPlanHike?: () => void;
 }
 
 const getDifficultyLabel = (level: number) => {
@@ -43,7 +44,7 @@ const getDifficultyVariant = (level: number) => {
     }
 };
 
-export const TrailCard = ({ trail, onViewDetails, onDelete }: TrailCardProps) => {
+export const TrailCard = ({ trail, onViewDetails, onDelete, onPlanHike }: TrailCardProps) => {
     const { t } = useTranslation();
     const hours = trail.length / 1000 / 4;
     const h = Math.floor(hours);
@@ -109,17 +110,32 @@ export const TrailCard = ({ trail, onViewDetails, onDelete }: TrailCardProps) =>
                     </div>
                 </div>
 
-                <div className="mt-auto">
-                    {onViewDetails ? (
-                        <Button variant="outline" className="w-full" size="sm" onClick={() => onViewDetails(trail)}>
-                            {t('route.view_details')}
-                        </Button>
-                    ) : (
-                        <Link to={`/routes/${trail.id}`} className="block">
-                            <Button variant="outline" className="w-full" size="sm">
+                <div className="mt-auto flex gap-2">
+                    <div className="flex-1">
+                        {onViewDetails ? (
+                            <Button variant="outline" className="w-full" size="sm" onClick={() => onViewDetails(trail)}>
                                 {t('route.view_details')}
                             </Button>
-                        </Link>
+                        ) : (
+                            <Link to={`/routes/${trail.id}`} className="block">
+                                <Button variant="outline" className="w-full" size="sm">
+                                    {t('route.view_details')}
+                                </Button>
+                            </Link>
+                        )}
+                    </div>
+
+                    {onPlanHike && (
+                        <div className="flex-1">
+                            <Button
+                                variant="primary"
+                                className="w-full bg-brand-accent text-brand-dark"
+                                size="sm"
+                                onClick={onPlanHike}
+                            >
+                                Planning
+                            </Button>
+                        </div>
                     )}
                 </div>
             </div>

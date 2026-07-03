@@ -10,6 +10,7 @@ import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react';
 import { Button } from '../../components/Button';
 import RouteEditorPanel from './components/RouteEditorPanel';
 import { Trail } from '../../utils/Trail';
+import { planNewHike } from '../../api/plannedHikeService';
 
 const emptyGeoJson: FeatureCollection = {
     type: 'FeatureCollection',
@@ -31,6 +32,11 @@ function RoutePage() {
     const [newRouteTime, setNewRouteTime] = useState(0);
     const [currentRouteCoordinates, setCurrentRouteCoordinates] = useState<[number, number][]>([]);
     const [userTrails, setUserTrails] = useState<TrailData[]>([]);
+
+    const [planningTrail, setPlanningTrail] = useState<Trail | null>(null);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const saved = localStorage.getItem('userTrails');
@@ -149,6 +155,41 @@ function RoutePage() {
         }
     };
 
+    const handleOpenPlanner = (trail: Trail) => {
+        setPlanningTrail(trail);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(8, 0, 0, 0);
+
+        const tomorrowEnd = new Date(tomorrow);
+        tomorrowEnd.setHours(18, 0, 0, 0);
+
+        setStartDate(tomorrow.toISOString().slice(0, 16));
+        setEndDate(tomorrowEnd.toISOString().slice(0, 16));
+    };
+
+    const handleSavePlannedHike = async () => {
+        if (!planningTrail || !startDate || !endDate) return;
+        const cleanString = String(planningTrail.id).replace(/\D/g, '').substring(0, 6);
+        const numericId = parseInt(cleanString) || 1;
+
+        try {
+            setIsSubmitting(true);
+            await planNewHike({
+                routeId: numericId,
+                start: new Date(startDate).toISOString(),
+                end: new Date(endDate).toISOString()
+            });
+            alert('Túra sikeresen betervezve! Nézd meg a Journal oldalon.');
+            setPlanningTrail(null);
+        } catch (error) {
+            console.error('Hiba:', error);
+            alert('Nem sikerült betervezni a túrát.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen pt-20 lg:overflow-hidden bg-brand-dark">
             {/* Sidebar - Trail List or Editor */}
@@ -202,6 +243,7 @@ function RoutePage() {
                                         trail={trail}
                                         onViewDetails={handleViewDetails}
                                         onDelete={trail.id.startsWith('user-') ? handleDeleteTrail : undefined}
+                                        onPlanHike={() => handleOpenPlanner(trail)}
                                     />
                                 </div>
                             ))}
@@ -212,6 +254,47 @@ function RoutePage() {
 
             {/* Map Area */}
             <RouteMap geojson={displayedGeoJson} onRouteCalculated={handleRouteCalculated} />
+
+            {/* Date Select */}
+            {planningTrail && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+                    <div className="bg-brand-dark border border-white/10 p-6 rounded-2xl w-full max-w-md space-y-6">
+                        <h3 className="text-xl font-bold text-white">
+                            Túra betervezése: {planningTrail.name}
+                        </h3>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-brand-muted text-sm mb-1">Kezdés (Indulás)</label>
+                                <input
+                                    type="datetime-local"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-brand-muted text-sm mb-1">Befejezés (Érkezés)</label>
+                                <input
+                                    type="datetime-local"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-4">
+                            <Button variant="secondary" onClick={() => setPlanningTrail(null)} disabled={isSubmitting}>
+                                Mégsem
+                            </Button>
+                            <Button variant="primary" className="bg-brand-accent text-brand-dark" onClick={handleSavePlannedHike} disabled={isSubmitting}>
+                                {isSubmitting ? 'Mentés...' : 'Túra Mentése'}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

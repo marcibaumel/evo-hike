@@ -14,5 +14,13 @@ namespace evoHike.Backend.Data
         public DbSet<PlannedHikeEntity> PlannedHikes { get; set; } = null!;
 
         public DbSet<HikeParticipant> HikeParticipants { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<HikeParticipant>()
+                .HasKey(hp => new { hp.PlannedHikeId, hp.UserId });
+        }
     }
 }
