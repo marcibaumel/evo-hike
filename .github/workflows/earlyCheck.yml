@@ -2,29 +2,34 @@ name: Early check
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   frontend-lint:
     name: Frontend lint
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
           cache-dependency-path: Frontend/package-lock.json
-      
+
       - name: Install dependencies
         working-directory: Frontend
-        run: npm ci
-      
+        run: |
+          npm ci || (
+            echo "npm ci failed; retrying with clean npm install because of optional dependency resolution issues."
+            rm -rf node_modules package-lock.json
+            npm install
+          )
+
       - name: Run ESLint
         working-directory: Frontend
         run: npm run lint
@@ -32,23 +37,23 @@ jobs:
   backend-tests:
     name: Backend tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
-      
+          dotnet-version: "8.0.x"
+
       - name: Restore dependencies
         working-directory: Backend
         run: dotnet restore
-      
+
       - name: Build
         working-directory: Backend
         run: dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=true
-      
+
       - name: Run unit tests
         working-directory: Backend
         run: dotnet test evoHike.UnitTests/evoHike.UnitTests.csproj --configuration Release --no-build --verbosity normal
@@ -56,33 +61,38 @@ jobs:
   frontend-test:
     name: Frontend tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
           cache-dependency-path: Frontend/package-lock.json
-      
+
       - name: Install dependencies
         working-directory: Frontend
-        run: npm ci
-      
+        run: |
+          npm ci || (
+            echo "npm ci failed; retrying with clean npm install because of optional dependency resolution issues."
+            rm -rf node_modules package-lock.json
+            npm install
+          )
+
       - name: Install Playwright browsers
         working-directory: Frontend
         run: npx playwright install --with-deps
-      
+
       - name: Build frontend
         working-directory: Frontend
         run: npm run build
-      
+
       - name: Run Playwright tests
         working-directory: Frontend
         run: npm run test:headless
-      
+
       # - name: Upload Playwright report
       #   uses: actions/upload-artifact@v4
       #   with:
