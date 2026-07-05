@@ -3,6 +3,7 @@ import { authenticatePage } from './auth.setup';
 
 async function openMobileMenu(page: Page) {
     const menuToggle = page.getByTestId('mobile-menu-toggle');
+    await expect(menuToggle).toBeVisible();
     await menuToggle.click();
     return page.getByTestId('mobile-menu-dropdown');
 }
@@ -27,8 +28,7 @@ async function checkPrivateLinks(dropdown: Locator, shouldBeVisible: boolean) {
 }
 
 test.describe('Mobile view Navbar tests', () => {
-
-    test.use({ locale: 'hu-HU' });
+    test.use({ locale: 'hu-HU', viewport: { width: 390, height: 844 } });
 
     test.beforeEach(async ({ page }) => {
         await page.goto('http://localhost:5173/');

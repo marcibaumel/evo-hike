@@ -2,28 +2,34 @@ import {test,expect} from '@playwright/test';
 import { authenticatePage } from './auth.setup';
 
 test.describe('Leaflet and buttons test', () =>{
+    test.use({ viewport: { width: 1280, height: 720 } });
 
     test.beforeEach(async ({page})=> {
         await authenticatePage(page);
     });
 
     test('check the start, end buttons are working',async ({page}) =>{
-        await page.goto('http://localhost:5173');
-
-        await page.getByRole('link', {name: 'Planner'}).click();
+        await page.goto('http://localhost:5173/routes');
         await expect(page).toHaveURL(/\/routes$/);
+
+        const mobileDropdown = page.getByTestId('mobile-menu-dropdown');
+        const menuVisible = await mobileDropdown.isVisible();
+        if (menuVisible) {
+            await page.getByTestId('mobile-menu-toggle').click();
+            await expect(mobileDropdown).toBeHidden();
+        }
 
         await page.getByTestId('btn-create-route').click();
 
         const mapPointer = page.locator('.leaflet-container');
 
-        expect(mapPointer).toBeVisible();
+        await expect(mapPointer).toBeVisible();
 
         const mapBound = await mapPointer.boundingBox();
         if (!mapBound) {
             throw new Error('The map is not visible.');
         }
-        page.waitForTimeout(500);
+        await page.waitForTimeout(500);
 
         await page.getByTestId('btn-menuitem-nav-from').click();
 
@@ -45,7 +51,7 @@ test.describe('Leaflet and buttons test', () =>{
 
         let marker = page.locator('.leaflet-marker-icon');
 
-        expect(marker).toHaveCount(3);
+        await expect(marker).toHaveCount(3);
 
         await page.getByTestId('btn-menuitem-nav-clear').click();
 
@@ -53,6 +59,6 @@ test.describe('Leaflet and buttons test', () =>{
 
         marker = page.locator('.leaflet-marker-icon');
 
-        expect(marker).toHaveCount(0);
+        await expect(marker).toHaveCount(0);
     });
 });
