@@ -40,5 +40,32 @@ namespace evoHike.Backend.Services
 
             return poiDtos;
         }
+        public async Task<TrailDTO> CreateTrailAsync(TrailDTO newTrail)
+        {
+            var entity = new HikingTrailEntity
+            {
+                TrailName = string.IsNullOrEmpty(newTrail.Name) ? "New tour" : newTrail.Name,
+                StartLocation = newTrail.Location,
+                Length = newTrail.Length,
+                Difficulty = newTrail.Difficulty,
+                Elevation = newTrail.ElevationGain,
+                Rating = newTrail.Rating,
+                ReviewCount = newTrail.ReviewCount,
+                EstimatedDuration = newTrail.EstimatedDuration,
+                CoverPhotoPath = newTrail.CoverPhotoPath,
+                RouteLine = newTrail.RouteLine,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            var savedEntity = await _dataAccess.AddTrailAsync(entity);
+
+            newTrail.Id = savedEntity.Id;
+
+            return newTrail;
+        }
+        public async Task<bool> DeleteTrailAsync(int id)
+        {
+            return await _dataAccess.DeleteTrailAsync(id);
+        }
     }
 }

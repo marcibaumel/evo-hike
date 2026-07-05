@@ -34,7 +34,10 @@ namespace evoHike.Backend.Controllers
         {
             try
             {
-                var hikes = await _plannedHikeService.GetHikesAsync(status);
+                var currentUserId = GetCurrentUserId();
+
+                var hikes = await _plannedHikeService.GetHikesAsync(currentUserId, status, true);
+
                 return Ok(hikes);
             }
             catch (Exception ex)
@@ -63,8 +66,12 @@ namespace evoHike.Backend.Controllers
             {
                 return BadRequest(ex.Message); 
             }
+            catch (Exception ex)
+            {
+                var errorMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return StatusCode(500, errorMessage);
+            }
         }
-
         [HttpPost("{id}/join")]
         public async Task<IActionResult> JoinHike(int id)
         {
@@ -74,11 +81,15 @@ namespace evoHike.Backend.Controllers
 
                 await _plannedHikeService.JoinHikeAsync(id, currentUserId);
 
-                return Ok(new { message = "Successfully joined the hike" });
+                return Ok(new { message = "Successfully joined the tour!" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 

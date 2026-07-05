@@ -9,7 +9,7 @@ namespace evoHike.Backend.DataAccess.Interfaces
         Task<PlannedHikeEntity> AddHikeAsync(PlannedHikeEntity hike);
         Task<PlannedHikeEntity?> FindHikeAsync(int trailId);
         Task SaveChangesAsync();
-        Task AddParticipantAsync(int hikeId, int userId);
+        Task<bool> AddParticipantAsync(int plannedHikeId, int userId);
         Task<bool> HasUserJoinedAsync(int hikeId, int userId);
     }
 }

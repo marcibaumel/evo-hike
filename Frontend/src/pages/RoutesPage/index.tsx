@@ -39,14 +39,37 @@ function RoutePage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        const saved = localStorage.getItem('userTrails');
-        if (saved) {
+        const fetchTrailsFromDb = async () => {
             try {
-                setUserTrails(JSON.parse(saved));
+                const token = localStorage.getItem('token') || '';
+                const response = await fetch('/api/Trails', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const dbTrails = await response.json();
+
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const formattedTrails = dbTrails.map((t: any) => ({
+                        id: t.id,
+                        name: t.trailName || t.name || 'Own Route',
+                        location: t.location || 'Custom Route',
+                        length: t.length,
+                        difficulty: t.difficulty === 0 ? 'Easy' : t.difficulty === 2 ? 'Hard' : 'Moderate',
+                        elevationGain: t.elevationGain || t.elevation || 0,
+                        coverPhotoPath: t.coverPhotoPath || ''
+                    }));
+
+                    setUserTrails(formattedTrails);
+                }
             } catch (e) {
-                console.error('Failed to parse user trails', e);
+                console.error('Failed to load tours from database', e);
             }
-        }
+        };
+
+        fetchTrailsFromDb();
     }, []);
 
     const allTrailsData = useMemo(() => {
@@ -83,61 +106,103 @@ function RoutePage() {
         }
     };
 
-    const handleSaveNewRoute = () => {
+    const handleSaveNewRoute = async () => {
         if (!newRouteName) {
             alert('Please enter a route name.');
             return;
         }
 
-        const newId = `user-${Date.now()}`;
-
-        const geometry = {
-            type: 'LineString',
-            coordinates: currentRouteCoordinates
-        };
-
-        const newTrail: TrailData = {
-            id: newId,
+        const newTrailData = {
             name: newRouteName,
             location: 'Custom Route',
             length: newRouteDistance,
-            difficulty: newRouteDistance < 5000 ? 'Easy' : newRouteDistance > 15000 ? 'Hard' : 'Moderate',
+            difficulty: newRouteDistance < 5000 ? 0 : newRouteDistance > 15000 ? 2 : 1,
             elevationGain: 0,
-            time: newRouteTime,
             rating: 0,
             reviewCount: 0,
-            coverPhotoPath: '',
-            description: newRouteDescription,
-            userPhotos: [],
-            geojson: {
-                type: 'Feature',
-                properties: {
-                    id: newId,
-                    name: newRouteName
-                },
-                geometry: geometry
-            }
+            coverPhotoPath: ''
         };
 
-        const updatedUserTrails = [newTrail, ...userTrails];
-        setUserTrails(updatedUserTrails);
-        localStorage.setItem('userTrails', JSON.stringify(updatedUserTrails));
+        try {
+            const token = localStorage.getItem('token') || '';
+            const response = await fetch('/api/Trails', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newTrailData)
+            });
 
-        setIsCreatingRoute(false);
-        setNewRouteName('');
-        setNewRouteDescription('');
-        setNewRouteDistance(0);
-        setNewRouteTime(0);
-        setCurrentRouteCoordinates([]);
-    };
+            if (!response.ok) {
+                throw new Error('Server error when saving the tour.');
+            }
 
-    const handleDeleteTrail = (trail: Trail) => {
-        if (confirm(t('route.confirm_delete', 'Are you sure you want to delete this trail?'))) {
-            const updatedUserTrails = userTrails.filter((t) => t.id !== trail.id);
+            const savedTrail = await response.json();
+
+            const newTrailObj = {
+                id: savedTrail.id,
+                name: savedTrail.trailName || savedTrail.name || newRouteName,
+                location: savedTrail.location || 'Custom Route',
+                length: savedTrail.length || newRouteDistance,
+                difficulty: savedTrail.difficulty === 0 ? 'Easy' : savedTrail.difficulty === 2 ? 'Hard' : 'Moderate',
+                elevationGain: savedTrail.elevationGain || 0,
+                coverPhotoPath: savedTrail.coverPhotoPath || '',
+                geojson: {
+                    type: 'Feature',
+                    properties: { id: savedTrail.id, name: newRouteName },
+                    geometry: { type: 'LineString', coordinates: currentRouteCoordinates }
+                }
+            };
+
+            const updatedUserTrails = [newTrailObj, ...userTrails];
             setUserTrails(updatedUserTrails);
             localStorage.setItem('userTrails', JSON.stringify(updatedUserTrails));
 
-            setDisplayedGeoJson(emptyGeoJson);
+            setIsCreatingRoute(false);
+            setNewRouteName('');
+            setNewRouteDescription('');
+            setNewRouteDistance(0);
+            setNewRouteTime(0);
+            setCurrentRouteCoordinates([]);
+
+            alert('The tour has been successfully added to the database!');
+
+        } catch (error) {
+            console.error('Error while creating the tour:', error);
+            alert('Failed to create the tour in the database.');
+        }
+    };
+
+    const handleDeleteTrail = async (trail: Trail) => {
+        if (confirm(t('route.confirm_delete', 'Are you sure you want to delete this trail?'))) {
+            try {
+                const numericId = parseInt(trail.id.toString());
+
+                if (!isNaN(numericId) && numericId > 0) {
+                    const token = localStorage.getItem('token') || '';
+                    const response = await fetch(`/api/Trails/${numericId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Server error while deleting.');
+                    }
+                }
+
+                const updatedUserTrails = userTrails.filter((t) => t.id !== trail.id);
+                setUserTrails(updatedUserTrails);
+                localStorage.setItem('userTrails', JSON.stringify(updatedUserTrails));
+
+                setDisplayedGeoJson(emptyGeoJson);
+
+            } catch (error) {
+                console.error('Error while deleting:', error);
+                alert('Failed to delete tour from database.');
+            }
         }
     };
 
@@ -170,8 +235,13 @@ function RoutePage() {
 
     const handleSavePlannedHike = async () => {
         if (!planningTrail || !startDate || !endDate) return;
-        const cleanString = String(planningTrail.id).replace(/\D/g, '').substring(0, 6);
-        const numericId = parseInt(cleanString) || 1;
+
+        const numericId = parseInt(planningTrail.id.toString());
+
+        if (isNaN(numericId) || numericId <= 0) {
+            alert('This tour cannot be planned because it is only test data. Please create a new tour on the map.!');
+            return;
+        }
 
         try {
             setIsSubmitting(true);
@@ -180,11 +250,11 @@ function RoutePage() {
                 start: new Date(startDate).toISOString(),
                 end: new Date(endDate).toISOString()
             });
-            alert('Túra sikeresen betervezve! Nézd meg a Journal oldalon.');
+            alert('Tour successfully scheduled! Check it out on the Journal page.');
             setPlanningTrail(null);
         } catch (error) {
-            console.error('Hiba:', error);
-            alert('Nem sikerült betervezni a túrát.');
+            console.error('Error:', error);
+            alert('Failed to schedule tour.');
         } finally {
             setIsSubmitting(false);
         }
@@ -242,7 +312,7 @@ function RoutePage() {
                                     <TrailCard
                                         trail={trail}
                                         onViewDetails={handleViewDetails}
-                                        onDelete={trail.id.startsWith('user-') ? handleDeleteTrail : undefined}
+                                        onDelete={() => handleDeleteTrail(trail)}
                                         onPlanHike={() => handleOpenPlanner(trail)}
                                     />
                                 </div>
@@ -260,12 +330,12 @@ function RoutePage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
                     <div className="bg-brand-dark border border-white/10 p-6 rounded-2xl w-full max-w-md space-y-6">
                         <h3 className="text-xl font-bold text-white">
-                            Túra betervezése: {planningTrail.name}
+                            Schedule hike: {planningTrail.name}
                         </h3>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-brand-muted text-sm mb-1">Kezdés (Indulás)</label>
+                                <label className="block text-brand-muted text-sm mb-1">Start Date & Time</label>
                                 <input
                                     type="datetime-local"
                                     value={startDate}
@@ -274,7 +344,7 @@ function RoutePage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-brand-muted text-sm mb-1">Befejezés (Érkezés)</label>
+                                <label className="block text-brand-muted text-sm mb-1">End Date & Time</label>
                                 <input
                                     type="datetime-local"
                                     value={endDate}
@@ -286,10 +356,10 @@ function RoutePage() {
 
                         <div className="flex justify-end gap-3 pt-4">
                             <Button variant="secondary" onClick={() => setPlanningTrail(null)} disabled={isSubmitting}>
-                                Mégsem
+                                Cancel
                             </Button>
                             <Button variant="primary" className="bg-brand-accent text-brand-dark" onClick={handleSavePlannedHike} disabled={isSubmitting}>
-                                {isSubmitting ? 'Mentés...' : 'Túra Mentése'}
+                                {isSubmitting ? 'Saving...' : 'Schedule Hike'}
                             </Button>
                         </div>
                     </div>

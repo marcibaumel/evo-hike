@@ -38,16 +38,22 @@ namespace evoHike.Backend.DataAccess
         {
             await _context.SaveChangesAsync();
         }
-        public async Task AddParticipantAsync(int hikeId, int userId)
+        public async Task<bool> AddParticipantAsync(int plannedHikeId, int userId)
         {
-            var participant = new HikeParticipant
+            var exists = await _context.HikeParticipants
+                .AnyAsync(hp => hp.PlannedHikeId == plannedHikeId && hp.UserId == userId);
+
+            if (exists) return false;
+
+            _context.HikeParticipants.Add(new HikeParticipant
             {
-                PlannedHikeId = hikeId,
+                PlannedHikeId = plannedHikeId,
                 UserId = userId,
                 JoinedAt = DateTime.UtcNow
-            };
-            _context.HikeParticipants.Add(participant);
+            });
+
             await _context.SaveChangesAsync();
+            return true;
         }
         public async Task<bool> HasUserJoinedAsync(int hikeId, int userId)
         {

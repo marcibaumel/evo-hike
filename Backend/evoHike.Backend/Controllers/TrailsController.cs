@@ -43,5 +43,36 @@ namespace evoHike.Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult<TrailDTO>> CreateTrail([FromBody] TrailDTO newTrail)
+        {
+            try
+            {
+                var createdTrail = await _trailService.CreateTrailAsync(newTrail);
+                return Ok(createdTrail);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTrail(int id)
+        {
+            try
+            {
+                var success = await _trailService.DeleteTrailAsync(id);
+                if (!success)
+                {
+                    return NotFound("Tour not found in the database");
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

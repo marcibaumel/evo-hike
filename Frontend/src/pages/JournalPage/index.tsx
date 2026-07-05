@@ -8,6 +8,17 @@ import { ProfileHeader } from './components/ProfileHeader';
 import { type UpcomingHike, UpcomingHikeCard } from './components/UpcomingHikeCard';
 import { Button } from '../../components/Button';
 import { getPlannedHikes } from '../../api/plannedHikeService';
+interface BackendHikeData {
+    id: number;
+    plannedStartDateTime: string;
+    hikingTrailId: number;
+    hikingTrail?: {
+        name?: string;
+        trailName?: string;
+        difficulty?: number | string;
+        coverPhotoPath?: string;
+    };
+}
 
 function JournalPage() {
     const { t } = useTranslation();
@@ -62,15 +73,14 @@ function JournalPage() {
             try {
                 const data = await getPlannedHikes();
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const formattedHikes: UpcomingHike[] = data.map((hike: any) => {
+                const formattedHikes: UpcomingHike[] = data.map((hike: BackendHikeData) => {
                     const startDate = new Date(hike.plannedStartDateTime);
                     const today = new Date();
                     const daysLeft = Math.ceil((startDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
 
                     return {
                         id: hike.id,
-                        title: hike.hikingTrail?.name || `Túra #${hike.hikingTrailId}`,
+                        title: hike.hikingTrail?.trailName || hike.hikingTrail?.name || `Túra #${hike.hikingTrailId || hike.id}`,
                         date: startDate.toLocaleDateString(),
                         daysLeft: daysLeft > 0 ? daysLeft : 0,
                         difficulty: hike.hikingTrail?.difficulty || 'Moderate',

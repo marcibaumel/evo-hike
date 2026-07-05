@@ -15,9 +15,11 @@ namespace evoHike.Backend.Services
             _plannedHike = plannedHike;
         }
 
-        public async Task<IEnumerable<PlannedHikeEntity>> GetHikesAsync(HikeStatus? filterStatus = null,bool includeTrail = false) 
+        public async Task<IEnumerable<PlannedHikeEntity>> GetHikesAsync(int userId, HikeStatus? filterStatus = null,bool includeTrail = false)
         {
             var query = _plannedHike.GetBaseQuery();
+
+            query = query.Where(ph => ph.Participants.Any(p => p.UserId == userId));
 
             if (includeTrail)
             {
