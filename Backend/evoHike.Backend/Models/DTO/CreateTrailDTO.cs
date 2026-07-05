@@ -8,5 +8,9 @@ namespace evoHike.Backend.Models.DTO
         public int Difficulty { get; set; }
         public int Time { get; set; }
         public string RouteLine { get; set; } = string.Empty;
+		public List<string>? UserPhotos { get; set; }
+		public CoordinateDTO? StartPoint { get; set; }
+    	public CoordinateDTO? EndPoint { get; set; }
+    	public List<CoordinateDTO>? Waypoints { get; set; }
     }
 }

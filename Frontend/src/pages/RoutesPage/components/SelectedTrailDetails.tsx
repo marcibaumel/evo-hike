@@ -12,6 +12,10 @@ interface SelectedTrailDetailsProps {
 
 export default function SelectedTrailDetails({ trail, pois, map }: SelectedTrailDetailsProps) {
     const { t } = useTranslation();
+    const hours = trail.time /60;
+    const h = Math.floor(hours/60);
+    const m = Math.round((hours - h*60 ));
+    const duration = h > 0 ? `${h}h ${m}m` : `${m}m`;
     return (
         <div className="bg-brand-dark/95 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4">
             <h2 className="flex items-center text-xl font-display font-bold text-white">
@@ -21,7 +25,7 @@ export default function SelectedTrailDetails({ trail, pois, map }: SelectedTrail
             <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-300 border-b border-white/10 pb-4">
                 <span><strong>{t('selectedTrail.distance')}:</strong> {(trail.length / 1000).toFixed(1)} km</span>
                 <span><strong>{t('selectedTrail.elevation')}:</strong> {trail.elevationGain}m</span>
-                <span><strong>{t('selectedTrail.time')}:</strong> {Math.floor(trail.time / 60)}h {trail.time % 60}m</span>
+                <span><strong>{t('selectedTrail.time')}:</strong>{duration}</span>
             </div>
 
             <p className="text-sm text-brand-muted italic leading-relaxed">{trail.description}</p>

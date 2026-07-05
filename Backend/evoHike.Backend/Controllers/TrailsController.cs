@@ -62,5 +62,20 @@ namespace evoHike.Backend.Controllers
         		return BadRequest(ex.Message);
     		}
 		}
+        
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTrail(int id)
+        {
+            try
+            {
+                await _trailService.DeleteTrailAsync(id);
+                return Ok(new { message = "Túra sikeresen törölve!" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"TÖRLÉSI HIBA: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

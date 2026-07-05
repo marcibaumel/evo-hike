@@ -11,7 +11,6 @@ public static class DbInitializer
     {
         if (!context.Database.IsInMemory())
         {
-            context.Database.EnsureDeleted(); 
             context.Database.Migrate();
         }
 

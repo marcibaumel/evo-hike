@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
-import { latLngBounds } from 'leaflet';
 import RoutingMachine from './RoutingMachine';
 import MapContextMenu from './MapContextMenu';
 import MapLegend from './MapLegend';
@@ -13,14 +12,16 @@ import 'leaflet/dist/leaflet.css';
 import { Map } from 'leaflet';
 import type { LeafletMouseEvent, Layer } from 'leaflet';
 import type { OverpassElement } from '../../../api/overpassApi.ts';
-import type { FeatureCollection, Feature, Geometry } from 'geojson';
+import type { FeatureCollection, Feature } from 'geojson';
+import { Trail } from '../../../utils/Trail';
 
-
+import L from 'leaflet';
 
 interface RouteMapProps {
     selectedTrailId?: string;
+    selectedTrail?: Trail | null;
     customGeojson?: FeatureCollection | Feature | null;
-    allGeojson: FeatureCollection<Geometry>;
+    selectedGeojson?: FeatureCollection | Feature | null;
     pois: OverpassElement[];
     onRouteCalculated: (dist: number, time: number, coords: [number, number][]) => void;
     onMapReady: (map: Map) => void;
@@ -47,7 +48,7 @@ const MapEventsHandler = ({ onContextMenu, onClick }: MapEventsHandlerProps) => 
 };
 
 
-export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onRouteCalculated, onMapReady, onTrailClick, onClear, creatingRouteState, points, setPoints }: RouteMapProps) => {
+export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selectedGeojson, pois, onRouteCalculated, onMapReady, onTrailClick, onClear, creatingRouteState, points, setPoints }: RouteMapProps) => {
     const [map, setMap] = useState<Map | null>(null);
     const [selectionMode, setSelectionMode] = useState<'start' | 'end' | 'waypoint' | null>(null);
     const [contextMenu, setContextMenu] = useState<{ x: number, y: number, lat: number, lng: number } | null>(null);
@@ -56,17 +57,19 @@ export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onR
         if (map) onMapReady(map);
     }, [map, onMapReady]);
 
-    const selectedFeature = useMemo(() => {
-        if (!selectedTrailId || !allGeojson?.features) return null;
-        return allGeojson.features.find((f: Feature) => String(f.properties?.id) === String(selectedTrailId));
-    }, [selectedTrailId, allGeojson]);
-
     useEffect(() => {
-        if (map && selectedFeature && selectedFeature.geometry.type === 'LineString') {
-            const coords = (selectedFeature.geometry.coordinates as [number, number][]).map(([lon, lat]) => [lat, lon] as [number, number]);
-            map.fitBounds(latLngBounds(coords), { padding: [50, 50], animate: true });
+        if (map && selectedGeojson) {
+            try {
+                const layer = L.geoJSON(selectedGeojson as any);
+                const bounds = layer.getBounds();
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds, { padding: [50, 50], animate: true });
+                }
+            } catch (e) {
+                console.error("Bounds error", e);
+            }
         }
-    }, [selectedFeature, map]);
+    }, [selectedGeojson, map]);
 
     const handleMapClick = (e: LeafletMouseEvent) => {
         if (contextMenu) {
@@ -157,11 +160,11 @@ export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onR
                     </Marker>
                 ))}
 
-                {selectedFeature && <GeoJSON key={`visual-${selectedTrailId}`} data={selectedFeature} style={visualLayerStyle} />}
-                {selectedFeature && <GeoJSON key={`interact-${selectedTrailId}`} data={selectedFeature} style={interactionLayerStyle} onEachFeature={onEachFeature} />}
+                {selectedGeojson && <GeoJSON key={`visual-${selectedTrailId}`} data={selectedGeojson as any} style={visualLayerStyle} />}
+                {selectedGeojson && <GeoJSON key={`interact-${selectedTrailId}`} data={selectedGeojson as any} style={interactionLayerStyle} onEachFeature={onEachFeature} />}
 
                 {/* Uploaded GPX (Blue dashed line) */}
-                {customGeojson && <GeoJSON key="custom-gpx" data={customGeojson} style={{ ...visualLayerStyle, dashArray: '10, 10' }} />}
+                {customGeojson && <GeoJSON key={`custom-gpx-${Math.random()}`} data={customGeojson as any} style={{ ...visualLayerStyle, dashArray: '10, 10' }} />}
 
                 <MarkerClusterGroup chunkedLoading iconCreateFunction={createClusterCustomIcon}>
                     {pois && pois.length > 0 && pois.map((poi) => (
@@ -205,6 +208,17 @@ export const RouteMap = ({ selectedTrailId, customGeojson, allGeojson, pois, onR
                     }}
                 />
             )}
+            {!creatingRouteState && selectedTrail?.startPoint && (
+                <Marker position={[selectedTrail.startPoint.lat, selectedTrail.startPoint.lng]} icon={startIcon} />
+            )}
+
+            {!creatingRouteState && selectedTrail?.endPoint && (
+                <Marker position={[selectedTrail.endPoint.lat, selectedTrail.endPoint.lng]} icon={endIcon} />
+            )}
+
+            {!creatingRouteState && selectedTrail?.waypoints?.map((p, i) => (
+                <Marker key={`saved-wp-${i}`} position={[p.lat, p.lng]} icon={waypointIcon} />
+            ))}
         </div>
     );
 };

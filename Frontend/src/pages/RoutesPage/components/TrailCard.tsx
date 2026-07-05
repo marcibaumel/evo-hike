@@ -34,10 +34,14 @@ const getDifficultyVariant = (level: number) => {
 
 export const TrailCard = ({ trail, onViewDetails, onDelete }: TrailCardProps) => {
     const { t } = useTranslation();
-    const hours = trail.length / 1000 / 4;
-    const h = Math.floor(hours);
-    const m = Math.round((hours - h) * 60);
+    const hours = trail.time /60;
+    const h = Math.floor(hours/60);
+    const m = Math.round((hours - h*60 ));
     const duration = h > 0 ? `${h}h ${m}m` : `${m}m`;
+
+    const displayImage = trail.coverPhotoPath
+        || (trail.userPhotos && trail.userPhotos.length > 0 ? trail.userPhotos[0] : null)
+        || 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop';
 
     const distanceKm = (trail.length / 1000).toFixed(1);
 
@@ -45,7 +49,7 @@ export const TrailCard = ({ trail, onViewDetails, onDelete }: TrailCardProps) =>
         <Card variant="glass" hoverEffect className="flex flex-col h-full overflow-hidden p-0">
             <div className="relative h-48 overflow-hidden group">
                 <img
-                    src={trail.coverPhotoPath || 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop'}
+                    src={displayImage}
                     alt={trail.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

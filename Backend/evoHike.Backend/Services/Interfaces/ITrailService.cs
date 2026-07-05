@@ -11,5 +11,7 @@ namespace evoHike.Backend.Services.Interfaces
         Task<IEnumerable<PoiDTO>> GetPoisNearTrailAsync(int trailId, double distanceMeters);
         
         Task<TrailDTO> CreateTrailAsync(CreateTrailDTO newTrailDto);
+        
+        Task DeleteTrailAsync(int id);
     }
 }

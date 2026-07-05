@@ -11,7 +11,8 @@ export interface CreateTrailRequest {
     length: number;
     difficulty: number;
     time: number;
-    routeLine: RouteLineGeoJSON; 
+    routeLine: RouteLineGeoJSON;
+    userPhotos?: string[];
 }
 
 export const trailService = {
@@ -23,6 +24,14 @@ export const trailService = {
 
         console.log("--- [Frontend] Küldöm a stringesített adatot ---", payload);
         const response = await apiClient.post('/api/trails', payload);
+        return response.data;
+    },
+    getTrails: async () => {
+        const response = await apiClient.get('/api/trails');
+        return response.data;
+    },
+    deleteTrail: async (id: number) => {
+        const response = await apiClient.delete(`/api/trails/${id}`);
         return response.data;
     }
 };
