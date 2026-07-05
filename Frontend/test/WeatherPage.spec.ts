@@ -3,6 +3,8 @@ import { mockGeocodingResponse, mockWeatherResponse } from './mocks/geocodingRes
 import { authenticatePage } from './auth.setup';
 
 test.describe('WeatherPage', () => {
+    test.use({ viewport: { width: 1280, height: 720 } });
+
     test.beforeEach(async ({ page }) => {
         await authenticatePage(page);
 
@@ -107,6 +109,7 @@ test.describe('WeatherPage', () => {
             await expect(refreshButton).toBeEnabled();
 
             await Promise.all([
+                page.waitForResponse(response => response.url().includes('geocoding-api.open-meteo.com/v1/search')),
                 page.waitForResponse(response => response.url().includes('api.open-meteo.com/v1/forecast')),
                 refreshButton.click()
             ]);
