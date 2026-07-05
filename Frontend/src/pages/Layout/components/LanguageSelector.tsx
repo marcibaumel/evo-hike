@@ -13,6 +13,7 @@ export const LanguageSelector = ({ currentOption, open, onClick }: LanguageSelec
             onClick={onClick}
             className="flex items-center gap-2 p-2 rounded-full hover:bg-white/10 transition-colors duration-200 border border-transparent hover:border-white/10"
             aria-expanded={open}
+            data-testid='lang-switcher-toggle'
             aria-haspopup="menu">
             <img
                 src={currentOption.flagSource}

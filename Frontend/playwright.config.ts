@@ -6,7 +6,7 @@ export default defineConfig({
     fullyParallel: true,
     reporter: 'html',
     use: {
-        // baseURL: 'http://localhost:5173',
+        //baseURL: 'http://localhost:5173',
         trace: 'on-first-retry'
     },
 
@@ -14,11 +14,19 @@ export default defineConfig({
         {
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] }
+        },
+
+        {
+            name: 'mobile',
+            use: {
+                ...devices['iPhone 14']
+            }
         }
     ],
 
     webServer: {
         command: 'npm run dev',
-        url: 'http://localhost:5173'
+        url: 'http://localhost:5173',
+        reuseExistingServer: true
     }
 });
