@@ -111,7 +111,7 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                 <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
 
-                {points.start && points.end && waypoints.length >= 2 && (
+                {!customGeojson && points.start && points.end && waypoints.length >= 2 && (
                     <RoutingMachine
                         waypoints={waypoints}
                         onRouteFound={(s) => onRouteCalculated(s.totalDistance, s.totalTime, s.coordinates)}
@@ -120,6 +120,7 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
 
                 {points.start && (
                     <Marker position={points.start} icon={startIcon}>
+                        {!customGeojson && (
                         <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
                             <button
                                 onClick={() => setPoints(p => ({...p, start: null}))}
@@ -129,11 +130,13 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                                 <MdDelete size={18} />
                             </button>
                         </Popup>
+                        )}
                     </Marker>
                 )}
 
                 {points.end && (
                     <Marker position={points.end} icon={endIcon}>
+                        {!customGeojson && (
                         <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
                             <button
                                 onClick={() => setPoints(p => ({...p, end: null}))}
@@ -143,11 +146,13 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                                 <MdDelete size={18} />
                             </button>
                         </Popup>
+                        )}
                     </Marker>
                 )}
 
                 {points.mids.map((p, i) => (
                     <Marker key={i} position={p} icon={waypointIcon}>
+                        {!customGeojson && (
                         <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
                             <button
                                 onClick={() => setPoints(prev => ({...prev, mids: prev.mids.filter((_, idx) => idx !== i)}))}
@@ -157,14 +162,14 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                                 <MdDelete size={18} />
                             </button>
                         </Popup>
+                        )}
                     </Marker>
                 ))}
 
                 {selectedGeojson && <GeoJSON key={`visual-${selectedTrailId}`} data={selectedGeojson as any} style={visualLayerStyle} />}
                 {selectedGeojson && <GeoJSON key={`interact-${selectedTrailId}`} data={selectedGeojson as any} style={interactionLayerStyle} onEachFeature={onEachFeature} />}
-
-                {/* Uploaded GPX (Blue dashed line) */}
-                {customGeojson && <GeoJSON key={`custom-gpx-${Math.random()}`} data={customGeojson as any} style={{ ...visualLayerStyle, dashArray: '10, 10' }} />}
+                
+                {customGeojson && <GeoJSON key={`custom-gpx-${Math.random()}`} data={customGeojson as any} style={visualLayerStyle} />}
 
                 <MarkerClusterGroup chunkedLoading iconCreateFunction={createClusterCustomIcon}>
                     {pois && pois.length > 0 && pois.map((poi) => (
@@ -177,6 +182,18 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                         </Marker>
                     ))}
                 </MarkerClusterGroup>
+                
+                {!creatingRouteState && selectedTrail?.startPoint && (
+                    <Marker position={[selectedTrail.startPoint.lat, selectedTrail.startPoint.lng]} icon={startIcon} />
+                )}
+
+                {!creatingRouteState && selectedTrail?.endPoint && (
+                    <Marker position={[selectedTrail.endPoint.lat, selectedTrail.endPoint.lng]} icon={endIcon} />
+                )}
+
+                {!creatingRouteState && selectedTrail?.waypoints?.map((p, i) => (
+                    <Marker key={`saved-wp-${i}`} position={[p.lat, p.lng]} icon={waypointIcon} />
+                ))}
             </MapContainer>
 
             <MapLegend />
@@ -208,17 +225,7 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                     }}
                 />
             )}
-            {!creatingRouteState && selectedTrail?.startPoint && (
-                <Marker position={[selectedTrail.startPoint.lat, selectedTrail.startPoint.lng]} icon={startIcon} />
-            )}
 
-            {!creatingRouteState && selectedTrail?.endPoint && (
-                <Marker position={[selectedTrail.endPoint.lat, selectedTrail.endPoint.lng]} icon={endIcon} />
-            )}
-
-            {!creatingRouteState && selectedTrail?.waypoints?.map((p, i) => (
-                <Marker key={`saved-wp-${i}`} position={[p.lat, p.lng]} icon={waypointIcon} />
-            ))}
         </div>
     );
 };

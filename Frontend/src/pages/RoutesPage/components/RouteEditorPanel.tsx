@@ -14,8 +14,7 @@ import {
 } from '@phosphor-icons/react';
 import { useRouteForm } from '../../../hooks/useRouteForm';
 import { useTranslation } from 'react-i18next';
-import { parseGpxToGeoJSON } from '../../../utils/gpxParser';
-import type { FeatureCollection } from 'geojson';
+import { parseGpxToGeoJSON, calculateDistanceInMeters, calculateElevationGain } from '../../../utils/routePlanner.ts';
 import { Button } from '../../../components/Button';
 
 interface RouteEditorPanelProps {
@@ -27,14 +26,16 @@ interface RouteEditorPanelProps {
     onDescriptionChange: (value: string) => void;
     onSave: () => void;
     closeRouteEditor: () => void;
-    onGpxLoaded: (data: FeatureCollection | null) => void;
+    setUploadedGpx: (data: any) => void;
+    setCustomRoute: React.Dispatch<React.SetStateAction<any>>;
+    setPoints: React.Dispatch<React.SetStateAction<any>>;
     disableGpxUpload?: boolean;
     images: File[];
     onImagesChange: (files: File[] | ((prev: File[]) => File[])) => void;
     onReset: () => void;
 }
 
-export default function RouteEditorPanel({name, description, distance, time, onNameChange, onDescriptionChange, onSave, closeRouteEditor, onGpxLoaded, disableGpxUpload, images, onImagesChange, onReset}: RouteEditorPanelProps) {
+export default function RouteEditorPanel({name, description, distance, time, onNameChange, onDescriptionChange, onSave, closeRouteEditor, setUploadedGpx, setCustomRoute, setPoints, disableGpxUpload, images, onImagesChange, onReset}: RouteEditorPanelProps) {
     const { t } = useTranslation();
     const { gpxInputRef, handleGpxChange, triggerGpxInput, gpxFile, clearGpx } = useRouteForm();
     const [showErrors, setShowErrors] = useState(false);
@@ -55,29 +56,72 @@ export default function RouteEditorPanel({name, description, distance, time, onN
         const m = Math.floor((seconds % 3600) / 60);
         return h > 0 ? `${h} ${t('routeForm.hours')} ${m} ${t('routeForm.minutes')}` : `${m} ${t('routeForm.minutes')}`;
     };
-
+    
     useEffect(() => {
         if (gpxFile) {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            
+            reader.onload = async (e) => {
                 const text = e.target?.result;
                 if (typeof text === 'string') {
+                    let parsedGeojson: any = null;
+
                     if (gpxFile.name.toLowerCase().endsWith('.gpx')) {
-                        onGpxLoaded(parseGpxToGeoJSON(text));
+                        parsedGeojson = parseGpxToGeoJSON(text);
                     } else {
                         try {
-                            onGpxLoaded(JSON.parse(text));
+                            parsedGeojson = JSON.parse(text);
                         } catch {
-                            onGpxLoaded(null);
+                            parsedGeojson = null;
                         }
+                    }
+
+                    if (!parsedGeojson) {
+                        setUploadedGpx(null);
+                        return;
+                    }
+                    
+                    setUploadedGpx(parsedGeojson);
+                    
+                    let rawCoords: number[][] = [];
+                    if (parsedGeojson.type === 'Feature' && parsedGeojson.geometry?.type === 'LineString') {
+                        rawCoords = parsedGeojson.geometry.coordinates;
+                    } else if (parsedGeojson.type === 'FeatureCollection') {
+                        const lineStringFeature = parsedGeojson.features.find((f: any) => f.geometry?.type === 'LineString');
+                        if (lineStringFeature) {
+                            rawCoords = lineStringFeature.geometry.coordinates;
+                        }
+                    }
+
+                    if (rawCoords.length > 0) {
+                        const formattedCoords: [number, number][] = rawCoords.map(c => [c[1], c[0]]);
+
+                        const calcDist = calculateDistanceInMeters(formattedCoords);
+                        const gain = await calculateElevationGain(formattedCoords);
+                        const walkingSpeedMetersPerSecond = 4000 / 3600;
+                        const estimatedTimeSeconds = Math.round((calcDist / walkingSpeedMetersPerSecond) + (gain * 6));
+                        
+                        setCustomRoute((prev: any) => ({
+                            ...prev,
+                            distance: calcDist,
+                            time: estimatedTimeSeconds,
+                            elevationGain: gain,
+                            coordinates: formattedCoords
+                        }));
+                        
+                        setPoints((prev: any) => ({
+                            ...prev,
+                            start: formattedCoords[0],
+                            end: formattedCoords[formattedCoords.length - 1],
+                        }));
                     }
                 }
             };
             reader.readAsText(gpxFile);
         } else {
-            onGpxLoaded(null);
+            setUploadedGpx(null);
         }
-    }, [gpxFile, onGpxLoaded]);
+    }, [gpxFile, setUploadedGpx, setCustomRoute, setPoints]);
 
     const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
@@ -171,7 +215,17 @@ export default function RouteEditorPanel({name, description, distance, time, onN
                     <Button variant="secondary" className="w-full justify-between" onClick={disableGpxUpload ? undefined : triggerGpxInput}>
                         <span className="flex items-center gap-2"><UploadSimpleIcon /> {gpxFile ? gpxFile.name : t('routeForm.upload_file')}</span>
                         {gpxFile && <XIcon onClick={(e) => {
-                            e.stopPropagation(); clearGpx();
+                            e.stopPropagation(); 
+                            clearGpx();
+                            setUploadedGpx(null);
+                            setPoints({ start: null, end: null, mids: [] });
+                            setCustomRoute((prev: any) => ({
+                                ...prev,
+                                distance: 0,
+                                time: 0,
+                                elevationGain: 0,
+                                coordinates: []
+                            }));
                         }} />}
                     </Button>
                     <Button variant="primary" className="w-full py-4" onClick={() => isFormValid ? onSave() : setShowErrors(true)}>

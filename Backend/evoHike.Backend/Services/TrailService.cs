@@ -80,6 +80,7 @@ namespace evoHike.Backend.Services
                 TrailName = dto.Name,
                 Description = dto.Description,
                 Length = dto.Length,
+				Elevation = dto.ElevationGain,
                 Difficulty = dto.Difficulty,
                 EstimatedDuration = dto.Time,
                 RouteLine = geometryRoute, 
@@ -91,7 +92,6 @@ namespace evoHike.Backend.Services
                 TrailSymbol = "Egyéni",
                 Rating = 0,
                 ReviewCount = 0,
-                Elevation = 0,
 
 				StartPoint = dto.StartPoint != null ? new Point(dto.StartPoint.Lng, dto.StartPoint.Lat) { SRID = 4326 } : null,
    				EndPoint = dto.EndPoint != null ? new Point(dto.EndPoint.Lng, dto.EndPoint.Lat) { SRID = 4326 } : null,

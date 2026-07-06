@@ -1,6 +1,6 @@
 import { Trail } from '../../../utils/Trail';
 import type { OverpassElement } from '../../../api/overpassApi';
-import { MapPinIcon, CameraIcon, MapTrifoldIcon } from '@phosphor-icons/react';
+import { MapPinIcon, CameraIcon, MapTrifoldIcon,XIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
 import {Map} from 'leaflet';
 
@@ -8,9 +8,10 @@ interface SelectedTrailDetailsProps {
     trail: Trail;
     pois: OverpassElement[];
     map: Map | null;
+    onClose: () => void
 }
 
-export default function SelectedTrailDetails({ trail, pois, map }: SelectedTrailDetailsProps) {
+export default function SelectedTrailDetails({ trail, pois, map,onClose }: SelectedTrailDetailsProps) {
     const { t } = useTranslation();
     const hours = trail.time /60;
     const h = Math.floor(hours/60);
@@ -18,6 +19,12 @@ export default function SelectedTrailDetails({ trail, pois, map }: SelectedTrail
     const duration = h > 0 ? `${h}h ${m}m` : `${m}m`;
     return (
         <div className="bg-brand-dark/95 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4">
+            <button
+                onClick={onClose}
+                className="p-2 rounded-full text-brand-muted hover:text-white hover:bg-white/10 transition-colors"
+            >
+                <XIcon size={20} />
+            </button>
             <h2 className="flex items-center text-xl font-display font-bold text-white">
                 <MapPinIcon className="text-red-500 mr-2" size={28} weight="fill" /> {trail.name}
             </h2>
@@ -52,7 +59,6 @@ export default function SelectedTrailDetails({ trail, pois, map }: SelectedTrail
                                     className="text-left group w-full"
                                 >
                                     <span className="text-brand-accent group-hover:underline font-bold text-sm">{poi.tags?.name}</span>
-                                    <span className="text-brand-muted text-xs block">({poi.tags?.tourism || poi.tags?.natural || 'POI'})</span>
                                 </button>
                             </li>
                         ))}
