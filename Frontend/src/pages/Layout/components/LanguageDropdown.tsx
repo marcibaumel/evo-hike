@@ -8,12 +8,13 @@ interface LanguageDropdownProps {
 
 export const LanguageDropdown = ({ options, currentOption, onSelect }: LanguageDropdownProps) => {
     return (
-        <div className="absolute right-0 mt-2 w-48 py-2 bg-brand-card/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl origin-top-right animate-in fade-in zoom-in-95 duration-200">
+        <div data-testid='lang-dropdown' className="absolute z-50 right-0 mt-2 w-48 py-2 bg-brand-card/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl origin-top-right animate-in fade-in zoom-in-95 duration-200">
             {options.map((option) => {
                 const isActive = option.code === currentOption.code;
                 return (
                     <button
                         key={option.code}
+                        data-testid={'lang-option-' + option.short}
                         onClick={() => onSelect(option.code)}
                         disabled={isActive}
                         className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors duration-200

@@ -74,7 +74,7 @@ function Navbar() {
 
                 {/* Desktop Navigation */}
                 {isAuthenticated && (
-                    <div className="hidden md:flex items-center space-x-10">
+                    <div className="hidden md:flex items-center space-x-10" data-testid='desktop-navbar'>
                         <NavbarLink to="/routes">{t('navbarLink1')}</NavbarLink>
                         <NavbarLink to="/weather">{t('navbarLink2')}</NavbarLink>
                         <NavbarLink to="/journal">{t('navbarLink3')}</NavbarLink>
@@ -103,14 +103,17 @@ function Navbar() {
                     {/* Mobile Toggle */}
                     <button
                         onClick={() => setOpen(!open)}
-                        className="p-2 text-brand-muted hover:text-white md:hidden transition-colors">
+                        className="p-2 text-brand-muted hover:text-white md:hidden transition-colors"
+                        data-testid="mobile-menu-toggle"
+                        aria-label="Toggle menu">
                         {open ? <XIcon size={28} /> : <ListIcon size={28} />}
                     </button>
                 </div>
 
                 {/* Mobile Menu Dropdown */}
                 <div
-                    className={`absolute top-20 left-0 w-full bg-brand-dark/95 backdrop-blur-3xl border-b border-white/10 md:hidden transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) overflow-hidden ${open ? 'max-h-125 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'
+                    data-testid='mobile-menu-dropdown'
+                    className={`absolute top-20 left-0 w-full bg-brand-dark/95 backdrop-blur-3xl border-b border-white/10 md:hidden transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) overflow-visible ${open ? 'max-h-125 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'
                     }`}>
                     <ul className="flex flex-col p-6 space-y-4">
                         {isAuthenticated && (
@@ -129,12 +132,13 @@ function Navbar() {
                         )}
                         <li className='pt-6 border-t border-white/10 flex flex-col gap-6'>
                             {isAuthenticated ? (
-                                <button onClick={handleLogout} className='w-full text-center py-3 rounded-xl bg-red-500/80 text-white font-bold'>
+                                <button onClick={handleLogout} data-testid='btn-logout' className='w-full text-center py-3 rounded-xl bg-red-500/80 text-white font-bold'>
                                     {t('logout')}
                                 </button>
                             ) : (
                                 <NavLink
                                     to='/login'
+                                    data-testid='btn-login'
                                     className='w-full text-center py-3 rounded-xl bg-brand-accent text-brand-dark font-bold'>
                                     {t('navbarLink6')}
                                 </NavLink>

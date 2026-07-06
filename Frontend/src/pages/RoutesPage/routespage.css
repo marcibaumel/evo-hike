@@ -1,0 +1,14 @@
+.custom-delete-popup .leaflet-popup-content-wrapper {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.custom-delete-popup .leaflet-popup-content {
+    margin: 0 !important;
+    width: auto !important;
+}
+
+.custom-delete-popup .leaflet-popup-tip-container {
+    display: none !important; 
+}
