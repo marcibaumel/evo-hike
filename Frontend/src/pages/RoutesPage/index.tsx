@@ -397,7 +397,6 @@ export default function RoutePage() {
                 )}
             </div>
 
-            {/* main ág: Részletes térkép nézet */}
             <div className="relative flex-1 h-full">
                 <RouteMap
                     selectedTrailId={selectedTrail?.id}
@@ -419,7 +418,6 @@ export default function RoutePage() {
                 )}
             </div>
 
-            {/* HIKE-33: Dátum választó (Planner) Modal */}
             {planningTrail && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
                     <div className="bg-brand-dark border border-white/10 p-6 rounded-2xl w-full max-w-md space-y-6">
