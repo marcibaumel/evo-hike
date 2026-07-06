@@ -36,7 +36,7 @@ export class Trail {
         startPoint?: { lat: number, lng: number } | null;
         endPoint?: { lat: number, lng: number } | null;
         waypoints?: { lat: number, lng: number }[];
-        
+
     }) {
         this.id = data.id;
         this.name = data.name;

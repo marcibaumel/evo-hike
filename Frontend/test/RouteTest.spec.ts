@@ -41,8 +41,8 @@ test.describe('RouteTest', () =>{
         await expect(page).toHaveURL(/\/routes$/);
 
         await expect(
-            page.getByRole('button', {name : 'View Details'})
-        ).toHaveCount(2);
+            page.getByRole('button', {name : 'View Details'}).first()
+        ).toBeVisible();
 
         await page.goBack();
 

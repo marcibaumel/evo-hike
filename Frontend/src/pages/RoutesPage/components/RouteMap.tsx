@@ -60,13 +60,15 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
     useEffect(() => {
         if (map && selectedGeojson) {
             try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const layer = L.geoJSON(selectedGeojson as any);
                 const bounds = layer.getBounds();
                 if (bounds.isValid()) {
                     map.fitBounds(bounds, { padding: [50, 50], animate: true });
                 }
             } catch (e) {
-                console.error("Bounds error", e);
+                /* eslint-disable no-console */
+                console.error('Bounds error', e);
             }
         }
     }, [selectedGeojson, map]);
@@ -121,15 +123,15 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                 {points.start && (
                     <Marker position={points.start} icon={startIcon}>
                         {!customGeojson && (
-                        <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
-                            <button
-                                onClick={() => setPoints(p => ({...p, start: null}))}
-                                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
-                                title="Pont törlése"
-                            >
-                                <MdDelete size={18} />
-                            </button>
-                        </Popup>
+                            <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
+                                <button
+                                    onClick={() => setPoints(p => ({...p, start: null}))}
+                                    className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
+                                    title="Pont törlése"
+                                >
+                                    <MdDelete size={18} />
+                                </button>
+                            </Popup>
                         )}
                     </Marker>
                 )}
@@ -137,15 +139,15 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                 {points.end && (
                     <Marker position={points.end} icon={endIcon}>
                         {!customGeojson && (
-                        <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
-                            <button
-                                onClick={() => setPoints(p => ({...p, end: null}))}
-                                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
-                                title="Pont törlése"
-                            >
-                                <MdDelete size={18} />
-                            </button>
-                        </Popup>
+                            <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
+                                <button
+                                    onClick={() => setPoints(p => ({...p, end: null}))}
+                                    className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
+                                    title="Pont törlése"
+                                >
+                                    <MdDelete size={18} />
+                                </button>
+                            </Popup>
                         )}
                     </Marker>
                 )}
@@ -153,23 +155,32 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                 {points.mids.map((p, i) => (
                     <Marker key={i} position={p} icon={waypointIcon}>
                         {!customGeojson && (
-                        <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
-                            <button
-                                onClick={() => setPoints(prev => ({...prev, mids: prev.mids.filter((_, idx) => idx !== i)}))}
-                                className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
-                                title="Pont törlése"
-                            >
-                                <MdDelete size={18} />
-                            </button>
-                        </Popup>
+                            <Popup closeButton={false} autoPan={false} className="custom-delete-popup">
+                                <button
+                                    onClick={() => setPoints(prev => ({...prev, mids: prev.mids.filter((_, idx) => idx !== i)}))}
+                                    className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors duration-200 flex items-center justify-center cursor-pointer"
+                                    title="Pont törlése"
+                                >
+                                    <MdDelete size={18} />
+                                </button>
+                            </Popup>
                         )}
                     </Marker>
                 ))}
 
-                {selectedGeojson && <GeoJSON key={`visual-${selectedTrailId}`} data={selectedGeojson as any} style={visualLayerStyle} />}
-                {selectedGeojson && <GeoJSON key={`interact-${selectedTrailId}`} data={selectedGeojson as any} style={interactionLayerStyle} onEachFeature={onEachFeature} />}
-                
-                {customGeojson && <GeoJSON key={`custom-gpx-${Math.random()}`} data={customGeojson as any} style={visualLayerStyle} />}
+                {selectedGeojson && (
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    <GeoJSON key={`visual-${selectedTrailId}`} data={selectedGeojson as any} style={visualLayerStyle} />
+                )}
+                {selectedGeojson && (
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    <GeoJSON key={`interact-${selectedTrailId}`} data={selectedGeojson as any} style={interactionLayerStyle} onEachFeature={onEachFeature} />
+                )}
+
+                {customGeojson && (
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    <GeoJSON key={`custom-gpx-${Math.random()}`} data={customGeojson as any} style={visualLayerStyle} />
+                )}
 
                 <MarkerClusterGroup chunkedLoading iconCreateFunction={createClusterCustomIcon}>
                     {pois && pois.length > 0 && pois.map((poi) => (
@@ -182,7 +193,7 @@ export const RouteMap = ({ selectedTrailId,selectedTrail, customGeojson, selecte
                         </Marker>
                     ))}
                 </MarkerClusterGroup>
-                
+
                 {!creatingRouteState && selectedTrail?.startPoint && (
                     <Marker position={[selectedTrail.startPoint.lat, selectedTrail.startPoint.lng]} icon={startIcon} />
                 )}

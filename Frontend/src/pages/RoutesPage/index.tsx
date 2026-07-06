@@ -40,7 +40,7 @@ export default function RoutePage() {
         elevationGain: 0,
         coordinates: [] as [number, number][]
     });
-    
+
     const [uploadedGpx, setUploadedGpx] = useState<FeatureCollection | null>(null);
     const [routeImages, setRouteImages] = useState<File[]>([]);
     const [points, setPoints] = useState<{
@@ -53,7 +53,7 @@ export default function RoutePage() {
         const fetchTrails = async () => {
             try {
                 const data = await trailService.getTrails();
-                
+
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const mappedTrails = data.map((t: any) => {
                     let diffLevel: DifficultyLevel = 0;
@@ -82,7 +82,7 @@ export default function RoutePage() {
                         waypoints: (t.waypoints as { lat: number, lng: number }[]) || []
                     });
                 });
-                
+
                 setTrails(mappedTrails);
             } catch (error) {
                 console.error('Nem sikerült letölteni a túrákat a backendről:', error);
@@ -116,12 +116,12 @@ export default function RoutePage() {
                 if (geoData.type === 'Feature' && geoData.geometry?.type === 'LineString') {
                     fetchPOIs(geoData.geometry.coordinates as [number, number][]);
                 } else if (geoData.type === 'FeatureCollection') {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const lineStringFeature = geoData.features.find((f: any) => f.geometry?.type === 'LineString');
                     if (lineStringFeature && lineStringFeature.geometry?.type === 'LineString') {
                         fetchPOIs(lineStringFeature.geometry.coordinates as [number, number][]);
                     }
-                }
-                else if (geoData.type === 'LineString') {
+                } else if (geoData.type === 'LineString') {
                     fetchPOIs(geoData.coordinates as [number, number][]);
                 }
             } else {
@@ -168,7 +168,7 @@ export default function RoutePage() {
 
         try {
             const savedTrailDTO = await trailService.createTrail(payload);
-            
+
             const newTrail = new Trail({
                 id: String(savedTrailDTO.id),
                 name: savedTrailDTO.name || payload.name,
@@ -185,18 +185,18 @@ export default function RoutePage() {
                 geojson: uploadedGpx || ({
                     type: 'Feature',
                     properties: { id: String(savedTrailDTO.id), name: savedTrailDTO.name || payload.name },
-                    geometry: { 
+                    geometry: {
                         type: 'LineString',
                         coordinates: customRoute.coordinates.map((c): [number, number] => [c[1], c[0]])
                     }
-                    
+
                 } as Feature),
-                
+
                 startPoint: savedTrailDTO.startPoint || payload.startPoint,
                 endPoint: savedTrailDTO.endPoint || payload.endPoint,
                 waypoints: savedTrailDTO.waypoints || payload.waypoints || []
             });
-            
+
             setTrails(prev => [newTrail, ...prev]);
 
             setView('list');
@@ -224,7 +224,7 @@ export default function RoutePage() {
         setSelectedTrail(null);
         setPois([]);
     };
-    
+
 
     const handleResetForm = () => {
         setRouteImages([]);
@@ -235,7 +235,7 @@ export default function RoutePage() {
     };
 
     const handleDeleteTrail = async (id: string) => {
-        if (!window.confirm("Biztosan törölni szeretnéd ezt a túrát?")) return;
+        if (!window.confirm('Biztosan törölni szeretnéd ezt a túrát?')) return;
 
         try {
             await trailService.deleteTrail(Number(id));
@@ -245,8 +245,8 @@ export default function RoutePage() {
                 setPois([]);
             }
         } catch (error) {
-            console.error("Hiba a backend törlés során:", error);
-            alert("Nem sikerült törölni a túrát! (Lehet, hogy ez egy védett fejlesztői ajánlás, vagy megszakadt a kapcsolat.)");
+            console.error('Hiba a backend törlés során:', error);
+            alert('Nem sikerült törölni a túrát! (Lehet, hogy ez egy védett fejlesztői ajánlás, vagy megszakadt a kapcsolat.)');
         }
     };
 

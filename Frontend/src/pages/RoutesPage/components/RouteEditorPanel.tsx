@@ -26,9 +26,12 @@ interface RouteEditorPanelProps {
     onDescriptionChange: (value: string) => void;
     onSave: () => void;
     closeRouteEditor: () => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setUploadedGpx: (data: any) => void;
-    setCustomRoute: React.Dispatch<React.SetStateAction<any>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setPoints: React.Dispatch<React.SetStateAction<any>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setCustomRoute: React.Dispatch<React.SetStateAction<any>>;
     disableGpxUpload?: boolean;
     images: File[];
     onImagesChange: (files: File[] | ((prev: File[]) => File[])) => void;
@@ -56,14 +59,15 @@ export default function RouteEditorPanel({name, description, distance, time, onN
         const m = Math.floor((seconds % 3600) / 60);
         return h > 0 ? `${h} ${t('routeForm.hours')} ${m} ${t('routeForm.minutes')}` : `${m} ${t('routeForm.minutes')}`;
     };
-    
+
     useEffect(() => {
         if (gpxFile) {
             const reader = new FileReader();
-            
+
             reader.onload = async (e) => {
                 const text = e.target?.result;
                 if (typeof text === 'string') {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     let parsedGeojson: any = null;
 
                     if (gpxFile.name.toLowerCase().endsWith('.gpx')) {
@@ -80,13 +84,14 @@ export default function RouteEditorPanel({name, description, distance, time, onN
                         setUploadedGpx(null);
                         return;
                     }
-                    
+
                     setUploadedGpx(parsedGeojson);
-                    
+
                     let rawCoords: number[][] = [];
                     if (parsedGeojson.type === 'Feature' && parsedGeojson.geometry?.type === 'LineString') {
                         rawCoords = parsedGeojson.geometry.coordinates;
                     } else if (parsedGeojson.type === 'FeatureCollection') {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         const lineStringFeature = parsedGeojson.features.find((f: any) => f.geometry?.type === 'LineString');
                         if (lineStringFeature) {
                             rawCoords = lineStringFeature.geometry.coordinates;
@@ -100,7 +105,8 @@ export default function RouteEditorPanel({name, description, distance, time, onN
                         const gain = await calculateElevationGain(formattedCoords);
                         const walkingSpeedMetersPerSecond = 4000 / 3600;
                         const estimatedTimeSeconds = Math.round((calcDist / walkingSpeedMetersPerSecond) + (gain * 6));
-                        
+
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         setCustomRoute((prev: any) => ({
                             ...prev,
                             distance: calcDist,
@@ -108,11 +114,12 @@ export default function RouteEditorPanel({name, description, distance, time, onN
                             elevationGain: gain,
                             coordinates: formattedCoords
                         }));
-                        
+
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         setPoints((prev: any) => ({
                             ...prev,
                             start: formattedCoords[0],
-                            end: formattedCoords[formattedCoords.length - 1],
+                            end: formattedCoords[formattedCoords.length - 1]
                         }));
                     }
                 }
@@ -215,10 +222,11 @@ export default function RouteEditorPanel({name, description, distance, time, onN
                     <Button variant="secondary" className="w-full justify-between" onClick={disableGpxUpload ? undefined : triggerGpxInput}>
                         <span className="flex items-center gap-2"><UploadSimpleIcon /> {gpxFile ? gpxFile.name : t('routeForm.upload_file')}</span>
                         {gpxFile && <XIcon onClick={(e) => {
-                            e.stopPropagation(); 
+                            e.stopPropagation();
                             clearGpx();
                             setUploadedGpx(null);
                             setPoints({ start: null, end: null, mids: [] });
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             setCustomRoute((prev: any) => ({
                                 ...prev,
                                 distance: 0,

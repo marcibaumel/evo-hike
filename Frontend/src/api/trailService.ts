@@ -22,7 +22,6 @@ export const trailService = {
             routeLine: JSON.stringify(data.routeLine)
         };
 
-        console.log("--- [Frontend] Küldöm a stringesített adatot ---", payload);
         const response = await apiClient.post('/api/trails', payload);
         return response.data;
     },
