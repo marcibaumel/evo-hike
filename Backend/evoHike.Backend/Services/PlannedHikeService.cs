@@ -19,7 +19,7 @@ namespace evoHike.Backend.Services
         {
             var query = _plannedHike.GetBaseQuery();
 
-            query = query.Where(ph => ph.Participants.Any(p => p.UserId == userId));
+            query = query.Where(ph => ph.OrganizerId == userId || ph.Participants.Any(p => p.UserId == userId));
 
             if (includeTrail)
             {
@@ -60,7 +60,6 @@ namespace evoHike.Backend.Services
                                 ? JsonSerializer.Serialize(request.ChecklistItems)
                                 : null,
                 CreatedAt = DateTime.UtcNow,
-
                 OrganizerId = userId
             };
             var createdHike = await _plannedHike.AddHikeAsync(newPlan);
