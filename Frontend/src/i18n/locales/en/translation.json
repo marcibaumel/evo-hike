@@ -1,25 +1,259 @@
 {
-  "social": "Social",
-  "weather": "Weather",
+  "auth": {
+    "confirm_password_label": "Confirm password",
+    "email_label": "Email Address",
+    "error_email_invalid": "Please enter a valid email address.",
+    "error_email_taken": "This email is already registered.",
+    "error_generic": "Something went wrong. Please try again.",
+    "error_invalid": "Invalid email or password.",
+    "error_password_format": "Password must be at least 8 characters, with upper, lower, number, and special characters.",
+    "error_password_match": "Passwords do not match.",
+    "error_required_fields": "Please fill in all required fields.",
+    "error_username_length": "Username must be between 3 and 20 characters.",
+    "have_account": "Already have an account?",
+    "link_login": "Login here",
+    "link_register": "Register here",
+    "login_btn": "Sign In",
+    "login_title": "Welcome Back",
+    "no_account": "Don't have an account?",
+    "password_label": "Password",
+    "register_btn": "Create Account",
+    "register_title": "Join the Adventure",
+    "username_label": "Username"
+  },
+  "checklist": {
+    "first_aid": "First Aid Kit",
+    "food": "Food / Energy bar",
+    "map": "Map (Offline) / GPS",
+    "phone": "Charged phone + Powerbank",
+    "raincoat": "Raincoat / Spare clothes",
+    "water": "Sufficient water (1.5L+)"
+  },
   "clickHere": "Click here",
+  "dashboard": {
+    "badges": {
+      "title": "Recent Badges"
+    },
+    "checklist": {
+      "edit_button": "Edit Checklist",
+      "items": {
+        "boots": "Clean hiking boots",
+        "first_aid": "Pack first aid kit",
+        "offline_maps": "Download offline maps",
+        "power_bank": "Charge power bank",
+        "weather_check": "Check weather forecast"
+      },
+      "title": "Expedition Prep"
+    },
+    "memories": {
+      "title": "Recent Memories",
+      "view_all": "View All"
+    },
+    "stats": {
+      "distance": "Distance",
+      "elevation": "Elevation",
+      "hikes": "Hikes"
+    },
+    "upcoming": {
+      "days_left": "{{count}} Days to go",
+      "title": "Upcoming Adventures"
+    }
+  },
+  "filterPage": {
+    "adjustFilters": "Adjust filters",
+    "done": "Kész",
+    "filterTrails": "Filter trails",
+    "noMatch": "No trails match your filters.",
+    "reset": "Alaphelyzet"
+  },
+  "joinHike": {
+    "title": "Join Hike",
+    "in_progress": "Joining hike in progress...",
+    "login_required": "Please log in to evoHike first!",
+    "success": "Successfully joined! Redirecting to journal...",
+    "error_prefix": "Error occurred: ",
+    "network_error": "A network error occurred while joining."
+  },
+  "journal": {
+    "share_success": "The connection link has been copied to your clipboard! Send it to your friends.",
+    "share_error": "Error while copying: ",
+    "share_button": "Share Hike",
+    "loading": "Loading hikes...",
+    "empty_state": "You don't have any planned hikes yet. Create one on the Route page!",
+    "no_active_trail": "No active trail"
+  },
+  "landing": {
+    "features": {
+      "community_desc": "Share your journals, photos, and tips with fellow hikers.",
+      "community_title": "Community",
+      "maps_desc": "Plan detailed routes with elevation profiles, waypoints, and offline capabilities. Never lose your way again.",
+      "maps_title": "Interactive Routes",
+      "stat_mapped": "National Parks Mapped",
+      "subtitle": "Advanced tools designed for the modern hiker. From planning to tracking, we've got you covered.",
+      "title": "Everything you need",
+      "weather_desc": "Real-time updates and forecasts for your specific trail location.",
+      "weather_title": "Live Weather"
+    },
+    "hero": {
+      "badge": "Explore the Unseen",
+      "cta_primary": "Start Planning",
+      "cta_secondary": "View Community",
+      "description": "Discover hidden trails, track your journey, and connect with a community of explorers. Your next great adventure starts here.",
+      "stat_distance": "Total Distance",
+      "stat_elevation": "Elevation Gain",
+      "title_prefix": "Wilderness",
+      "title_suffix": "Awaits."
+    }
+  },
+  "logout": "Logout",
   "mainMenuH1": "Weather Forecast from C# Backend",
-  "routePageH1": "Routing planning",
+  "mapLegend": {
+    "attraction": "Attraction",
+    "castle": "Castle",
+    "cave": "Cave",
+    "church": "Church",
+    "drinking_water": "Drinking water",
+    "historic": "Historic",
+    "monument": "Monument",
+    "museum": "Museum",
+    "natural": "Natural",
+    "peak": "Peak",
+    "restaurant": "Restaurant",
+    "ruins": "Ruins",
+    "service": "Service",
+    "spring": "Spring",
+    "title": "Legend",
+    "tourism": "Tourism",
+    "viewpoint": "Viewpoint",
+    "waterfall": "Waterfall"
+  },
   "navbarLink1": "Planner",
   "navbarLink2": "Weather",
   "navbarLink3": "Journal",
   "navbarLink4": "Social",
   "navbarLink5": "Contacts",
   "navbarLink6": "Login",
-  "logout": "Logout",
-  "weatherForecast": "Weather Forecast",
+  "notFound": {
+    "backToHome": "Back to home",
+    "contact": "Contact us",
+    "description": "Congratulations, you've successfully gone off the map! Only the wilderness (and this 404 error) awaits you here. Let's find a safer, well-marked trail instead.",
+    "title": "Oops! Page not found."
+  },
+  "plan": {
+    "cancel": "Cancel",
+    "checklist_title": "Checklist",
+    "end_date": "End Date",
+    "error_date": "Invalid date range.",
+    "error_past_date": "Start date cannot be in the past.",
+    "error_save": "Error while saving.",
+    "save": "Save",
+    "saving": "Saving...",
+    "start_date": "Start Date",
+    "success": "Saved successfully!",
+    "title": "Plan Hike"
+  },
   "refresh": "Refresh",
-  "weatherTime": "Time",
-  "weatherTemperature": "Temperature",
-  "weatherFeelsLike": "Feels Like",
-  "weatherWind": "Wind",
-  "weatherVapor": "Vapor",
-  "weatherPrecipitation": "Precipitation",
-  "weatherDescription": "Description",
+  "route": {
+    "active_trails": "Active Trails",
+    "search_placeholder": "Find a trail...",
+    "showing_count": "Showing {{count}} trails",
+    "stats": {
+      "dist": "Dist",
+      "elev": "Elev",
+      "time": "Time"
+    },
+    "view_details": "View Details"
+  },
+  "routeForm": {
+    "add_photo": "Add photo",
+    "add_route": "Add Route",
+    "cancel": "Cancel",
+    "close_menu": "Close menu",
+    "description_label": "Description",
+    "description_placeholder": "E.g. EXTREME AND VERY dangerous because there are many pirates here !!4",
+    "distance": "Distance",
+    "hours": "h",
+    "image_alt": "trail image",
+    "image_too_big": "Image too large! Max 5MB allowed.",
+    "manual_nav_active": "Manual navigation active. Clear navigation first!",
+    "minutes": "m",
+    "name_placeholder": "E.g. Hike to the treasure",
+    "or": "OR",
+    "poi": {
+      "description": "Description",
+      "name": "Name",
+      "new": "+ Add new",
+      "poi": "Point of Interests"
+    },
+    "route_name": "Trail name",
+    "save": "Save",
+    "time": "Time",
+    "title": "Route Planner",
+    "trail_description": "Short description...",
+    "upload_file": "File Upload (.gpx)"
+  },
+  "routePage": {
+    "addWaypoint": "Add waypoint",
+    "clearNav": "Clear navigation",
+    "custom_route": "Custom Route",
+    "delete": "Delete",
+    "endPoint": "End point",
+    "enter_route_name": "Please enter a route name.",
+    "gpxLoadedError": "GPX file loaded. Clear navigation for manual planning!",
+    "intermediatePoint": "Intermediate point",
+    "navFrom": "Navigate from here",
+    "navTo": "Navigate to here",
+    "routeSaved": "Route saved",
+    "route_save_error": "Failed to create the tour in the database.",
+    "route_saved_success": "The tour has been successfully added to the database!",
+    "schedule_error": "Failed to schedule tour.",
+    "schedule_success": "Tour successfully scheduled! Check it out on the Journal page.",
+    "startPoint": "Start point",
+    "test_data_error": "This tour cannot be planned because it is only test data. Please create a new tour on the map!",
+    "unnamed_route": "Unnamed Route"
+  },
+  "routePageH1": "Routing planning",
+  "selectedTrail": {
+    "distance": "Dist",
+    "elevation": "Elev",
+    "hour": "h",
+    "items": "items",
+    "jump_to_map": "Jump to map",
+    "location": "Location",
+    "minute": "min",
+    "nearby_pois": "Nearby POIs along the route",
+    "photo_alt": "Trail photo",
+    "selected": "Selected",
+    "time": "Time",
+    "user_photos": "User photos"
+  },
+  "social": "Social",
+  "social_page": {
+    "create_post_placeholder": "Start a new post...",
+    "page_subtitle": "Share your adventures and discover new paths from the community.",
+    "page_title": "Community Feed"
+  },
+  "trail": {
+    "button_text": "To Planner",
+    "difficulties": {
+      "0": "Easy",
+      "1": "Medium",
+      "2": "Hard",
+      "3": "Extreme"
+    },
+    "difficulty_label": "Difficulty",
+    "distance": "Distance",
+    "elevation": "Elevation",
+    "rating": "Rating",
+    "time": "Max Time",
+    "timePlaceholder": "e.g. 120"
+  },
+  "trailList": {
+    "difficulty_level": "Difficulty level",
+    "filter": "Filter",
+    "search_title": "Route Search"
+  },
+  "weather": "Weather",
   "weatherCodes": {
     "0": "Clear sky",
     "1": "Mainly clear",
@@ -50,259 +284,34 @@
     "96": "Thunderstorm with slight hail",
     "99": "Thunderstorm with heavy hail"
   },
-  "trail": {
-    "difficulty_label": "Difficulty",
-    "distance": "Distance",
-    "elevation": "Elevation",
-    "rating": "Rating",
-    "button_text": "To Planner",
-    "difficulties": {
-      "0": "Easy",
-      "1": "Medium",
-      "2": "Hard",
-      "3": "Extreme"
-    }
-  },
-  "landing": {
-    "hero": {
-      "badge": "Explore the Unseen",
-      "title_prefix": "Wilderness",
-      "title_suffix": "Awaits.",
-      "description": "Discover hidden trails, track your journey, and connect with a community of explorers. Your next great adventure starts here.",
-      "cta_primary": "Start Planning",
-      "cta_secondary": "View Community",
-      "stat_distance": "Total Distance",
-      "stat_elevation": "Elevation Gain"
-    },
-    "features": {
-      "title": "Everything you need",
-      "subtitle": "Advanced tools designed for the modern hiker. From planning to tracking, we've got you covered.",
-      "maps_title": "Interactive Routes",
-      "maps_desc": "Plan detailed routes with elevation profiles, waypoints, and offline capabilities. Never lose your way again.",
-      "weather_title": "Live Weather",
-      "weather_desc": "Real-time updates and forecasts for your specific trail location.",
-      "community_title": "Community",
-      "community_desc": "Share your journals, photos, and tips with fellow hikers.",
-      "stat_mapped": "National Parks Mapped"
-    }
-  },
-  "route": {
-    "search_placeholder": "Find a trail...",
-    "showing_count": "Showing {{count}} trails",
-    "active_trails": "Active Trails",
-    "view_details": "View Details",
-    "stats": {
-      "dist": "Dist",
-      "elev": "Elev",
-      "time": "Time"
-    }
-  },
-  "social_page": {
-    "page_title": "Community Feed",
-    "page_subtitle": "Share your adventures and discover new paths from the community.",
-    "create_post_placeholder": "Start a new post..."
-  },
-  "dashboard": {
-    "stats": {
-      "hikes": "Hikes",
-      "distance": "Distance",
-      "elevation": "Elevation"
-    },
-    "upcoming": {
-      "title": "Upcoming Adventures",
-      "days_left": "{{count}} Days to go"
-    },
-    "memories": {
-      "title": "Recent Memories",
-      "view_all": "View All"
-    },
-    "checklist": {
-      "title": "Expedition Prep",
-      "edit_button": "Edit Checklist",
-      "items": {
-        "offline_maps": "Download offline maps",
-        "weather_check": "Check weather forecast",
-        "first_aid": "Pack first aid kit",
-        "power_bank": "Charge power bank",
-        "boots": "Clean hiking boots"
-      }
-    },
-    "badges": {
-      "title": "Recent Badges"
-    }
-  },
+  "weatherDescription": "Description",
+  "weatherFeelsLike": "Feels Like",
+  "weatherForecast": "Weather Forecast",
+  "weatherPrecipitation": "Precipitation",
+  "weatherTemperature": "Temperature",
+  "weatherTime": "Time",
+  "weatherVapor": "Vapor",
+  "weatherWind": "Wind",
   "weather_page": {
     "current_weather": "Current Weather",
-    "unknown_conditions": "Unknown Conditions",
-    "next_48h": "Next 48 Hours",
-    "units": {
-      "meters_per_sec": "meters / sec",
-      "percent": "%"
+    "error": {
+      "failed": "Failed to load forecast",
+      "retry": "Retry"
     },
     "labels": {
       "humidity": "Humidity",
       "precip_chance": "Precipitation Chance",
       "probability": "probability"
     },
+    "next_48h": "Next 48 Hours",
     "status": {
       "expect_rain": "Expect Rain",
       "likely_dry": "Likely Dry"
     },
-    "error": {
-      "failed": "Failed to load forecast",
-      "retry": "Retry"
-    }
-  },
-  "routeForm": {
-    "route_name": "Trail name",
-    "add_photo": "Add photo",
-    "upload_file": "File Upload (.gpx)",
-    "trail_description": "Short description...",
-    "poi": {
-      "poi": "Point of Interests",
-      "name": "Name",
-      "description": "Description",
-      "new": "+ Add new"
+    "units": {
+      "meters_per_sec": "meters / sec",
+      "percent": "%"
     },
-    "save": "Save",
-    "cancel": "Cancel",
-    "title": "Route Planner",
-    "close_menu": "Close menu",
-    "name_placeholder": "E.g. Hike to the treasure",
-    "description_label": "Description",
-    "description_placeholder": "E.g. EXTREME AND VERY dangerous because there are many pirates here !!4",
-    "distance": "Distance",
-    "time": "Time",
-    "image_alt": "trail image",
-    "add_route": "Add Route",
-    "or": "OR",
-    "manual_nav_active": "Manual navigation active. Clear navigation first!",
-    "image_too_big": "Image too large! Max 5MB allowed.",
-    "hours": "h",
-    "minutes": "m"
-  },
-  "routePage": {
-    "gpxLoadedError": "GPX file loaded. Clear navigation for manual planning!",
-    "routeSaved": "Route saved",
-    "intermediatePoint": "Intermediate point",
-    "startPoint": "Start point",
-    "endPoint": "End point",
-    "delete": "Delete",
-    "navFrom": "Navigate from here",
-    "navTo": "Navigate to here",
-    "addWaypoint": "Add waypoint",
-    "clearNav": "Clear navigation",
-    "enter_route_name": "Please enter a route name.",
-    "route_saved_success": "The tour has been successfully added to the database!",
-    "route_save_error": "Failed to create the tour in the database.",
-    "test_data_error": "This tour cannot be planned because it is only test data. Please create a new tour on the map!",
-    "schedule_success": "Tour successfully scheduled! Check it out on the Journal page.",
-    "schedule_error": "Failed to schedule tour.",
-    "custom_route": "Custom Route",
-    "unnamed_route": "Unnamed Route"
-  },
-  "mapLegend": {
-    "title": "Legend",
-    "natural": "Natural",
-    "peak": "Peak",
-    "spring": "Spring",
-    "cave": "Cave",
-    "waterfall": "Waterfall",
-    "tourism": "Tourism",
-    "viewpoint": "Viewpoint",
-    "attraction": "Attraction",
-    "museum": "Museum",
-    "historic": "Historic",
-    "castle": "Castle",
-    "ruins": "Ruins",
-    "monument": "Monument",
-    "service": "Service",
-    "drinking_water": "Drinking water",
-    "church": "Church",
-    "restaurant": "Restaurant"
-  },
-  "selectedTrail": {
-    "selected": "Selected",
-    "location": "Location",
-    "distance": "Dist",
-    "elevation": "Elev",
-    "time": "Time",
-    "hour": "h",
-    "minute": "min",
-    "user_photos": "User photos",
-    "photo_alt": "Trail photo",
-    "nearby_pois": "Nearby POIs along the route",
-    "jump_to_map": "Jump to map",
-    "items": "items"
-  },
-  "trailList": {
-    "search_title": "Route Search",
-    "filter": "Filter",
-    "difficulty_level": "Difficulty level"
-  },
-  "plan": {
-    "title": "Plan Hike",
-    "start_date": "Start Date",
-    "end_date": "End Date",
-    "checklist_title": "Checklist",
-    "save": "Save",
-    "saving": "Saving...",
-    "cancel": "Cancel",
-    "success": "Saved successfully!",
-    "error_save": "Error while saving.",
-    "error_date": "Invalid date range.",
-    "error_past_date": "Start date cannot be in the past."
-  },
-  "checklist": {
-    "water": "Sufficient water (1.5L+)",
-    "raincoat": "Raincoat / Spare clothes",
-    "phone": "Charged phone + Powerbank",
-    "map": "Map (Offline) / GPS",
-    "first_aid": "First Aid Kit",
-    "food": "Food / Energy bar"
-  },
-  "notFound": {
-    "title": "Oops! Page not found.",
-    "description": "Congratulations, you've successfully gone off the map! Only the wilderness (and this 404 error) awaits you here. Let's find a safer, well-marked trail instead.",
-    "backToHome": "Back to home",
-    "contact": "Contact us"
-  },
-  "auth": {
-    "login_title": "Welcome Back",
-    "register_title": "Join the Adventure",
-    "email_label": "Email Address",
-    "password_label": "Password",
-    "confirm_password_label": "Confirm password",
-    "username_label": "Username",
-    "login_btn": "Sign In",
-    "register_btn": "Create Account",
-    "no_account": "Don't have an account?",
-    "have_account": "Already have an account?",
-    "link_register": "Register here",
-    "link_login": "Login here",
-    "error_invalid": "Invalid email or password.",
-    "error_generic": "Something went wrong. Please try again.",
-    "error_password_format": "Password must be at least 8 characters, with upper, lower, number, and special characters.",
-    "error_email_invalid": "Please enter a valid email address.",
-    "error_username_length": "Username must be between 3 and 20 characters.",
-    "error_email_taken": "This email is already registered.",
-    "error_required_fields": "Please fill in all required fields.",
-    "error_password_match": "Passwords do not match."
-  },
-  "joinHike": {
-    "title": "Join Hike",
-    "in_progress": "Joining hike in progress...",
-    "login_required": "Please log in to evoHike first!",
-    "success": "Successfully joined! Redirecting to journal...",
-    "error_prefix": "Error occurred: ",
-    "network_error": "A network error occurred while joining."
-  },
-  "journal": {
-    "share_success": "The connection link has been copied to your clipboard! Send it to your friends.",
-    "share_error": "Error while copying: ",
-    "share_button": "Share Hike",
-    "loading": "Loading hikes...",
-    "empty_state": "You don't have any planned hikes yet. Create one on the Route page!",
-    "no_active_trail": "No active trail"
+    "unknown_conditions": "Unknown Conditions"
   }
 }

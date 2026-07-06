@@ -1,25 +1,259 @@
 {
-  "social": "Közösség",
-  "weather": "Időjárás",
+  "auth": {
+    "confirm_password_label": "Jelszó megerősítése",
+    "email_label": "Email cím",
+    "error_email_invalid": "Kérjük, adj meg egy érvényes email címet.",
+    "error_email_taken": "Ez az email cím már regisztrálva van.",
+    "error_generic": "Valami hiba történt. Próbáld újra később.",
+    "error_invalid": "Érvénytelen email vagy jelszó.",
+    "error_password_format": "A jelszónak legalább 8 karakterből kell állnia, és tartalmaznia kell kis- és nagybetűt, számot és speciális karaktert.",
+    "error_password_match": "A jelszavak nem egyeznek.",
+    "error_required_fields": "Kérjük, tölts ki minden kötelező mezőt.",
+    "error_username_length": "A felhasználónévnek 3 és 20 karakter között kell lennie.",
+    "have_account": "Már van fiókod?",
+    "link_login": "Jelentkezz be itt",
+    "link_register": "Regisztrálj itt",
+    "login_btn": "Bejelentkezés",
+    "login_title": "Üdvözlünk újra",
+    "no_account": "Még nincs fiókod?",
+    "password_label": "Jelszó",
+    "register_btn": "Fiók létrehozása",
+    "register_title": "Csatlakozz a kalandhoz",
+    "username_label": "Felhasználónév"
+  },
+  "checklist": {
+    "first_aid": "Elsősegély csomag",
+    "food": "Élelem / Energiaszelet",
+    "map": "Térkép (Offline is) / GPS",
+    "phone": "Töltött telefon + Powerbank",
+    "raincoat": "Esőkabát / Váltóruha",
+    "water": "Megfelelő mennyiségű víz (1.5L+)"
+  },
   "clickHere": "Kapcsolj ide",
+  "dashboard": {
+    "badges": {
+      "title": "Legutóbbi jelvények"
+    },
+    "checklist": {
+      "edit_button": "Lista szerkesztése",
+      "items": {
+        "boots": "Túrabakancs megtisztítása",
+        "first_aid": "Elsősegély csomag bepakolása",
+        "offline_maps": "Offline térképek letöltése",
+        "power_bank": "Powerbank feltöltése",
+        "weather_check": "Időjárás előrejelzés ellenőrzése"
+      },
+      "title": "Expedíció előkészítése"
+    },
+    "memories": {
+      "title": "Legutóbbi emlékek",
+      "view_all": "Összes megtekintése"
+    },
+    "stats": {
+      "distance": "Távolság",
+      "elevation": "Emelkedési szint",
+      "hikes": "Túrák"
+    },
+    "upcoming": {
+      "days_left": "{{count}} Nap van hátra",
+      "title": "Következő kalandok"
+    }
+  },
+  "filterPage": {
+    "adjustFilters": "Szűrők módosítása",
+    "done": "Kész",
+    "filterTrails": "Útvonalak szűrése",
+    "noMatch": "Nincs a keresettnek megfelelő túra",
+    "reset": "Alaphelyzet"
+  },
+  "joinHike": {
+    "title": "Túra Csatlakozás",
+    "in_progress": "Csatlakozás folyamatban...",
+    "login_required": "Kérlek, előbb jelentkezz be az evoHike-ba!",
+    "success": "Sikeresen csatlakoztál! Átirányítás a naplóba...",
+    "error_prefix": "Hiba történt: ",
+    "network_error": "Hálózati hiba történt a csatlakozás során."
+  },
+  "journal": {
+    "share_success": "A csatlakozási link a vágólapra másolva! Küldd el a barátaidnak.",
+    "share_error": "Hiba a másolás során: ",
+    "share_button": "Meghirdetés",
+    "loading": "Túrák betöltése...",
+    "empty_state": "Még nincsenek tervezett túráid. Készíts egyet a Route oldalon!",
+    "no_active_trail": "Nincs aktív túra"
+  },
+  "landing": {
+    "features": {
+      "community_desc": "Oszd meg túranaplódat, képeidet, és gondolataidat más túrázókkal.",
+      "community_title": "Közösség",
+      "maps_desc": "Tervezz részletes útvonalakat emelkedési szintekkel, köztes célokkal, és offline lehetőségekkel, hogy soha ne térj le a helyes útról.",
+      "maps_title": "Interaktív Útvonalak",
+      "stat_mapped": "Nemzeti parkok",
+      "subtitle": "Hatékony eszközök a modern túrázónak. A tervezéstől a megvalósításig, mi segítünk.",
+      "title": "Minden amire szükséged van",
+      "weather_desc": "Valós idejű frissítések és előrejelzések a következő túrádhoz.",
+      "weather_title": "Időjárás"
+    },
+    "hero": {
+      "badge": "Fedezd fel a rejtett dolgokat",
+      "cta_primary": "Tervezőbe",
+      "cta_secondary": "Közzösségi oldal",
+      "description": "Fedezz fel rejtett útvonalakat, naplózd túrázásaidat és légy része a felfedezők közzösségének. A következő nagy kalandod itt kezdődik.",
+      "stat_distance": "Teljes távolság",
+      "stat_elevation": "Emelkedési szint",
+      "title_prefix": "A vadon",
+      "title_suffix": "vár"
+    }
+  },
+  "logout": "Kijelentkezés",
   "mainMenuH1": "Időjárás előrejelzés C# Backend felől",
-  "routePageH1": "Útvonaltervezés",
+  "mapLegend": {
+    "attraction": "Nevezetesség",
+    "castle": "Vár",
+    "cave": "Barlang",
+    "church": "Templom",
+    "drinking_water": "Ivóvíz",
+    "historic": "Történelmi",
+    "monument": "Emlékmű",
+    "museum": "Múzeum",
+    "natural": "Természeti",
+    "peak": "Csúcs",
+    "restaurant": "Étterem",
+    "ruins": "Rom",
+    "service": "Szolgáltatás",
+    "spring": "Forrás",
+    "title": "Jelmagyarázat",
+    "tourism": "Turizmus",
+    "viewpoint": "Kilátó",
+    "waterfall": "Vízesés"
+  },
   "navbarLink1": "Tervezés",
   "navbarLink2": "Időjárás",
   "navbarLink3": "Túranapló",
   "navbarLink4": "Közösség",
   "navbarLink5": "Kapcsolat",
   "navbarLink6": "Bejelentkezés",
-  "logout": "Kijelentkezés",
-  "weatherForecast": "Időjárás előrejelzés",
+  "notFound": {
+    "backToHome": "Vissza a főoldalra",
+    "contact": "Kapcsolatfelvétel",
+    "description": "Gratulálunk, sikeresen letértél a térképről! Itt már csak a vadon (és ez a 404-es hiba) vár. Inkább keressünk egy biztonságosabb, jól jelzett útvonalat.",
+    "title": "Hoppá! Az oldal nem található."
+  },
+  "plan": {
+    "cancel": "Mégse",
+    "checklist_title": "Mit viszel magaddal?",
+    "end_date": "Befejezés",
+    "error_date": "A dátum nem megfelelő.",
+    "error_past_date": "A kezdő dátum nem lehet múltbeli.",
+    "error_save": "Hiba a mentésnél.",
+    "save": "Mentés",
+    "saving": "Mentés...",
+    "start_date": "Kezdés",
+    "success": "Sikeres mentés!",
+    "title": "Túra Tervezése"
+  },
   "refresh": "Frissítés",
-  "weatherTime": "Idő",
-  "weatherTemperature": "Hőmérséklet",
-  "weatherFeelsLike": "Hőérzet",
-  "weatherWind": "Szél",
-  "weatherVapor": "Pára",
-  "weatherPrecipitation": "Csapadék",
-  "weatherDescription": "Leírás",
+  "route": {
+    "active_trails": "Aktív túrák",
+    "search_placeholder": "Keress egy túrát...",
+    "showing_count": "Találatok száma: {{count}}",
+    "stats": {
+      "dist": "Táv",
+      "elev": "Emelkedés",
+      "time": "Idő"
+    },
+    "view_details": "Részletek"
+  },
+  "routeForm": {
+    "add_photo": "Fotó hozzáadása",
+    "add_route": "Útvonal hozzáadása",
+    "cancel": "Vissza",
+    "close_menu": "Menü bezárása",
+    "description_label": "Leírás",
+    "description_placeholder": "Pl. EXTRÉÉÉÉM DE NAGYON vigyázzni kell mert sok a kalóz errefelé !!4",
+    "distance": "Távolság",
+    "hours": "ó",
+    "image_alt": "túra kép",
+    "image_too_big": "A kép túl nagy! Max 5MB megengedett.",
+    "manual_nav_active": "Manuális útvonaltervezés aktív. Előbb töröld a navigációt!",
+    "minutes": "p",
+    "name_placeholder": "Pl. A kincshez vezető túra",
+    "or": "VAGY",
+    "poi": {
+      "description": "Leírás",
+      "name": "Név",
+      "new": "+ Új hozzáadása",
+      "poi": "Nevezetességek"
+    },
+    "route_name": "Útvonal neve",
+    "save": "Mentés",
+    "time": "Idő",
+    "title": "Útvonal tervező",
+    "trail_description": "Túra rövid leírása...",
+    "upload_file": "Útvonal fájl (.gpx)"
+  },
+  "routePage": {
+    "addWaypoint": "Útvonal pont hozzáadása",
+    "clearNav": "Navigáció törlése",
+    "custom_route": "Saját útvonal",
+    "delete": "Törlés",
+    "endPoint": "Cél pont",
+    "enter_route_name": "Kérlek, adj meg egy útvonal nevet.",
+    "gpxLoadedError": "GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!",
+    "intermediatePoint": "Köztes pont",
+    "navFrom": "Navigáció innen",
+    "navTo": "Navigáció ide",
+    "routeSaved": "Útvonal mentve",
+    "route_save_error": "Nem sikerült létrehozni a túrát az adatbázisban.",
+    "route_saved_success": "A túra sikeresen hozzáadva az adatbázishoz!",
+    "schedule_error": "Nem sikerült betervezni a túrát.",
+    "schedule_success": "Túra sikeresen betervezve! Nézd meg a Napló oldalon.",
+    "startPoint": "Start pont",
+    "test_data_error": "Ezt a túrát nem lehet betervezni, mert csak tesztadat. Kérlek, készíts egy új túrát a térképen!",
+    "unnamed_route": "Névtelen útvonal"
+  },
+  "routePageH1": "Útvonaltervezés",
+  "selectedTrail": {
+    "distance": "Táv",
+    "elevation": "Szint",
+    "hour": "óra",
+    "items": "db",
+    "jump_to_map": "Ugrás a térképen",
+    "location": "Helyszín",
+    "minute": "perc",
+    "nearby_pois": "Közeli látnivalók az útvonal mentén",
+    "photo_alt": "Túra fotó",
+    "selected": "Kiválasztva",
+    "time": "Idő",
+    "user_photos": "Felhasználói fotók"
+  },
+  "social": "Közösség",
+  "social_page": {
+    "create_post_placeholder": "Írj egy új bekezdést...",
+    "page_subtitle": "Osszd meg kalandjaidat és fedezz fel új útvonalakat a közzösségtől!",
+    "page_title": "Közösségi oldal"
+  },
+  "trail": {
+    "button_text": "Tervezőbe",
+    "difficulties": {
+      "0": "Könnyű",
+      "1": "Közepes",
+      "2": "Nehéz",
+      "3": "Extrém"
+    },
+    "difficulty_label": "Túra nehézség",
+    "distance": "Távolság",
+    "elevation": "Emelkedés",
+    "rating": "Értékelés",
+    "time": "Időtartam",
+    "timePlaceholder": "120 perc"
+  },
+  "trailList": {
+    "difficulty_level": "Nehézségi szint",
+    "filter": "Szűrés",
+    "search_title": "Útvonal Kereső"
+  },
+  "weather": "Időjárás",
   "weatherCodes": {
     "0": "Tiszta égbolt",
     "1": "Főként tiszta",
@@ -50,169 +284,34 @@
     "96": "Zivatar jégesővel (gyenge)",
     "99": "Zivatar jégesővel (erős)"
   },
-  "trail": {
-    "difficulty_label": "Túra nehézség",
-    "distance": "Távolság",
-    "elevation": "Emelkedés",
-    "rating": "Értékelés",
-    "button_text": "Tervezőbe",
-    "difficulties": {
-      "0": "Könnyű",
-      "1": "Közepes",
-      "2": "Nehéz",
-      "3": "Extrém"
-    }
-  },
-  "routeForm": {
-    "route_name": "Útvonal neve",
-    "add_photo": "Fotó hozzáadása",
-    "upload_file": "Útvonal fájl (.gpx)",
-    "trail_description": "Túra rövid leírása...",
-    "poi": {
-      "poi": "Nevezetességek",
-      "name": "Név",
-      "description": "Leírás",
-      "new": "+ Új hozzáadása"
+  "weatherDescription": "Leírás",
+  "weatherFeelsLike": "Hőérzet",
+  "weatherForecast": "Időjárás előrejelzés",
+  "weatherPrecipitation": "Csapadék",
+  "weatherTemperature": "Hőmérséklet",
+  "weatherTime": "Idő",
+  "weatherVapor": "Pára",
+  "weatherWind": "Szél",
+  "weather_page": {
+    "current_weather": "Aktuális időjárás",
+    "error": {
+      "failed": "Nem sikerült betöltetni az időjárást",
+      "retry": "Újra"
     },
-    "save": "Mentés",
-    "cancel": "Vissza",
-    "title": "Útvonal tervező",
-    "close_menu": "Menü bezárása",
-    "name_placeholder": "Pl. A kincshez vezető túra",
-    "description_label": "Leírás",
-    "description_placeholder": "Pl. EXTRÉÉÉÉM DE NAGYON vigyázzni kell mert sok a kalóz errefelé !!4",
-    "distance": "Távolság",
-    "time": "Idő",
-    "image_alt": "túra kép",
-    "add_route": "Útvonal hozzáadása",
-    "or": "VAGY",
-    "manual_nav_active": "Manuális útvonaltervezés aktív. Előbb töröld a navigációt!",
-    "image_too_big": "A kép túl nagy! Max 5MB megengedett.",
-    "hours": "ó",
-    "minutes": "p"
-  },
-  "routePage": {
-    "gpxLoadedError": "GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!",
-    "routeSaved": "Útvonal mentve",
-    "intermediatePoint": "Köztes pont",
-    "startPoint": "Start pont",
-    "endPoint": "Cél pont",
-    "delete": "Törlés",
-    "navFrom": "Navigáció innen",
-    "navTo": "Navigáció ide",
-    "addWaypoint": "Útvonal pont hozzáadása",
-    "clearNav": "Navigáció törlése",
-    "enter_route_name": "Kérlek, adj meg egy útvonal nevet.",
-    "route_saved_success": "A túra sikeresen hozzáadva az adatbázishoz!",
-    "route_save_error": "Nem sikerült létrehozni a túrát az adatbázisban.",
-    "test_data_error": "Ezt a túrát nem lehet betervezni, mert csak tesztadat. Kérlek, készíts egy új túrát a térképen!",
-    "schedule_success": "Túra sikeresen betervezve! Nézd meg a Napló oldalon.",
-    "schedule_error": "Nem sikerült betervezni a túrát.",
-    "custom_route": "Saját útvonal",
-    "unnamed_route": "Névtelen útvonal"
-  },
-  "mapLegend": {
-    "title": "Jelmagyarázat",
-    "natural": "Természeti",
-    "peak": "Csúcs",
-    "spring": "Forrás",
-    "cave": "Barlang",
-    "waterfall": "Vízesés",
-    "tourism": "Turizmus",
-    "viewpoint": "Kilátó",
-    "attraction": "Nevezetesség",
-    "museum": "Múzeum",
-    "historic": "Történelmi",
-    "castle": "Vár",
-    "ruins": "Rom",
-    "monument": "Emlékmű",
-    "service": "Szolgáltatás",
-    "drinking_water": "Ivóvíz",
-    "church": "Templom",
-    "restaurant": "Étterem"
-  },
-  "selectedTrail": {
-    "selected": "Kiválasztva",
-    "location": "Helyszín",
-    "distance": "Táv",
-    "elevation": "Szint",
-    "time": "Idő",
-    "hour": "óra",
-    "minute": "perc",
-    "user_photos": "Felhasználói fotók",
-    "photo_alt": "Túra fotó",
-    "nearby_pois": "Közeli látnivalók az útvonal mentén",
-    "jump_to_map": "Ugrás a térképen",
-    "items": "db"
-  },
-  "trailList": {
-    "search_title": "Útvonal Kereső",
-    "filter": "Szűrés",
-    "difficulty_level": "Nehézségi szint"
-  },
-  "plan": {
-    "title": "Túra Tervezése",
-    "start_date": "Kezdés",
-    "end_date": "Befejezés",
-    "checklist_title": "Mit viszel magaddal?",
-    "save": "Mentés",
-    "saving": "Mentés...",
-    "cancel": "Mégse",
-    "success": "Sikeres mentés!",
-    "error_save": "Hiba a mentésnél.",
-    "error_date": "A dátum nem megfelelő.",
-    "error_past_date": "A kezdő dátum nem lehet múltbeli."
-  },
-  "checklist": {
-    "water": "Megfelelő mennyiségű víz (1.5L+)",
-    "raincoat": "Esőkabát / Váltóruha",
-    "phone": "Töltött telefon + Powerbank",
-    "map": "Térkép (Offline is) / GPS",
-    "first_aid": "Elsősegély csomag",
-    "food": "Élelem / Energiaszelet"
-  },
-  "notFound": {
-    "title": "Hoppá! Az oldal nem található.",
-    "description": "Gratulálunk, sikeresen letértél a térképről! Itt már csak a vadon (és ez a 404-es hiba) vár. Inkább keressünk egy biztonságosabb, jól jelzett útvonalat.",
-    "backToHome": "Vissza a főoldalra",
-    "contact": "Kapcsolatfelvétel"
-  },
-  "auth": {
-    "login_title": "Üdvözlünk újra",
-    "register_title": "Csatlakozz a kalandhoz",
-    "email_label": "Email cím",
-    "password_label": "Jelszó",
-    "confirm_password_label": "Jelszó megerősítése",
-    "username_label": "Felhasználónév",
-    "login_btn": "Bejelentkezés",
-    "register_btn": "Fiók létrehozása",
-    "no_account": "Még nincs fiókod?",
-    "have_account": "Már van fiókod?",
-    "link_register": "Regisztrálj itt",
-    "link_login": "Jelentkezz be itt",
-    "error_invalid": "Érvénytelen email vagy jelszó.",
-    "error_generic": "Valami hiba történt. Próbáld újra később.",
-    "error_password_format": "A jelszónak legalább 8 karakterből kell állnia, és tartalmaznia kell kis- és nagybetűt, számot és speciális karaktert.",
-    "error_email_invalid": "Kérjük, adj meg egy érvényes email címet.",
-    "error_username_length": "A felhasználónévnek 3 és 20 karakter között kell lennie.",
-    "error_email_taken": "Ez az email cím már regisztrálva van.",
-    "error_required_fields": "Kérjük, tölts ki minden kötelező mezőt.",
-    "error_password_match": "A jelszavak nem egyeznek."
-  },
-  "joinHike": {
-    "title": "Túra Csatlakozás",
-    "in_progress": "Csatlakozás folyamatban...",
-    "login_required": "Kérlek, előbb jelentkezz be az evoHike-ba!",
-    "success": "Sikeresen csatlakoztál! Átirányítás a naplóba...",
-    "error_prefix": "Hiba történt: ",
-    "network_error": "Hálózati hiba történt a csatlakozás során."
-  },
-  "journal": {
-    "share_success": "A csatlakozási link a vágólapra másolva! Küldd el a barátaidnak.",
-    "share_error": "Hiba a másolás során: ",
-    "share_button": "Meghirdetés",
-    "loading": "Túrák betöltése...",
-    "empty_state": "Még nincsenek tervezett túráid. Készíts egyet a Route oldalon!",
-    "no_active_trail": "Nincs aktív túra"
+    "labels": {
+      "humidity": "Páratartalom",
+      "precip_chance": "Csapadék valószínűsége",
+      "probability": "valószínűség"
+    },
+    "next_48h": "Következő 48 óra",
+    "status": {
+      "expect_rain": "Eső várható",
+      "likely_dry": "Jobbára száraz"
+    },
+    "units": {
+      "meters_per_sec": "méter / másodperc",
+      "percent": "%"
+    },
+    "unknown_conditions": "Nem ismert időjárási viszonyok"
   }
 }
