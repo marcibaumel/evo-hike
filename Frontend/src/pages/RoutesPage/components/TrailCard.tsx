@@ -14,11 +14,11 @@ interface TrailCardProps {
 
 const getDifficultyLabel = (level: number) => {
     switch (level) {
-    case 0: return 'Easy';
-    case 1: return 'Moderate';
-    case 2: return 'Hard';
-    case 3: return 'Extreme';
-    default: return 'Unknown';
+    case 0: return 'difficulty.easy';
+    case 1: return 'difficulty.moderate';
+    case 2: return 'difficulty.hard';
+    case 3: return 'difficulty.extreme';
+    default: return 'difficulty.unknown';
     }
 };
 
@@ -55,7 +55,12 @@ export const TrailCard = ({ trail, onViewDetails, onDelete }: TrailCardProps) =>
                 />
                 <div className="absolute top-4 right-4">
                     <Badge variant={getDifficultyVariant(trail.difficulty)}>
-                        {getDifficultyLabel(trail.difficulty)}
+                        {t(getDifficultyLabel(trail.difficulty), {
+                            defaultValue: trail.difficulty === 0 ? 'Könnyű' :
+                                trail.difficulty === 1 ? 'Közepes' :
+                                    trail.difficulty === 2 ? 'Nehéz' :
+                                        trail.difficulty === 3 ? 'Extrém' : 'Ismeretlen'
+                        })}
                     </Badge>
                 </div>
                 {onDelete && (
