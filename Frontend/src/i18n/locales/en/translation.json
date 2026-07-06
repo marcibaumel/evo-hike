@@ -191,7 +191,15 @@
     "navFrom": "Navigate from here",
     "navTo": "Navigate to here",
     "addWaypoint": "Add waypoint",
-    "clearNav": "Clear navigation"
+    "clearNav": "Clear navigation",
+    "enter_route_name": "Please enter a route name.",
+    "route_saved_success": "The tour has been successfully added to the database!",
+    "route_save_error": "Failed to create the tour in the database.",
+    "test_data_error": "This tour cannot be planned because it is only test data. Please create a new tour on the map!",
+    "schedule_success": "Tour successfully scheduled! Check it out on the Journal page.",
+    "schedule_error": "Failed to schedule tour.",
+    "custom_route": "Custom Route",
+    "unnamed_route": "Unnamed Route"
   },
   "mapLegend": {
     "title": "Legend",
@@ -280,5 +288,21 @@
     "error_email_taken": "This email is already registered.",
     "error_required_fields": "Please fill in all required fields.",
     "error_password_match": "Passwords do not match."
+  },
+  "joinHike": {
+    "title": "Join Hike",
+    "in_progress": "Joining hike in progress...",
+    "login_required": "Please log in to evoHike first!",
+    "success": "Successfully joined! Redirecting to journal...",
+    "error_prefix": "Error occurred: ",
+    "network_error": "A network error occurred while joining."
+  },
+  "journal": {
+    "share_success": "The connection link has been copied to your clipboard! Send it to your friends.",
+    "share_error": "Error while copying: ",
+    "share_button": "Share Hike",
+    "loading": "Loading hikes...",
+    "empty_state": "You don't have any planned hikes yet. Create one on the Route page!",
+    "no_active_trail": "No active trail"
   }
 }

@@ -103,8 +103,8 @@ function JournalPage() {
         const joinLink = `${window.location.origin}/join-hike/${hikeId}`;
 
         navigator.clipboard.writeText(joinLink)
-            .then(() => alert('The connection link has been copied to your clipboard! Send it to your friends.'))
-            .catch(err => console.error('Error while copying: ', err));
+            .then(() => alert(t('journal.share.success')))
+            .catch(err => console.error(t('journal.share.error'), err));
     };
 
     return (
@@ -130,9 +130,9 @@ function JournalPage() {
 
                             <div className="grid gap-4">
                                 {isLoading ? (
-                                    <p className="text-white">Túrák betöltése...</p>
+                                    <p className="text-white">{t('journal.loading')}</p>
                                 ) : upcomingHikes.length === 0 ? (
-                                    <p className="text-brand-muted">Még nincsenek tervezett túráid. Készíts egyet a Route oldalon!</p>
+                                    <p className="text-brand-muted">{t('journal.empty_state')}</p>
                                 ) : (
                                     upcomingHikes.map((hike) => (
                                         <div key={hike.id} className="relative group">
@@ -145,7 +145,7 @@ function JournalPage() {
                                                     className="flex items-center gap-2 bg-brand-dark/80 backdrop-blur"
                                                     onClick={() => handleShareHike(hike.id)}
                                                 >
-                                                    <ShareNetwork size={16} /> Meghirdetés
+                                                    <ShareNetwork size={16} /> {t('journal.share.button')}
                                                 </Button>
                                             </div>
                                         </div>
@@ -163,7 +163,7 @@ function JournalPage() {
                         {/* Checklist */}
                         <ExpeditionChecklist
                             title={t('dashboard.checklist.title')}
-                            subtitle={upcomingHikes.length > 0 ? upcomingHikes[0].title : 'No active trail'}
+                            subtitle={upcomingHikes.length > 0 ? upcomingHikes[0].title : t('journal.no_active_trail')}
                             items={checklistItems}
                             onUpdate={setChecklistItems}
                         />

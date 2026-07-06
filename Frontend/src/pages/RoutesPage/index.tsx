@@ -54,8 +54,8 @@ function RoutePage() {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const formattedTrails = dbTrails.map((t: any) => ({
                         id: t.id,
-                        name: t.trailName || t.name || 'Own Route',
-                        location: t.location || 'Custom Route',
+                        name: t.trailName || t.name || t('routePage.unnamed_route'),
+                        location: t.location || t('routePage.custom_route'),
                         length: t.length,
                         difficulty: t.difficulty === 0 ? 'Easy' : t.difficulty === 2 ? 'Hard' : 'Moderate',
                         elevationGain: t.elevationGain || t.elevation || 0,
@@ -70,7 +70,7 @@ function RoutePage() {
         };
 
         fetchTrailsFromDb();
-    }, []);
+    }, [t]);
 
     const allTrailsData = useMemo(() => {
         return [...userTrails, ...backendTrails];
@@ -108,13 +108,13 @@ function RoutePage() {
 
     const handleSaveNewRoute = async () => {
         if (!newRouteName) {
-            alert('Please enter a route name.');
+            alert(t('routePage.enter_route_name'));
             return;
         }
 
         const newTrailData = {
             name: newRouteName,
-            location: 'Custom Route',
+            location: t('routePage.custom_route'),
             length: newRouteDistance,
             difficulty: newRouteDistance < 5000 ? 0 : newRouteDistance > 15000 ? 2 : 1,
             elevationGain: 0,
@@ -143,7 +143,7 @@ function RoutePage() {
             const newTrailObj = {
                 id: savedTrail.id,
                 name: savedTrail.trailName || savedTrail.name || newRouteName,
-                location: savedTrail.location || 'Custom Route',
+                location: savedTrail.location || t('routePage.custom_route'),
                 length: savedTrail.length || newRouteDistance,
                 difficulty: savedTrail.difficulty === 0 ? 'Easy' : savedTrail.difficulty === 2 ? 'Hard' : 'Moderate',
                 elevationGain: savedTrail.elevationGain || 0,
@@ -166,11 +166,11 @@ function RoutePage() {
             setNewRouteTime(0);
             setCurrentRouteCoordinates([]);
 
-            alert('The tour has been successfully added to the database!');
+            alert(t('routePage.route_saved_success'));
 
         } catch (error) {
-            console.error('Error while creating the tour:', error);
-            alert('Failed to create the tour in the database.');
+            console.error(error);
+            alert(t('routePage.route_save_error'));
         }
     };
 
@@ -201,7 +201,7 @@ function RoutePage() {
 
             } catch (error) {
                 console.error('Error while deleting:', error);
-                alert('Failed to delete tour from database.');
+                alert(t('routePage.route_save_error'));
             }
         }
     };
@@ -239,7 +239,7 @@ function RoutePage() {
         const numericId = parseInt(planningTrail.id.toString());
 
         if (isNaN(numericId) || numericId <= 0) {
-            alert('This tour cannot be planned because it is only test data. Please create a new tour on the map.!');
+            alert(t('routePage.test_data_error'));
             return;
         }
 
@@ -250,11 +250,11 @@ function RoutePage() {
                 start: new Date(startDate).toISOString(),
                 end: new Date(endDate).toISOString()
             });
-            alert('Tour successfully scheduled! Check it out on the Journal page.');
+            alert(t('routePage.schedule_success'));
             setPlanningTrail(null);
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed to schedule tour.');
+            alert(t('routePage.schedule_error'));
         } finally {
             setIsSubmitting(false);
         }
@@ -299,7 +299,7 @@ function RoutePage() {
                                     className="p-2.5 rounded-xl h-auto bg-brand-accent hover:bg-brand-accent/90"
                                     size="sm"
                                     onClick={() => setIsCreatingRoute(true)}
-                                    title={t('route.create_new')}>
+                                    title={t('routeForm.add_route')}>
                                     <PlusIcon size={20} weight="bold" className="text-brand-dark" />
                                 </Button>
                             </div>
@@ -330,12 +330,12 @@ function RoutePage() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
                     <div className="bg-brand-dark border border-white/10 p-6 rounded-2xl w-full max-w-md space-y-6">
                         <h3 className="text-xl font-bold text-white">
-                            Schedule hike: {planningTrail.name}
+                            {t('plan.title')}: {planningTrail.name}
                         </h3>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-brand-muted text-sm mb-1">Start Date & Time</label>
+                                <label className="block text-brand-muted text-sm mb-1">{t('plan.start_date')}</label>
                                 <input
                                     type="datetime-local"
                                     value={startDate}
@@ -344,7 +344,7 @@ function RoutePage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-brand-muted text-sm mb-1">End Date & Time</label>
+                                <label className="block text-brand-muted text-sm mb-1">{t('plan.end_date')}</label>
                                 <input
                                     type="datetime-local"
                                     value={endDate}
@@ -356,10 +356,10 @@ function RoutePage() {
 
                         <div className="flex justify-end gap-3 pt-4">
                             <Button variant="secondary" onClick={() => setPlanningTrail(null)} disabled={isSubmitting}>
-                                Cancel
+                                {t('plan.cancel')}
                             </Button>
                             <Button variant="primary" className="bg-brand-accent text-brand-dark" onClick={handleSavePlannedHike} disabled={isSubmitting}>
-                                {isSubmitting ? 'Saving...' : 'Schedule Hike'}
+                                {isSubmitting ? t('plan.saving') : t('plan.save')}
                             </Button>
                         </div>
                     </div>

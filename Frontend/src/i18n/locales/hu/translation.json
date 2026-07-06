@@ -101,7 +101,15 @@
     "navFrom": "Navigáció innen",
     "navTo": "Navigáció ide",
     "addWaypoint": "Útvonal pont hozzáadása",
-    "clearNav": "Navigáció törlése"
+    "clearNav": "Navigáció törlése",
+    "enter_route_name": "Kérlek, adj meg egy útvonal nevet.",
+    "route_saved_success": "A túra sikeresen hozzáadva az adatbázishoz!",
+    "route_save_error": "Nem sikerült létrehozni a túrát az adatbázisban.",
+    "test_data_error": "Ezt a túrát nem lehet betervezni, mert csak tesztadat. Kérlek, készíts egy új túrát a térképen!",
+    "schedule_success": "Túra sikeresen betervezve! Nézd meg a Napló oldalon.",
+    "schedule_error": "Nem sikerült betervezni a túrát.",
+    "custom_route": "Saját útvonal",
+    "unnamed_route": "Névtelen útvonal"
   },
   "mapLegend": {
     "title": "Jelmagyarázat",
@@ -190,5 +198,21 @@
     "error_email_taken": "Ez az email cím már regisztrálva van.",
     "error_required_fields": "Kérjük, tölts ki minden kötelező mezőt.",
     "error_password_match": "A jelszavak nem egyeznek."
+  },
+  "joinHike": {
+    "title": "Túra Csatlakozás",
+    "in_progress": "Csatlakozás folyamatban...",
+    "login_required": "Kérlek, előbb jelentkezz be az evoHike-ba!",
+    "success": "Sikeresen csatlakoztál! Átirányítás a naplóba...",
+    "error_prefix": "Hiba történt: ",
+    "network_error": "Hálózati hiba történt a csatlakozás során."
+  },
+  "journal": {
+    "share_success": "A csatlakozási link a vágólapra másolva! Küldd el a barátaidnak.",
+    "share_error": "Hiba a másolás során: ",
+    "share_button": "Meghirdetés",
+    "loading": "Túrák betöltése...",
+    "empty_state": "Még nincsenek tervezett túráid. Készíts egyet a Route oldalon!",
+    "no_active_trail": "Nincs aktív túra"
   }
 }
