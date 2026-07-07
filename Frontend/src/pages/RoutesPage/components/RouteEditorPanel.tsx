@@ -99,7 +99,7 @@ export default function RouteEditorPanel({name, description, distance, time, onN
                     }
 
                     if (rawCoords.length > 0) {
-                        const formattedCoords: [number, number][] = rawCoords.map(c => [c[1], c[0]]);
+                        const formattedCoords: [number, number][] = rawCoords.map(c => [c[0], c[1]]);
 
                         const calcDist = calculateDistanceInMeters(formattedCoords);
                         const gain = await calculateElevationGain(formattedCoords);
@@ -118,8 +118,8 @@ export default function RouteEditorPanel({name, description, distance, time, onN
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         setPoints((prev: any) => ({
                             ...prev,
-                            start: formattedCoords[0],
-                            end: formattedCoords[formattedCoords.length - 1]
+                            start: [formattedCoords[0][1], formattedCoords[0][0]],
+                            end: [formattedCoords[formattedCoords.length - 1][1], formattedCoords[formattedCoords.length - 1][0]]
                         }));
                     }
                 }
