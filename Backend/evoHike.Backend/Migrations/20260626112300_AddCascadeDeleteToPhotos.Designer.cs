@@ -13,8 +13,8 @@ using evoHike.Backend.Data;
 namespace evoHike.Backend.Migrations
 {
     [DbContext(typeof(EvoHikeContext))]
-    [Migration("20260325212644_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260626112300_AddCascadeDeleteToPhotos")]
+    partial class AddCascadeDeleteToPhotos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,6 +155,57 @@ namespace evoHike.Backend.Migrations
                     b.ToTable("PointsOfInterest");
                 });
 
+            modelBuilder.Entity("evoHike.Backend.Models.TrailPhotoEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HikingTrailId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HikingTrailId");
+
+                    b.ToTable("TrailPhotos");
+                });
+
+            modelBuilder.Entity("evoHike.Backend.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
                 {
                     b.HasOne("evoHike.Backend.Models.HikingTrailEntity", "HikingTrail")
@@ -164,6 +215,20 @@ namespace evoHike.Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("HikingTrail");
+                });
+
+            modelBuilder.Entity("evoHike.Backend.Models.TrailPhotoEntity", b =>
+                {
+                    b.HasOne("evoHike.Backend.Models.HikingTrailEntity", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("HikingTrailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("evoHike.Backend.Models.HikingTrailEntity", b =>
+                {
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using evoHike.Backend.Data;
@@ -12,9 +13,11 @@ using evoHike.Backend.Data;
 namespace evoHike.Backend.Migrations
 {
     [DbContext(typeof(EvoHikeContext))]
-    partial class EvoHikeContextModelSnapshot : ModelSnapshot
+    [Migration("20260626104710_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,24 +25,6 @@ namespace evoHike.Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("evoHike.Backend.Models.HikeParticipant", b =>
-                {
-                    b.Property<int>("PlannedHikeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("PlannedHikeId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("HikeParticipants");
-                });
 
             modelBuilder.Entity("evoHike.Backend.Models.HikingTrailEntity", b =>
                 {
@@ -67,9 +52,6 @@ namespace evoHike.Backend.Migrations
                     b.Property<string>("EndLocation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Point>("EndPoint")
-                        .HasColumnType("geography");
-
                     b.Property<int?>("EstimatedDuration")
                         .HasColumnType("int");
 
@@ -91,18 +73,12 @@ namespace evoHike.Backend.Migrations
                     b.Property<string>("StartLocation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Point>("StartPoint")
-                        .HasColumnType("geography");
-
                     b.Property<string>("TrailName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TrailSymbol")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<MultiPoint>("Waypoints")
-                        .HasColumnType("geography");
 
                     b.Property<string>("Website")
                         .HasColumnType("nvarchar(max)");
@@ -138,9 +114,6 @@ namespace evoHike.Backend.Migrations
                     b.Property<int>("HikingTrailId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrganizerId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("PlannedEndDateTime")
                         .HasColumnType("datetime2");
 
@@ -153,8 +126,6 @@ namespace evoHike.Backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HikingTrailId");
-
-                    b.HasIndex("OrganizerId");
 
                     b.ToTable("PlannedHikes");
                 });
@@ -196,6 +167,9 @@ namespace evoHike.Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("HikingTrailEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("HikingTrailId")
                         .HasColumnType("int");
 
@@ -205,7 +179,7 @@ namespace evoHike.Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HikingTrailId");
+                    b.HasIndex("HikingTrailEntityId");
 
                     b.ToTable("TrailPhotos");
                 });
@@ -235,25 +209,6 @@ namespace evoHike.Backend.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("evoHike.Backend.Models.HikeParticipant", b =>
-                {
-                    b.HasOne("evoHike.Backend.Models.PlannedHikeEntity", "PlannedHike")
-                        .WithMany("Participants")
-                        .HasForeignKey("PlannedHikeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("evoHike.Backend.Models.User", "User")
-                        .WithMany("ParticipatedHikes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PlannedHike");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
                 {
                     b.HasOne("evoHike.Backend.Models.HikingTrailEntity", "HikingTrail")
@@ -262,36 +217,14 @@ namespace evoHike.Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("evoHike.Backend.Models.User", "Organizer")
-                        .WithMany("OrganizedHikes")
-                        .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("HikingTrail");
-
-                    b.Navigation("Organizer");
-                });
-
-            modelBuilder.Entity("evoHike.Backend.Models.PlannedHikeEntity", b =>
-                {
-                    b.Navigation("Participants");
-                });
-
-            modelBuilder.Entity("evoHike.Backend.Models.User", b =>
-                {
-                    b.Navigation("OrganizedHikes");
-
-                    b.Navigation("ParticipatedHikes");
                 });
 
             modelBuilder.Entity("evoHike.Backend.Models.TrailPhotoEntity", b =>
                 {
                     b.HasOne("evoHike.Backend.Models.HikingTrailEntity", null)
                         .WithMany("Photos")
-                        .HasForeignKey("HikingTrailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HikingTrailEntityId");
                 });
 
             modelBuilder.Entity("evoHike.Backend.Models.HikingTrailEntity", b =>

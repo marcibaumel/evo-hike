@@ -59,6 +59,13 @@
       "title": "Upcoming Adventures"
     }
   },
+  "difficulty": {
+    "easy": "Easy",
+    "moderate": "Moderate",
+    "hard": "Hard",
+    "extreme": "Extreme",
+    "unknown": "Unknown"
+  },
   "filterPage": {
     "adjustFilters": "Adjust filters",
     "done": "Kész",

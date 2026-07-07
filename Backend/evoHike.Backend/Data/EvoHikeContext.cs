@@ -12,8 +12,8 @@ namespace evoHike.Backend.Data
         public DbSet<HikingTrailEntity> HikingTrails { get; set; } = null!;
         public DbSet<PointOfInterestEntity> PointsOfInterest { get; set; } = null!;
         public DbSet<PlannedHikeEntity> PlannedHikes { get; set; } = null!;
-
         public DbSet<HikeParticipant> HikeParticipants { get; set; } = null!;
+        public DbSet<TrailPhotoEntity> TrailPhotos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,12 @@ namespace evoHike.Backend.Data
 
             modelBuilder.Entity<HikeParticipant>()
                 .HasKey(hp => new { hp.PlannedHikeId, hp.UserId });
+
+            modelBuilder.Entity<HikingTrailEntity>()
+                .HasMany(h => h.Photos)
+                .WithOne()
+                .HasForeignKey(p => p.HikingTrailId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

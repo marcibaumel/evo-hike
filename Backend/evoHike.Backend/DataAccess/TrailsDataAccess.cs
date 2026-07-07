@@ -17,27 +17,17 @@ namespace evoHike.Backend.DataAccess
 
         public async Task<IEnumerable<TrailDTO>> GetTrailsAsync()
         {
-            return await _context.HikingTrails
+            var trails = await _context.HikingTrails
+                .Include(t => t.Photos)
                 .AsNoTracking()
-                .Select(t => new TrailDTO
-                {
-                    Id = t.Id,
-                    Name = t.TrailName,
-                    Location = t.StartLocation,
-                    Length = t.Length,
-                    Difficulty = t.Difficulty,
-                    ElevationGain = t.Elevation,
-                    Rating = t.Rating,
-                    ReviewCount = t.ReviewCount,
-                    EstimatedDuration = t.EstimatedDuration,
-                    CoverPhotoPath = t.CoverPhotoPath ?? string.Empty
-                })
                 .ToListAsync();
+            return trails.Select(t => new TrailDTO(t));
         }
 
         public async Task<HikingTrailEntity?> GetByIdAsync(int id)
         {
             return await _context.HikingTrails
+                .Include(t => t.Photos)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
@@ -54,12 +44,12 @@ namespace evoHike.Backend.DataAccess
                 .Where(poi => poi.Location.IsWithinDistance(region, distanceMeters))
                 .ToListAsync();
         }
-        public async Task<HikingTrailEntity> AddTrailAsync(HikingTrailEntity trail)
+        public async Task AddTrailAsync(HikingTrailEntity trail)
         {
-            _context.HikingTrails.Add(trail);
+            await _context.HikingTrails.AddAsync(trail);
             await _context.SaveChangesAsync();
-            return trail;
         }
+
         public async Task<bool> DeleteTrailAsync(int id)
         {
             var trail = await _context.HikingTrails.FindAsync(id);
@@ -69,6 +59,7 @@ namespace evoHike.Backend.DataAccess
             await _context.SaveChangesAsync();
             return true;
         }
+
         public async Task<bool> AddParticipantAsync(int plannedHikeId, int userId)
         {
             var exists = await _context.HikeParticipants

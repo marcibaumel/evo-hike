@@ -25,4 +25,8 @@ public class HikingTrailEntity
     public int? EstimatedDuration { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public Geometry? RouteLine { get; set; }
+    public ICollection<TrailPhotoEntity> Photos { get; set; } = new List<TrailPhotoEntity>();
+	public Point? StartPoint { get; set; }
+    public Point? EndPoint { get; set; }
+    public MultiPoint? Waypoints { get; set; }
 }

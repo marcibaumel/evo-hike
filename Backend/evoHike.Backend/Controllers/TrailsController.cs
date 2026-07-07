@@ -45,18 +45,19 @@ namespace evoHike.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TrailDTO>> CreateTrail([FromBody] TrailDTO newTrail)
+        public async Task<ActionResult<TrailDTO>> CreateTrail([FromBody] CreateTrailDTO dto)
         {
             try
             {
-                var createdTrail = await _trailService.CreateTrailAsync(newTrail);
-                return Ok(createdTrail);
+                var savedTrail = await _trailService.CreateTrailAsync(dto);
+                return Ok(savedTrail);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTrail(int id)
         {
