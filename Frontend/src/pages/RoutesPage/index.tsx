@@ -207,7 +207,7 @@ export default function RoutePage() {
 
             const updatedUserTrails = [newTrailObj, ...userTrails];
             setUserTrails(updatedUserTrails);
-            
+
             setView('list');
             handleResetForm();
 
@@ -256,7 +256,7 @@ export default function RoutePage() {
 
             } catch (error) {
                 console.error('Error while deleting:', error);
-                alert(t('routePage.route_save_error')); 
+                alert(t('routePage.route_save_error'));
             }
         }
     };

@@ -30,7 +30,7 @@ namespace evoHike.Backend.DataAccess
                     Rating = t.Rating,
                     ReviewCount = t.ReviewCount,
                     EstimatedDuration = t.EstimatedDuration,
-                    CoverPhotoPath = t.CoverPhotoPath
+                    CoverPhotoPath = t.CoverPhotoPath ?? string.Empty
                 })
                 .ToListAsync();
         }
