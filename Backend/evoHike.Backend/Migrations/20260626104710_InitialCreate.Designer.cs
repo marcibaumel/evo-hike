@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using evoHike.Backend.Data;
@@ -12,9 +13,11 @@ using evoHike.Backend.Data;
 namespace evoHike.Backend.Migrations
 {
     [DbContext(typeof(EvoHikeContext))]
-    partial class EvoHikeContextModelSnapshot : ModelSnapshot
+    [Migration("20260626104710_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,9 +52,6 @@ namespace evoHike.Backend.Migrations
                     b.Property<string>("EndLocation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Point>("EndPoint")
-                        .HasColumnType("geography");
-
                     b.Property<int?>("EstimatedDuration")
                         .HasColumnType("int");
 
@@ -73,18 +73,12 @@ namespace evoHike.Backend.Migrations
                     b.Property<string>("StartLocation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Point>("StartPoint")
-                        .HasColumnType("geography");
-
                     b.Property<string>("TrailName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TrailSymbol")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<MultiPoint>("Waypoints")
-                        .HasColumnType("geography");
 
                     b.Property<string>("Website")
                         .HasColumnType("nvarchar(max)");
@@ -173,6 +167,9 @@ namespace evoHike.Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("HikingTrailEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("HikingTrailId")
                         .HasColumnType("int");
 
@@ -182,7 +179,7 @@ namespace evoHike.Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HikingTrailId");
+                    b.HasIndex("HikingTrailEntityId");
 
                     b.ToTable("TrailPhotos");
                 });
@@ -227,9 +224,7 @@ namespace evoHike.Backend.Migrations
                 {
                     b.HasOne("evoHike.Backend.Models.HikingTrailEntity", null)
                         .WithMany("Photos")
-                        .HasForeignKey("HikingTrailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HikingTrailEntityId");
                 });
 
             modelBuilder.Entity("evoHike.Backend.Models.HikingTrailEntity", b =>

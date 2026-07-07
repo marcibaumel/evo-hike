@@ -58,6 +58,21 @@ namespace evoHike.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PlannedHikes",
                 columns: table => new
                 {
@@ -82,10 +97,36 @@ namespace evoHike.Backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TrailPhotos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HikingTrailId = table.Column<int>(type: "int", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HikingTrailEntityId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrailPhotos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TrailPhotos_HikingTrails_HikingTrailEntityId",
+                        column: x => x.HikingTrailEntityId,
+                        principalTable: "HikingTrails",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_PlannedHikes_HikingTrailId",
                 table: "PlannedHikes",
                 column: "HikingTrailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrailPhotos_HikingTrailEntityId",
+                table: "TrailPhotos",
+                column: "HikingTrailEntityId");
         }
 
         /// <inheritdoc />
@@ -96,6 +137,12 @@ namespace evoHike.Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "PointsOfInterest");
+
+            migrationBuilder.DropTable(
+                name: "TrailPhotos");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "HikingTrails");

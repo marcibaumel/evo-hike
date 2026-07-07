@@ -43,5 +43,39 @@ namespace evoHike.Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+		public async Task<ActionResult<TrailDTO>> CreateTrail([FromBody] CreateTrailDTO dto)
+		{
+    		System.Console.WriteLine("---------------------------------------");
+    		System.Console.WriteLine($"[Szerver] Megérkezett! Túra neve: {dto.Name}");
+   			System.Console.WriteLine("---------------------------------------");
+
+    		try
+    		{
+        		var savedTrail = await _trailService.CreateTrailAsync(dto);
+        		return Ok(savedTrail);
+    		}
+    		catch (Exception ex)
+    		{
+        		System.Console.WriteLine($"HIBA: {ex.Message}");
+        		return BadRequest(ex.Message);
+    		}
+		}
+        
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTrail(int id)
+        {
+            try
+            {
+                await _trailService.DeleteTrailAsync(id);
+                return Ok(new { message = "Túra sikeresen törölve!" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"TÖRLÉSI HIBA: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

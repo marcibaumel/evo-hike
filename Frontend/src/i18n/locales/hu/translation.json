@@ -30,6 +30,13 @@
     "water": "Megfelelő mennyiségű víz (1.5L+)"
   },
   "clickHere": "Kapcsolj ide",
+  "difficulty": {
+    "easy": "Könnyű",
+    "moderate": "Közepes",
+    "hard": "Nehéz",
+    "extreme": "Extrém",
+    "unknown": "Ismeretlen"
+  },
   "dashboard": {
     "badges": {
       "title": "Legutóbbi jelvények"

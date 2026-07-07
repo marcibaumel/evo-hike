@@ -17,19 +17,17 @@ namespace evoHike.Backend.DataAccess
 
         public async Task<IEnumerable<TrailDTO>> GetTrailsAsync()
         {
-            return await _context.HikingTrails
+            var trails = await _context.HikingTrails
+                .Include(t => t.Photos)
                 .AsNoTracking()
-                .Select(t => new TrailDTO
-                {
-                    Name = t.TrailName,
-                    Difficulty = t.Difficulty
-                })
                 .ToListAsync();
+            return trails.Select(t => new TrailDTO(t));
         }
 
         public async Task<HikingTrailEntity?> GetByIdAsync(int id)
         {
             return await _context.HikingTrails
+                .Include(t => t.Photos)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
@@ -45,6 +43,21 @@ namespace evoHike.Backend.DataAccess
             return await _context.PointsOfInterest
                 .Where(poi => poi.Location.IsWithinDistance(region, distanceMeters))
                 .ToListAsync();
+        }
+        
+        public async Task AddTrailAsync(HikingTrailEntity trail)
+        {
+            await _context.HikingTrails.AddAsync(trail);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteTrailAsync(int id)
+        {
+            var trail = await _context.HikingTrails.FindAsync(id);
+            if (trail != null)
+            {
+                _context.HikingTrails.Remove(trail);
+                await _context.SaveChangesAsync();
+            }
         }
     }
        

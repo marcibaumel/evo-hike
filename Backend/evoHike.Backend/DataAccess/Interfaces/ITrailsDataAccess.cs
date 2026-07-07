@@ -11,5 +11,8 @@ namespace evoHike.Backend.DataAccess.Interfaces
         Task<HikingTrailEntity?> GetByIdAsync(int id);
         Task<HikingTrailEntity?> GetTrailByIdAsync(int trailId);
         Task<List<PointOfInterestEntity>> GetPoisWithinDistanceAsync(Geometry region, double distanceMeters);
+        Task DeleteTrailAsync(int id);
+        
+        Task AddTrailAsync(HikingTrailEntity trail);
     }
 }

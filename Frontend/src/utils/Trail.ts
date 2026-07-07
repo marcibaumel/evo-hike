@@ -15,6 +15,9 @@ export class Trail {
     description: string;
     userPhotos: string[];
     geojson?: FeatureCollection | Feature | null;
+    startPoint?: { lat: number, lng: number } | null;
+    endPoint?: { lat: number, lng: number } | null;
+    waypoints?: { lat: number, lng: number }[];
 
     constructor(data: {
         id: string;
@@ -30,6 +33,10 @@ export class Trail {
         description?: string;
         userPhotos?: string[];
         geojson?: FeatureCollection | Feature | null;
+        startPoint?: { lat: number, lng: number } | null;
+        endPoint?: { lat: number, lng: number } | null;
+        waypoints?: { lat: number, lng: number }[];
+
     }) {
         this.id = data.id;
         this.name = data.name;
@@ -44,5 +51,8 @@ export class Trail {
         this.description = data.description || '';
         this.userPhotos = data.userPhotos || [];
         this.geojson = data.geojson;
+        this.startPoint = data.startPoint || null;
+        this.endPoint = data.endPoint || null;
+        this.waypoints = data.waypoints || [];
     }
 }
