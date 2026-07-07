@@ -167,7 +167,7 @@ export default function RoutePage() {
             waypoints: points.mids.map(p => ({ lat: p[0], lng: p[1] })),
             routeLine: {
                 type: 'LineString' as const,
-                coordinates: customRoute.coordinates.map((c): [number, number] => [c[1], c[0]])
+                coordinates: customRoute.coordinates.map((c): [number, number] => [c[0], c[1]])
             }
         };
 
@@ -192,7 +192,7 @@ export default function RoutePage() {
                     properties: { id: String(savedTrailDTO.id), name: savedTrailDTO.name || payload.name },
                     geometry: {
                         type: 'LineString',
-                        coordinates: customRoute.coordinates.map((c): [number, number] => [c[1], c[0]])
+                        coordinates: customRoute.coordinates.map((c): [number, number] => [c[0], c[1]])
                     }
                 } as Feature),
                 startPoint: savedTrailDTO.startPoint || payload.startPoint,
