@@ -1,6 +1,8 @@
 import { MapTrifoldIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../../../components/Card';
+import bgImage from '../../../assets/pictures/mapBg.jpg';
+
 
 export const MapsCard = () => {
     const { t } = useTranslation();
@@ -8,7 +10,8 @@ export const MapsCard = () => {
     return (
         <Card
             variant="solid"
-            className="md:col-span-2 row-span-1 md:row-span-2 p-8 relative overflow-hidden group hover:border-brand-accent/20 transition-all duration-500">
+            style={{ backgroundImage: `url(${bgImage})` }}
+            className="md:col-span-2 bg-grey/55 bg-blend-overlay bg-cover bg-center bg-no repeat row-span-1 md:row-span-2 p-8 relative overflow-hidden group hover:border-brand-accent/20 transition-all duration-500">
             <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
                 <MapTrifoldIcon size={200} weight="thin" />
             </div>

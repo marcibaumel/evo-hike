@@ -3,6 +3,7 @@ using evoHike.Backend.Middleware;
 using evoHike.Backend.Repositories;
 using evoHike.Backend.DataAccess;
 using evoHike.Backend.DataAccess.Interfaces;
+using evoHike.Backend.Models.DTO;
 using evoHike.Backend.Services;
 using evoHike.Backend.Services.Interfaces;
 using OpenMeteo;
@@ -30,9 +31,13 @@ builder.Services.AddScoped<ITrailsDataAccess, TrailsDataAccess>();
 builder.Services.AddScoped<IPlannedHikeDataAccess, PlannedHikeDataAccess>();
 builder.Services.AddScoped<IDataImportDataAccess, DataImportDataAccess>();
 builder.Services.AddScoped<IPlannedHikeService, PlannedHikeService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<DataImportService>();
 builder.Services.AddScoped<OpenMeteoClient>();
+
+builder.Services.Configure<BrevoOptions>(
+    builder.Configuration.GetSection(BrevoOptions.BrevoOptionKey));
 
 var app = builder.Build();
 
