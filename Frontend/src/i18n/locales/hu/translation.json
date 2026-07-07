@@ -73,6 +73,22 @@
     "noMatch": "Nincs a keresettnek megfelelő túra",
     "reset": "Alaphelyzet"
   },
+  "joinHike": {
+    "title": "Túra Csatlakozás",
+    "in_progress": "Csatlakozás folyamatban...",
+    "login_required": "Kérlek, előbb jelentkezz be az evoHike-ba!",
+    "success": "Sikeresen csatlakoztál! Átirányítás a naplóba...",
+    "error_prefix": "Hiba történt: ",
+    "network_error": "Hálózati hiba történt a csatlakozás során."
+  },
+  "journal": {
+    "share_success": "A csatlakozási link a vágólapra másolva! Küldd el a barátaidnak.",
+    "share_error": "Hiba a másolás során: ",
+    "share_button": "Meghirdetés",
+    "loading": "Túrák betöltése...",
+    "empty_state": "Még nincsenek tervezett túráid. Készíts egyet a Route oldalon!",
+    "no_active_trail": "Nincs aktív túra"
+  },
   "landing": {
     "features": {
       "community_desc": "Oszd meg túranaplódat, képeidet, és gondolataidat más túrázókkal.",
@@ -186,14 +202,22 @@
   "routePage": {
     "addWaypoint": "Útvonal pont hozzáadása",
     "clearNav": "Navigáció törlése",
+    "custom_route": "Saját útvonal",
     "delete": "Törlés",
     "endPoint": "Cél pont",
+    "enter_route_name": "Kérlek, adj meg egy útvonal nevet.",
     "gpxLoadedError": "GPX fájl be van töltve. Töröld a navigációt a manuális tervezéshez!",
     "intermediatePoint": "Köztes pont",
     "navFrom": "Navigáció innen",
     "navTo": "Navigáció ide",
     "routeSaved": "Útvonal mentve",
-    "startPoint": "Start pont"
+    "route_save_error": "Nem sikerült létrehozni a túrát az adatbázisban.",
+    "route_saved_success": "A túra sikeresen hozzáadva az adatbázishoz!",
+    "schedule_error": "Nem sikerült betervezni a túrát.",
+    "schedule_success": "Túra sikeresen betervezve! Nézd meg a Napló oldalon.",
+    "startPoint": "Start pont",
+    "test_data_error": "Ezt a túrát nem lehet betervezni, mert csak tesztadat. Kérlek, készíts egy új túrát a térképen!",
+    "unnamed_route": "Névtelen útvonal"
   },
   "routePageH1": "Útvonaltervezés",
   "selectedTrail": {

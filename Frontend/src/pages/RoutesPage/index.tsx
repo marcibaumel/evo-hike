@@ -4,16 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { Map } from 'leaflet';
 import type { FeatureCollection, Feature } from 'geojson';
 import { RouteMap } from './components/RouteMap';
-import {FilterPanel} from './components/FilterPanel';
+import { FilterPanel } from './components/FilterPanel';
 import { Button } from '../../components/Button';
 import { TrailCard } from './components/TrailCard';
 import RouteEditorPanel from './components/RouteEditorPanel';
 import SelectedTrailDetails from './components/SelectedTrailDetails';
 
 import type { DifficultyLevel } from '../../utils/difficulty';
-import { MagnifyingGlassIcon, PlusIcon,SlidersHorizontalIcon } from '@phosphor-icons/react';
-
+import { MagnifyingGlassIcon, PlusIcon, SlidersHorizontalIcon } from '@phosphor-icons/react';
 import { Trail } from '../../utils/Trail';
+import { planNewHike } from '../../api/plannedHikeService';
 import { calculateElevationGain } from '../../utils/routePlanner';
 import { useTrailFilters } from '../../hooks/useTrailFilters';
 import { getNearbyPOIs, type OverpassElement } from '../../api/overpassApi';
@@ -48,6 +48,11 @@ export default function RoutePage() {
         end: [number, number] | null;
         mids: [number, number][];
     }>({ start: null, end: null, mids: [] });
+
+    const [planningTrail, setPlanningTrail] = useState<Trail | null>(null);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const fetchTrails = async () => {
@@ -189,9 +194,7 @@ export default function RoutePage() {
                         type: 'LineString',
                         coordinates: customRoute.coordinates.map((c): [number, number] => [c[1], c[0]])
                     }
-
                 } as Feature),
-
                 startPoint: savedTrailDTO.startPoint || payload.startPoint,
                 endPoint: savedTrailDTO.endPoint || payload.endPoint,
                 waypoints: savedTrailDTO.waypoints || payload.waypoints || []
@@ -247,6 +250,46 @@ export default function RoutePage() {
         } catch (error) {
             console.error('Hiba a backend törlés során:', error);
             alert('Nem sikerült törölni a túrát! (Lehet, hogy ez egy védett fejlesztői ajánlás, vagy megszakadt a kapcsolat.)');
+        }
+    };
+
+    const handleOpenPlanner = (trail: Trail) => {
+        setPlanningTrail(trail);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(8, 0, 0, 0);
+
+        const tomorrowEnd = new Date(tomorrow);
+        tomorrowEnd.setHours(18, 0, 0, 0);
+
+        setStartDate(tomorrow.toISOString().slice(0, 16));
+        setEndDate(tomorrowEnd.toISOString().slice(0, 16));
+    };
+
+    const handleSavePlannedHike = async () => {
+        if (!planningTrail || !startDate || !endDate) return;
+
+        const numericId = parseInt(planningTrail.id.toString());
+
+        if (isNaN(numericId) || numericId <= 0) {
+            alert(t('routePage.test_data_error'));
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            await planNewHike({
+                routeId: numericId,
+                start: new Date(startDate).toISOString(),
+                end: new Date(endDate).toISOString()
+            });
+            alert(t('routePage.schedule_success'));
+            setPlanningTrail(null);
+        } catch (error) {
+            console.error('Error:', error);
+            alert(t('routePage.schedule_error'));
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -343,6 +386,7 @@ export default function RoutePage() {
                                             trail={trail}
                                             onViewDetails={() => handleTrailSelect(trail.id)}
                                             onDelete={() => handleDeleteTrail(trail.id)}
+                                            onPlanHike={() => handleOpenPlanner(trail)}
                                         />
                                     </div>
                                 ))
@@ -377,6 +421,46 @@ export default function RoutePage() {
                     </div>
                 )}
             </div>
+
+            {planningTrail && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+                    <div className="bg-brand-dark border border-white/10 p-6 rounded-2xl w-full max-w-md space-y-6">
+                        <h3 className="text-xl font-bold text-white">
+                            {t('plan.title')}: {planningTrail.name}
+                        </h3>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-brand-muted text-sm mb-1">{t('plan.start_date')}</label>
+                                <input
+                                    type="datetime-local"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-brand-muted text-sm mb-1">{t('plan.end_date')}</label>
+                                <input
+                                    type="datetime-local"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-4">
+                            <Button variant="secondary" onClick={() => setPlanningTrail(null)} disabled={isSubmitting}>
+                                {t('plan.cancel')}
+                            </Button>
+                            <Button variant="primary" className="bg-brand-accent text-brand-dark" onClick={handleSavePlannedHike} disabled={isSubmitting}>
+                                {isSubmitting ? t('plan.saving') : t('plan.save')}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

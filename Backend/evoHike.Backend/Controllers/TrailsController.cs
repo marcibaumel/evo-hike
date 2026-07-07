@@ -45,35 +45,33 @@ namespace evoHike.Backend.Controllers
         }
 
         [HttpPost]
-		public async Task<ActionResult<TrailDTO>> CreateTrail([FromBody] CreateTrailDTO dto)
-		{
-    		System.Console.WriteLine("---------------------------------------");
-    		System.Console.WriteLine($"[Szerver] Megérkezett! Túra neve: {dto.Name}");
-   			System.Console.WriteLine("---------------------------------------");
-
-    		try
-    		{
-        		var savedTrail = await _trailService.CreateTrailAsync(dto);
-        		return Ok(savedTrail);
-    		}
-    		catch (Exception ex)
-    		{
-        		System.Console.WriteLine($"HIBA: {ex.Message}");
-        		return BadRequest(ex.Message);
-    		}
-		}
-        
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTrail(int id)
+        public async Task<ActionResult<TrailDTO>> CreateTrail([FromBody] CreateTrailDTO dto)
         {
             try
             {
-                await _trailService.DeleteTrailAsync(id);
-                return Ok(new { message = "Túra sikeresen törölve!" });
+                var savedTrail = await _trailService.CreateTrailAsync(dto);
+                return Ok(savedTrail);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"TÖRLÉSI HIBA: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTrail(int id)
+        {
+            try
+            {
+                var success = await _trailService.DeleteTrailAsync(id);
+                if (!success)
+                {
+                    return NotFound("Tour not found in the database");
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }

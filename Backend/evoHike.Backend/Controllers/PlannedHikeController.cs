@@ -1,9 +1,9 @@
 ﻿using evoHike.Backend.Models;
 using evoHike.Backend.Models.DTOs;
-using evoHike.Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using evoHike.Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace evoHike.Backend.Controllers
 {
@@ -19,13 +19,25 @@ namespace evoHike.Backend.Controllers
         {
             _plannedHikeService = plannedHikeService;
         }
+        private int GetCurrentUserId()
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (int.TryParse(userIdString, out int userId))
+            {
+                return userId;
+            }
+            throw new UnauthorizedAccessException("Couldn't retrieve user ID from token.");
+        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlannedHikeEntity>>> GetPlannedHikes([FromQuery] HikeStatus? status)
         {
             try
             {
-                var hikes = await _plannedHikeService.GetHikesAsync(status);
+                var currentUserId = GetCurrentUserId();
+
+                var hikes = await _plannedHikeService.GetHikesAsync(currentUserId, status, true);
+
                 return Ok(hikes);
             }
             catch (Exception ex)
@@ -45,12 +57,39 @@ namespace evoHike.Backend.Controllers
         {
             try
             {
-                var result = await _plannedHikeService.CreatePlannedHikeAsync(request);
+                var currentuserId = GetCurrentUserId();
+
+                var result = await _plannedHikeService.CreatePlannedHikeAsync(request,currentuserId);
                 return CreatedAtAction(nameof(GetPlannedHikes), new { id = result.Id }, result);
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message); 
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return StatusCode(500, errorMessage);
+            }
+        }
+        [HttpPost("{id}/join")]
+        public async Task<IActionResult> JoinHike(int id)
+        {
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+
+                await _plannedHikeService.JoinHikeAsync(id, currentUserId);
+
+                return Ok(new { message = "Successfully joined the tour!" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 

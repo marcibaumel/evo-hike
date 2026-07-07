@@ -24,5 +24,10 @@ namespace evoHike.Backend.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public string? ChecklistJson { get; set; }
+
+        public int OrganizerId { get; set; }
+        public User Organizer { get; set; } = null!;
+
+        public ICollection<HikeParticipant> Participants { get; set; } = new List<HikeParticipant>();
     }
 }

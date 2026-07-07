@@ -7,6 +7,7 @@ import Weather from './pages/WeatherPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage.tsx';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import AuthPage from './pages/AuthPage/AuthPage.tsx';
+import JoinHikePage from './pages/JoinHikePage';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/social" element={<SocialPage />} />
                 <Route path="/routes" element={<RoutePage />} />
                 <Route path="/weather" element={<Weather />} />
+                <Route path="/join-hike/:id" element={<JoinHikePage />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />
         </Routes>

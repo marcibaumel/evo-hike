@@ -44,20 +44,38 @@ namespace evoHike.Backend.DataAccess
                 .Where(poi => poi.Location.IsWithinDistance(region, distanceMeters))
                 .ToListAsync();
         }
-        
         public async Task AddTrailAsync(HikingTrailEntity trail)
         {
             await _context.HikingTrails.AddAsync(trail);
             await _context.SaveChangesAsync();
         }
-        public async Task DeleteTrailAsync(int id)
+
+        public async Task<bool> DeleteTrailAsync(int id)
         {
             var trail = await _context.HikingTrails.FindAsync(id);
-            if (trail != null)
+            if (trail == null) return false;
+
+            _context.HikingTrails.Remove(trail);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddParticipantAsync(int plannedHikeId, int userId)
+        {
+            var exists = await _context.HikeParticipants
+                .AnyAsync(hp => hp.PlannedHikeId == plannedHikeId && hp.UserId == userId);
+
+            if (exists) return false;
+
+            _context.HikeParticipants.Add(new HikeParticipant
             {
-                _context.HikingTrails.Remove(trail);
-                await _context.SaveChangesAsync();
-            }
+                PlannedHikeId = plannedHikeId,
+                UserId = userId,
+                JoinedAt = DateTime.UtcNow
+            });
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
        

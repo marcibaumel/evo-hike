@@ -1,14 +1,30 @@
-﻿import { MapTrifoldIcon, PlusIcon } from '@phosphor-icons/react';
+﻿import { MapTrifoldIcon, PlusIcon, ShareNetwork } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AchievementsWidget } from './components/AchievementsWidget';
 import { type ChecklistItem, ExpeditionChecklist } from './components/ExpeditionChecklist';
 import { PhotoGrid } from './components/PhotoGrid';
 import { ProfileHeader } from './components/ProfileHeader';
 import { type UpcomingHike, UpcomingHikeCard } from './components/UpcomingHikeCard';
+import { Button } from '../../components/Button';
+import { getPlannedHikes } from '../../api/plannedHikeService';
+interface BackendHikeData {
+    id: number;
+    plannedStartDateTime: string;
+    hikingTrailId: number;
+    hikingTrail?: {
+        name?: string;
+        trailName?: string;
+        difficulty?: number | string;
+        coverPhotoPath?: string;
+    };
+}
 
 function JournalPage() {
     const { t } = useTranslation();
+
+    const [upcomingHikes, setUpcomingHikes] = useState<UpcomingHike[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const user = {
         name: 'Alex Wanderer',
@@ -20,25 +36,6 @@ function JournalPage() {
             hikesCompleted: 42
         }
     };
-
-    const upcomingHikes: UpcomingHike[] = [
-        {
-            id: 1,
-            title: 'Bükk Peaks Challenge',
-            date: 'Oct 12, 2024',
-            daysLeft: 3,
-            difficulty: 'Hard',
-            image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop'
-        },
-        {
-            id: 2,
-            title: 'Lillafüred Waterfall Loop',
-            date: 'Oct 20, 2024',
-            daysLeft: 11,
-            difficulty: 'Moderate',
-            image: 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=2070&auto=format&fit=crop'
-        }
-    ];
 
     const recentPhotos = [
         'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop',
@@ -71,6 +68,45 @@ function JournalPage() {
         { id: '5', text: t('dashboard.checklist.items.boots'), isCompleted: false }
     ]);
 
+    useEffect(() => {
+        const loadHikes = async () => {
+            try {
+                const data = await getPlannedHikes();
+
+                const formattedHikes: UpcomingHike[] = data.map((hike: BackendHikeData) => {
+                    const startDate = new Date(hike.plannedStartDateTime);
+                    const today = new Date();
+                    const daysLeft = Math.ceil((startDate.getTime() - today.getTime()) / (1000 * 3600 * 24));
+
+                    return {
+                        id: hike.id,
+                        title: hike.hikingTrail?.trailName || hike.hikingTrail?.name || `Túra #${hike.hikingTrailId || hike.id}`,
+                        date: startDate.toLocaleDateString(),
+                        daysLeft: daysLeft > 0 ? daysLeft : 0,
+                        difficulty: hike.hikingTrail?.difficulty || 'Moderate',
+                        image: hike.hikingTrail?.coverPhotoPath || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b'
+                    };
+                });
+
+                setUpcomingHikes(formattedHikes);
+            } catch (error) {
+                console.error('Error loading tours:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadHikes();
+    }, []);
+
+    const handleShareHike = (hikeId: number) => {
+        const joinLink = `${window.location.origin}/join-hike/${hikeId}`;
+
+        navigator.clipboard.writeText(joinLink)
+            .then(() => alert(t('journal.share.success')))
+            .catch(err => console.error(t('journal.share.error'), err));
+    };
+
     return (
         <div className="min-h-screen bg-brand-dark pt-28 pb-12 px-4 selection:bg-brand-accent selection:text-brand-dark">
             <div className="max-w-7xl mx-auto space-y-8">
@@ -93,9 +129,28 @@ function JournalPage() {
                             </div>
 
                             <div className="grid gap-4">
-                                {upcomingHikes.map((hike) => (
-                                    <UpcomingHikeCard key={hike.id} hike={hike} />
-                                ))}
+                                {isLoading ? (
+                                    <p className="text-white">{t('journal.loading')}</p>
+                                ) : upcomingHikes.length === 0 ? (
+                                    <p className="text-brand-muted">{t('journal.empty_state')}</p>
+                                ) : (
+                                    upcomingHikes.map((hike) => (
+                                        <div key={hike.id} className="relative group">
+                                            <UpcomingHikeCard hike={hike} />
+
+                                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Button
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    className="flex items-center gap-2 bg-brand-dark/80 backdrop-blur"
+                                                    onClick={() => handleShareHike(hike.id)}
+                                                >
+                                                    <ShareNetwork size={16} /> {t('journal.share.button')}
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </section>
 
@@ -108,7 +163,7 @@ function JournalPage() {
                         {/* Checklist */}
                         <ExpeditionChecklist
                             title={t('dashboard.checklist.title')}
-                            subtitle="Bükk Peaks Challenge"
+                            subtitle={upcomingHikes.length > 0 ? upcomingHikes[0].title : t('journal.no_active_trail')}
                             items={checklistItems}
                             onUpdate={setChecklistItems}
                         />
