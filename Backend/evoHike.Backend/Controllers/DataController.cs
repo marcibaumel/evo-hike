@@ -33,5 +33,22 @@ namespace evoHike.Backend.Controllers
             await db.Database.MigrateAsync();
             return Ok("Database cleared.");
         }
+
+        [HttpPost("import-trails")]
+        public async Task<IActionResult> ImportTrails([FromQuery] string folderPath = "splittrails")
+        {
+            var fullPath = Path.IsPathRooted(folderPath)
+                ? folderPath
+                : Path.Combine(Directory.GetCurrentDirectory(), folderPath);
+
+            if (!Directory.Exists(fullPath))
+            {
+                return BadRequest(new { Message = $"Folder not found: {fullPath}" });
+            }
+
+            var result = await _importService.ImportTrailsAsync(fullPath);
+
+            return Ok(new { Message = result });
+        }
     }
 }

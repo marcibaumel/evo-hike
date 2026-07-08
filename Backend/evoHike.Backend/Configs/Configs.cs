@@ -106,12 +106,31 @@ public static class Configs
     }
     public static void InitializeDatabase(this WebApplication app)
     {
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-            var context = services.GetRequiredService<EvoHikeContext>();
+        using var scope = app.Services.CreateScope();
 
-            DbInitializer.Initialize(context);
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<EvoHikeContext>();
+        var importService = services.GetRequiredService<Services.DataImportService>();
+
+        DbInitializer.Initialize(context);
+
+        var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Data/split_trails");
+
+        if (!context.HikingTrails.Any() && Directory.Exists(folderPath))
+        {
+            var result = importService.ImportTrailsAsync(folderPath)
+                .GetAwaiter()
+                .GetResult();
+
+            Console.WriteLine(result);
+        }
+        else if (!Directory.Exists(folderPath))
+        {
+            Console.WriteLine($"splittrails folder not found: {folderPath}");
+        }
+        else
+        {
+            Console.WriteLine("Trails already exist, skipping auto-import.");
         }
     }
     

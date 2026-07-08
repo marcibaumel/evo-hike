@@ -35,6 +35,7 @@ builder.Services.AddScoped<IDataImportDataAccess, DataImportDataAccess>();
 builder.Services.AddScoped<IPlannedHikeService, PlannedHikeService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+builder.Services.AddScoped<IDataImportDataAccess, DataImportDataAccess>();
 builder.Services.AddScoped<DataImportService>();
 builder.Services.AddScoped<OpenMeteoClient>();
 
