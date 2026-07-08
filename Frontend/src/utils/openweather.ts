@@ -6,4 +6,6 @@ export interface OpenWeatherForecast {
     windSpeed_ms: number;
     humidityPercent: number;
     pop: number;
+    tempMaxC?: number;
+    tempMinC?: number;
 }

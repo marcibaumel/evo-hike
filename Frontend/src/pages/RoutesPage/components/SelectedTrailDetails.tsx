@@ -13,9 +13,8 @@ interface SelectedTrailDetailsProps {
 
 export default function SelectedTrailDetails({ trail, pois, map,onClose }: SelectedTrailDetailsProps) {
     const { t } = useTranslation();
-    const hours = trail.time / 60;
-    const h = Math.floor(hours / 60);
-    const m = Math.round((hours - h * 60 ));
+    const h = Math.floor(trail.time / 60);
+    const m = Math.round(trail.time % 60);
     const duration = h > 0 ? `${h}h ${m}m` : `${m}m`;
     return (
         <div className="bg-brand-dark/95 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4">

@@ -1,5 +1,4 @@
 ﻿import { CalendarBlankIcon } from '@phosphor-icons/react';
-
 import { useTranslation } from 'react-i18next';
 import type { OpenWeatherForecast } from '../../../utils/openweather';
 import { Badge } from '../../../components/Badge';
@@ -13,22 +12,16 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
     const { t } = useTranslation();
 
     const getWeatherDescription = (code: number): string => {
-        return t(`weatherCodes.${code}`, {
-            defaultValue: t('weather_page.unknown_conditions')
-        });
+        return t(`weatherCodes.${code}`, { defaultValue: t('weather_page.unknown_conditions') });
     };
 
     return (
         <div data-testid="current-weather-card" className="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[2.5rem] bg-linear-to-br from-[#1a2e2e] to-[#0d1f1f] border border-white/10 group">
             {/* Animated Gradient Background */}
             <div className="absolute inset-0 bg-linear-to-tr from-brand-accent/10 via-transparent to-blue-500/10 opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
-
+            
             <div className="absolute top-8 right-8 animate-float z-0">
-                <WeatherIcon
-                    code={current.weatherCode}
-                    size={160}
-                    className="drop-shadow-[0_0_50px_rgba(255,255,255,0.1)]"
-                />
+                <WeatherIcon code={current.weatherCode} size={160} className="drop-shadow-[0_0_50px_rgba(255,255,255,0.1)]" />
             </div>
 
             <div className="absolute bottom-0 left-0 p-8 md:p-10 w-full bg-linear-to-t from-brand-dark/80 to-transparent z-10">
@@ -40,9 +33,10 @@ export const CurrentWeatherCard = ({ current }: CurrentWeatherCardProps) => {
                         {getWeatherDescription(current.weatherCode)}
                     </span>
                 </div>
+
                 <div data-testid="weather-values" className="flex gap-4 text-sm font-bold tracking-widest text-brand-accent uppercase">
-                    <span data-testid="highest-weather-value">H: {Math.round(current.temperatureC + 3)}°</span>
-                    <span data-testid="lowest-weather-value">L: {Math.round(current.temperatureC - 2)}°</span>
+                    <span data-testid="highest-weather-value">H: {Math.round(current.tempMaxC ?? current.temperatureC)}°</span>
+                    <span data-testid="lowest-weather-value">L: {Math.round(current.tempMinC ?? current.temperatureC)}°</span>
                     <span>
                         {t('weatherFeelsLike')} {Math.round(current.feelsLikeC)}°
                     </span>

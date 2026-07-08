@@ -35,9 +35,8 @@ const getDifficultyVariant = (level: number) => {
 
 export const TrailCard = ({ trail, onViewDetails, onDelete, onPlanHike }: TrailCardProps) => {
     const { t } = useTranslation();
-    const hours = trail.time / 60;
-    const h = Math.floor(hours / 60);
-    const m = Math.round((hours - h * 60 ));
+    const h = Math.floor(trail.time / 60);
+    const m = Math.round(trail.time % 60);
     const duration = h > 0 ? `${h}h ${m}m` : `${m}m`;
 
     const displayImage = trail.coverPhotoPath

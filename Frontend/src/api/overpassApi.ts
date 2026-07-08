@@ -25,7 +25,10 @@ const CACHE_LIMIT = 50;
 const OVERPASS_ENDPOINTS = [
     'https://overpass-api.de/api/interpreter',
     'https://lz4.overpass-api.de/api/interpreter',
-    'https://overpass.kumi.systems/api/interpreter'
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://overpass.openstreetmap.ru/api/interpreter',
+    'https://overpass.nchc.org.tw/api/interpreter',
+    'https://overpass.openstreetmap.fr/api/interpreter',
 ];
 
 export const getNearbyPOIs = async (
@@ -87,7 +90,7 @@ export const getNearbyPOIs = async (
                 `data=${encodeURIComponent(query)}`,
                 {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    timeout: 20000
+                    timeout: 15000
                 }
             );
 
@@ -100,14 +103,15 @@ export const getNearbyPOIs = async (
             return response.data.elements;
 
         } catch (error) {
-            console.warn(`[Overpass API] Failed at endpoint ${endpoint}. Error:`, axios.isAxiosError(error) ? error.message : error);
+            console.warn(`[Overpass API] Failed at ${endpoint}. Switching to next...`);
             
             if (i === OVERPASS_ENDPOINTS.length - 1) {
                 console.error('[Overpass API] All endpoints failed.');
                 return [];
             }
             
-            await new Promise(res => setTimeout(res, 1000));
+            const backoffTime = 1000 * (i + 1);
+            await new Promise(res => setTimeout(res, backoffTime));
         }
     }
 
