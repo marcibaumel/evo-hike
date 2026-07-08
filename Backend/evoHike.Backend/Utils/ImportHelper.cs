@@ -82,6 +82,16 @@ public static partial class ImportHelper
         };
     }
 
+    public static int CalculateDifficulty(double lengthKm, double elevationMeters)
+    {
+        double effectiveDistanceKm = lengthKm + (elevationMeters / 100.0);
+        
+        if (effectiveDistanceKm < 8.0) return 0;
+        if (effectiveDistanceKm <= 16.0) return 1;
+        if (effectiveDistanceKm <= 25.0) return 2;
+        return 3;
+    }
+
     [GeneratedRegex(@"\(([^)]+)\)", RegexOptions.Compiled)]
     private static partial Regex ParenthesisContentRegex();
 }

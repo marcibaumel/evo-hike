@@ -19,7 +19,7 @@ interface OverpassResponse {
     elements: OverpassElement[];
 }
 
-const poiCache = new Map<string, OverpassElement[]>();
+const CACHE_PREFIX = 'poi_cache_';
 const CACHE_LIMIT = 50;
 
 const OVERPASS_ENDPOINTS = [
@@ -31,6 +31,29 @@ const OVERPASS_ENDPOINTS = [
     'https://overpass.openstreetmap.fr/api/interpreter',
 ];
 
+const cache = {
+    get(key: string): OverpassElement[] | null {
+        try {
+            const data = localStorage.getItem(CACHE_PREFIX + key);
+            return data ? JSON.parse(data) : null;
+        } catch {
+            return null;
+        }
+    },
+    set(key: string, value: OverpassElement[]) {
+        try {
+            const fullKey = CACHE_PREFIX + key;
+            const keys = Object.keys(localStorage).filter(k => k.startsWith(CACHE_PREFIX));
+            if (keys.length >= CACHE_LIMIT) {
+                localStorage.removeItem(keys[0]);
+            }
+            localStorage.setItem(fullKey, JSON.stringify(value));
+        } catch (e) {
+            console.warn('LocalStorage write failed (likely quota exceeded)', e);
+        }
+    }
+};
+
 export const getNearbyPOIs = async (
     coordinates: { lat: number; lon: number }[],
     radius: number = 200,
@@ -39,7 +62,6 @@ export const getNearbyPOIs = async (
 
     const targetPoints = 25;
     const step = Math.max(1, Math.ceil(coordinates.length / targetPoints));
-
     const sampledCoordinates = coordinates.filter((_, index) => index % step === 0);
 
     if (
@@ -49,27 +71,25 @@ export const getNearbyPOIs = async (
         sampledCoordinates.push(coordinates[coordinates.length - 1]);
     }
 
-    const coordString = sampledCoordinates
-        .map((c) => `${c.lat.toFixed(5)},${c.lon.toFixed(5)}`)
-        .join(',');
-
-    const cacheKey = `${radius}-${coordString}`;
-
-    if (poiCache.has(cacheKey)) {
-        const cachedData = poiCache.get(cacheKey)!;
-        poiCache.delete(cacheKey);
-        poiCache.set(cacheKey, cachedData);
-        return cachedData;
-    }
-
     const lats = sampledCoordinates.map((c) => c.lat);
     const lons = sampledCoordinates.map((c) => c.lon);
 
-    const buffer = 0.005; // ~500m bounding box buffer
+    const buffer = 0.005;
     const minLat = Math.min(...lats) - buffer;
     const maxLat = Math.max(...lats) + buffer;
     const minLon = Math.min(...lons) - buffer;
     const maxLon = Math.max(...lons) + buffer;
+
+    const cacheKey = `bbox:${minLat.toFixed(3)}_${minLon.toFixed(3)}_${maxLat.toFixed(3)}_${maxLon.toFixed(3)}-r:${radius}`;
+
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+        return cachedData;
+    }
+
+    const coordString = sampledCoordinates
+        .map((c) => `${c.lat.toFixed(5)},${c.lon.toFixed(5)}`)
+        .join(',');
 
     const query = `
     [out:json][timeout:15][bbox:${minLat},${minLon},${maxLat},${maxLon}];
@@ -90,16 +110,11 @@ export const getNearbyPOIs = async (
                 `data=${encodeURIComponent(query)}`,
                 {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    timeout: 15000
+                    timeout: 25000
                 }
             );
 
-            if (poiCache.size >= CACHE_LIMIT) {
-                const oldestKey = poiCache.keys().next().value;
-                if (oldestKey) poiCache.delete(oldestKey);
-            }
-
-            poiCache.set(cacheKey, response.data.elements);
+            cache.set(cacheKey, response.data.elements);
             return response.data.elements;
 
         } catch (error) {
@@ -110,7 +125,7 @@ export const getNearbyPOIs = async (
                 return [];
             }
             
-            const backoffTime = 1000 * (i + 1);
+            const backoffTime = 500 * (i + 1);
             await new Promise(res => setTimeout(res, backoffTime));
         }
     }

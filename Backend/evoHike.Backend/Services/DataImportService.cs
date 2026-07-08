@@ -81,6 +81,7 @@ public class DataImportService
             Description = ImportHelper.GetAttributeValue(attr, "description"),
             Length = lengthKm,
             Elevation = elevation,
+            Difficulty = ImportHelper.CalculateDifficulty(lengthKm, elevation),
             EstimatedDuration = ImportHelper.CalculateDurationMinutes(lengthKm, elevation),
             RouteLine = validGeometry,
             CreatedAt = DateTime.UtcNow

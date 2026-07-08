@@ -93,3 +93,12 @@ export const calculateDistanceInMeters = (coords: [number, number][]) => {
     }
     return Math.round(totalDistance);
 };
+
+export const calculateDifficulty = (distanceMeters: number, elevationGainMeters: number): number => {
+    const effectiveDistance = distanceMeters + (elevationGainMeters * 10);
+
+    if (effectiveDistance < 8000) return 0;
+    if (effectiveDistance <= 16000) return 1;
+    if (effectiveDistance <= 25000) return 2;
+    return 3;
+}

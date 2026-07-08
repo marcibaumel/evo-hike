@@ -14,7 +14,7 @@ import type { DifficultyLevel } from '../../utils/difficulty';
 import { MagnifyingGlassIcon, PlusIcon, SlidersHorizontalIcon } from '@phosphor-icons/react';
 import { Trail } from '../../utils/Trail';
 import { planNewHike } from '../../api/plannedHikeService';
-import { calculateElevationGain } from '../../utils/routePlanner';
+import { calculateElevationGain, calculateDifficulty } from '../../utils/routePlanner';
 import { useTrailFilters } from '../../hooks/useTrailFilters';
 import { getNearbyPOIs, type OverpassElement } from '../../api/overpassApi';
 
@@ -159,7 +159,7 @@ export default function RoutePage() {
             description: customRoute.description,
             length: customRoute.distance / 1000,
             elevationGain: customRoute.elevationGain,
-            difficulty: customRoute.distance < 5000 ? 0 : customRoute.distance > 15000 ? 2 : 1,
+            difficulty: calculateDifficulty(customRoute.distance, customRoute.elevationGain),
             time: Math.round(customRoute.time / 60),
             userPhotos: base64Photos,
             startPoint: points.start ? { lat: points.start[0], lng: points.start[1] } : null,
